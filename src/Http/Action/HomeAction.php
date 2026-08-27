@@ -17,7 +17,7 @@ final readonly class HomeAction
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $locale = (string) $request->getAttribute('locale');
-        $response->getBody()->write($this->twig->render('home.html.twig', [
+        $response->getBody()->write($this->twig->render('home.twig', [
             'locale' => $locale,
             'alternate_locale' => $locale === 'fr' ? 'en' : 'fr',
             'alternate_label' => $locale === 'fr' ? 'English' : 'Français',

@@ -24,7 +24,7 @@ final readonly class DocumentationAction
         $locale = (string) $request->getAttribute('locale');
         $documentation = $this->markdown->toHtml($this->documents->overview($locale));
 
-        $response->getBody()->write($this->twig->render('documentation.html.twig', [
+        $response->getBody()->write($this->twig->render('documentation.twig', [
             'locale' => $locale,
             'alternate_locale' => $locale === 'fr' ? 'en' : 'fr',
             'alternate_label' => $locale === 'fr' ? 'English' : 'Français',
