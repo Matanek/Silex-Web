@@ -83,9 +83,14 @@ $assert($remembered->getHeaderLine('Location') === '/en/', 'The locale cookie sh
 
 $frenchHome = $handle('https://silex.test/fr/');
 $frenchBody = (string) $frenchHome->getBody();
+$releaseFile = $root . '/release.txt';
+$expectedRelease = is_file($releaseFile) ? trim((string) file_get_contents($releaseFile)) : 'development';
 $assert($frenchHome->getStatusCode() === 200, 'The French home page must respond with HTTP 200.');
 $assert(str_contains($frenchBody, 'Construire clairement.'), 'The French home page content is missing.');
-$assert(str_contains($frenchBody, 'Silex Web release: development'), 'The deployment marker is missing.');
+$assert(
+    str_contains($frenchBody, 'Silex Web release: ' . $expectedRelease),
+    'The deployment marker does not match release.txt.',
+);
 $assert(str_contains($frenchHome->getHeaderLine('Set-Cookie'), 'silex_locale=fr'), 'The selected locale must be remembered.');
 $assert(str_contains($frenchHome->getHeaderLine('Set-Cookie'), 'Secure'), 'HTTPS locale cookies must be secure.');
 
