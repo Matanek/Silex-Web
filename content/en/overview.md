@@ -1,6 +1,7 @@
 # Silex documentation
 
-This is the foundation of the new Silex documentation portal.
+This portal brings the language and package documentation together without
+turning the website into a second source of truth.
 
 The website will publish documentation from the repositories that own it:
 
@@ -11,9 +12,11 @@ The website will publish documentation from the repositories that own it:
 ## First example
 
 ```silex
-function main() {
+func main() {
     print("Hello from Silex!")
 }
 ```
 
-The next step is to connect the canonical repositories and build the navigation from their manifests.
+The next step is to connect the canonical repositories and build the navigation
+from their manifests. Until then, the complete language guide remains available
+in the [Silex repository](https://github.com/Matanek/Silex/tree/main/Docs/Language).

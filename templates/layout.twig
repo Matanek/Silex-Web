@@ -3,30 +3,33 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{% block description %}Silex programming language{% endblock %}">
+    <meta name="description" content="{% block description %}{{ locale == 'fr' ? 'Silex est un langage et un compilateur natif expérimental.' : 'Silex is an experimental native language and compiler.' }}{% endblock %}">
+    <meta name="theme-color" content="#0c0c0d">
     <title>{% block title %}Silex{% endblock %}</title>
     <link rel="stylesheet" href="/assets/app.css">
 </head>
-<body class="min-h-screen bg-silex-950 text-slate-100 antialiased">
+<body>
     <!-- Silex Web release: {{ release }} -->
-    <header class="border-b border-white/10 bg-silex-950/90 backdrop-blur">
-        <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5" aria-label="Main navigation">
-            <a class="font-mono text-xl font-semibold tracking-tight text-white" href="/{{ locale }}/">
-                <span class="text-cyan-400">&lt;</span>Silex<span class="text-cyan-400">/&gt;</span>
-            </a>
-            <div class="flex items-center gap-5 text-sm text-slate-300">
-                <a class="transition hover:text-white" href="/{{ locale }}/docs">Documentation</a>
-                <a class="rounded-full border border-white/15 px-3 py-1.5 transition hover:border-cyan-400/60 hover:text-white" href="{{ alternate_path }}">
-                    {{ alternate_label }}
-                </a>
-            </div>
+    <header class="site-header">
+        <a class="brand" href="/{{ locale }}/" aria-label="{{ locale == 'fr' ? 'Accueil Silex' : 'Silex home' }}">
+            <span class="brand-mark" aria-hidden="true">S</span>
+            <span>Silex</span>
+        </a>
+
+        <nav class="site-navigation" aria-label="{{ locale == 'fr' ? 'Navigation principale' : 'Main navigation' }}">
+            <a href="/{{ locale }}/docs">Docs</a>
+            <a href="/{{ locale }}/#install">{{ locale == 'fr' ? 'Installer' : 'Install' }}</a>
+            <a href="https://registry.silex-lang.org/">Registry</a>
+            <a href="https://github.com/Matanek/Silex">GitHub</a>
+            <a class="locale-link" href="{{ alternate_path }}" lang="{{ alternate_locale }}">{{ alternate_label }}</a>
         </nav>
     </header>
 
     <main>{% block content %}{% endblock %}</main>
 
-    <footer class="mx-auto max-w-6xl px-6 py-10 text-sm text-slate-500">
-        {{ locale == 'fr' ? 'Construit avec Silex.' : 'Built with Silex.' }}
+    <footer class="site-footer">
+        <span>{{ locale == 'fr' ? 'Silex est un logiciel expérimental.' : 'Silex is experimental software.' }}</span>
+        <a href="https://github.com/Matanek/Silex/blob/main/LICENSE">Apache-2.0 with LLVM exception</a>
     </footer>
 </body>
 </html>

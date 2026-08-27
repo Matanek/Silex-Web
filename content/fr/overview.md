@@ -1,6 +1,7 @@
 # Documentation Silex
 
-Voici le socle du nouveau portail de documentation Silex.
+Ce portail réunit la documentation du langage et des packages sans transformer
+le site en une seconde source de vérité.
 
 Le site publiera la documentation depuis les dépôts qui la possèdent :
 
@@ -11,9 +12,11 @@ Le site publiera la documentation depuis les dépôts qui la possèdent :
 ## Premier exemple
 
 ```silex
-function main() {
+func main() {
     print("Bonjour depuis Silex !")
 }
 ```
 
-La prochaine étape consistera à connecter les dépôts canoniques et à construire la navigation depuis leurs manifestes.
+La prochaine étape consistera à connecter les dépôts canoniques et à construire
+la navigation depuis leurs manifestes. En attendant, le guide complet du langage
+reste disponible dans le [dépôt Silex](https://github.com/Matanek/Silex/tree/main/Docs/Language).

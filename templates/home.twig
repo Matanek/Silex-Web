@@ -1,47 +1,107 @@
 {% extends 'layout.twig' %}
 
-{% block title %}Silex — {{ locale == 'fr' ? 'Langage de programmation moderne' : 'Modern programming language' }}{% endblock %}
+{% block title %}Silex — {{ locale == 'fr' ? 'Code moderne. Puissance native.' : 'Modern Code. Native Power.' }}{% endblock %}
 
 {% block content %}
-<section class="relative overflow-hidden">
-    <div class="absolute inset-x-0 top-0 -z-10 h-96 bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.18),_transparent_60%)]"></div>
-    <div class="mx-auto max-w-6xl px-6 py-24 sm:py-32">
-        <p class="mb-5 font-mono text-sm font-semibold uppercase tracking-[0.24em] text-cyan-400">Silex Programming Language</p>
-        <h1 class="max-w-4xl text-5xl font-semibold tracking-tight text-white sm:text-7xl">
-            {{ locale == 'fr' ? 'Construire clairement. Compiler nativement.' : 'Build clearly. Compile natively.' }}
+<section class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+        <p class="eyebrow">{{ locale == 'fr' ? 'Langage natif moderne' : 'Modern native language' }}</p>
+        <h1 id="hero-title">
+            <span>{{ locale == 'fr' ? 'Code moderne' : 'Modern Code' }}</span>
+            <span>{{ locale == 'fr' ? 'Puissance native' : 'Native Power' }}</span>
         </h1>
-        <p class="mt-7 max-w-2xl text-lg leading-8 text-slate-300">
+        <p class="lede">
             {{ locale == 'fr'
-                ? 'Un langage moderne pour écrire des programmes lisibles, composables et proches de la machine.'
-                : 'A modern language for writing readable, composable programs close to the machine.' }}
+                ? 'Silex est un langage et un compilateur natif expérimental, avec des modules, des packages et une toolchain intégrée.'
+                : 'Silex is an experimental native language and compiler, with modules, packages and an integrated toolchain.' }}
         </p>
-        <div class="mt-10 flex flex-wrap gap-4">
-            <a class="rounded-lg bg-cyan-400 px-5 py-3 font-semibold text-silex-950 transition hover:bg-cyan-300" href="/{{ locale }}/docs">
-                {{ locale == 'fr' ? 'Lire la documentation' : 'Read the documentation' }}
-            </a>
-            <a class="rounded-lg border border-white/15 px-5 py-3 font-semibold text-white transition hover:border-white/30 hover:bg-white/5" href="https://github.com/Matanek/Silex">
-                GitHub
-            </a>
+        <div class="actions">
+            <a class="button button-primary" href="#install">{{ locale == 'fr' ? 'Installer Silex' : 'Install Silex' }}</a>
+            <a class="button button-secondary" href="/{{ locale }}/docs">{{ locale == 'fr' ? 'Lire la documentation' : 'Read the docs' }}</a>
         </div>
+    </div>
+
+    <div class="code-window" aria-label="{{ locale == 'fr' ? 'Exemple de code Silex' : 'Silex code example' }}">
+        <div class="code-titlebar">
+            <span></span><span></span><span></span>
+            <strong>Main.sx</strong>
+        </div>
+        <pre><code><span class="keyword">func</span> answer() <span class="type">int</span> {
+    <span class="keyword">return</span> 40 + 2
+}
+
+<span class="keyword">func</span> main() {
+    print(answer())
+}</code></pre>
+        <div class="terminal-line"><span>$</span> silex run Main.sx <strong>→ 42</strong></div>
     </div>
 </section>
 
-<section class="mx-auto grid max-w-6xl gap-5 px-6 pb-24 md:grid-cols-3">
-    {% set cards = locale == 'fr' ? [
-        ['Syntaxe expressive', 'Un code compact qui conserve une intention claire.'],
-        ['Compilation native', 'Une toolchain conçue pour produire et exécuter des programmes natifs.'],
-        ['Packages composables', 'Un écosystème modulaire dont chaque package conserve sa documentation.']
+<section class="principles" aria-label="{{ locale == 'fr' ? 'Principes de Silex' : 'Silex principles' }}">
+    {% set principles = locale == 'fr' ? [
+        ['01', 'Simple', 'Un langage ciblé et une toolchain intégrée rendent l’écriture, la compilation et l’exécution directes.'],
+        ['02', 'Sémantique explicite', 'Valeurs, références et déplacements expriment clairement la manière dont les données circulent.'],
+        ['03', 'Exécutables natifs', 'Le compilateur produit directement des exécutables natifs pour les plateformes prises en charge.']
     ] : [
-        ['Expressive syntax', 'Compact code that keeps its intent clear.'],
-        ['Native compilation', 'A toolchain designed to build and run native programs.'],
-        ['Composable packages', 'A modular ecosystem where each package owns its documentation.']
+        ['01', 'Simple', 'A focused language and integrated toolchain keep writing, building and running programs direct.'],
+        ['02', 'Explicit semantics', 'Values, references and moves make the way data flows through a program clear.'],
+        ['03', 'Native executables', 'The compiler directly produces native executables for its supported targets.']
     ] %}
 
-    {% for card in cards %}
-        <article class="rounded-2xl border border-white/10 bg-white/[0.035] p-6">
-            <h2 class="text-lg font-semibold text-white">{{ card[0] }}</h2>
-            <p class="mt-3 leading-7 text-slate-400">{{ card[1] }}</p>
+    {% for principle in principles %}
+        <article>
+            <span class="number">{{ principle[0] }}</span>
+            <h2>{{ principle[1] }}</h2>
+            <p>{{ principle[2] }}</p>
         </article>
     {% endfor %}
+</section>
+
+<section class="section install" id="install" aria-labelledby="install-title">
+    <div class="section-heading">
+        <p class="eyebrow">{{ locale == 'fr' ? 'Commencer ici' : 'Start here' }}</p>
+        <h2 id="install-title">{{ locale == 'fr' ? 'Installer Silex' : 'Install Silex' }}</h2>
+        <p>
+            {{ locale == 'fr'
+                ? 'Le compilateur autonome ne demande ni Zig, ni Git sur la machine du développeur.'
+                : 'The standalone compiler does not require Zig or Git on the developer machine.' }}
+        </p>
+    </div>
+
+    <div class="install-grid">
+        <article class="install-card">
+            <div class="platform"><h3>macOS</h3><span>Apple Silicon</span></div>
+            <pre><code>curl -fsSL https://raw.githubusercontent.com/Matanek/Silex/main/install.sh | sh</code></pre>
+        </article>
+        <article class="install-card">
+            <div class="platform"><h3>Linux</h3><span>x64</span></div>
+            <pre><code>curl -fsSL https://raw.githubusercontent.com/Matanek/Silex/main/install.sh | sh</code></pre>
+        </article>
+        <article class="install-card">
+            <div class="platform"><h3>Windows</h3><span>x64 · PowerShell</span></div>
+            <pre><code>irm https://raw.githubusercontent.com/Matanek/Silex/main/install.ps1 | iex</code></pre>
+        </article>
+    </div>
+
+    <div class="quickstart" aria-labelledby="quickstart-title">
+        <div class="quickstart-copy">
+            <p class="eyebrow">{{ locale == 'fr' ? 'Premiers pas' : 'Next steps' }}</p>
+            <h3 id="quickstart-title">{{ locale == 'fr' ? 'De l’installation au premier programme.' : 'From install to first program.' }}</h3>
+            <p>
+                {{ locale == 'fr'
+                    ? 'Vérifiez le compilateur, préparez la toolchain optionnelle puis lancez votre source.'
+                    : 'Verify the compiler, prepare the optional toolchain, then run your source.' }}
+            </p>
+        </div>
+
+        <div class="quickstart-terminal" aria-label="{{ locale == 'fr' ? 'Commandes de démarrage Silex' : 'Silex quickstart commands' }}">
+            <div class="quickstart-titlebar"><span></span><span></span><span></span><strong>Terminal</strong></div>
+            <ol class="quickstart-steps">
+                <li><span class="step-number">01</span><div><span class="step-label">{{ locale == 'fr' ? 'Vérifier l’installation' : 'Verify the installation' }}</span><code><b>$</b> silex --version</code></div></li>
+                <li><span class="step-number">02</span><div><span class="step-label">{{ locale == 'fr' ? 'Préparer les outils optionnels' : 'Prepare optional tools' }}</span><code><b>$</b> silex setup</code></div></li>
+                <li><span class="step-number">03</span><div><span class="step-label">{{ locale == 'fr' ? 'Lancer le programme' : 'Run the program' }}</span><code><b>$</b> silex run Main.sx</code></div></li>
+            </ol>
+        </div>
+    </div>
 </section>
 {% endblock %}

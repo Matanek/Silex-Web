@@ -3,17 +3,32 @@
 {% block title %}{{ locale == 'fr' ? 'Documentation Silex' : 'Silex Documentation' }}{% endblock %}
 
 {% block content %}
-<div class="mx-auto max-w-6xl px-6 py-16">
-    <div class="grid gap-12 lg:grid-cols-[14rem_minmax(0,1fr)]">
-        <aside>
-            <p class="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">Guides</p>
-            <nav class="mt-4" aria-label="Documentation">
-                <a class="block rounded-lg bg-white/5 px-4 py-3 font-medium text-white" href="/{{ locale }}/docs">
-                    {{ locale == 'fr' ? 'Vue d’ensemble' : 'Overview' }}
-                </a>
-            </nav>
-        </aside>
-        <article class="prose-silex min-w-0">{{ documentation_html|raw }}</article>
+<div class="docs-shell">
+    <aside class="docs-sidebar">
+        <div class="docs-sidebar-heading">
+            <span>Documentation</span>
+            <a href="/{{ locale }}/">{{ locale == 'fr' ? 'Accueil' : 'Home' }}</a>
+        </div>
+        <nav aria-label="Documentation">
+            <div class="docs-nav-group">
+                <h2>{{ locale == 'fr' ? 'Commencer' : 'Start' }}</h2>
+                <ul>
+                    <li><a aria-current="page" href="/{{ locale }}/docs">{{ locale == 'fr' ? 'Vue d’ensemble' : 'Overview' }}</a></li>
+                </ul>
+            </div>
+            <div class="docs-nav-group docs-nav-future">
+                <h2>{{ locale == 'fr' ? 'À venir' : 'Coming next' }}</h2>
+                <p>{{ locale == 'fr' ? 'Guide du langage et packages.' : 'Language guide and packages.' }}</p>
+            </div>
+        </nav>
+    </aside>
+
+    <div class="docs-main">
+        <div class="docs-toolbar">
+            <span>Silex / Docs / {{ locale|upper }}</span>
+            <a href="https://github.com/Matanek/Silex/tree/main/Docs">{{ locale == 'fr' ? 'Sources canoniques ↗' : 'Canonical sources ↗' }}</a>
+        </div>
+        <article class="prose-silex">{{ documentation_html|raw }}</article>
     </div>
 </div>
 {% endblock %}

@@ -86,7 +86,8 @@ $frenchBody = (string) $frenchHome->getBody();
 $releaseFile = $root . '/release.txt';
 $expectedRelease = is_file($releaseFile) ? trim((string) file_get_contents($releaseFile)) : 'development';
 $assert($frenchHome->getStatusCode() === 200, 'The French home page must respond with HTTP 200.');
-$assert(str_contains($frenchBody, 'Construire clairement.'), 'The French home page content is missing.');
+$assert(str_contains($frenchBody, 'Code moderne'), 'The French home page content is missing.');
+$assert(str_contains($frenchBody, 'silex run Main.sx'), 'The canonical quickstart command is missing.');
 $assert(
     str_contains($frenchBody, 'Silex Web release: ' . $expectedRelease),
     'The deployment marker does not match release.txt.',
@@ -99,6 +100,7 @@ $documentationBody = (string) $englishDocumentation->getBody();
 $assert($englishDocumentation->getStatusCode() === 200, 'The English documentation must respond with HTTP 200.');
 $assert(str_contains($documentationBody, '<h1>Silex documentation</h1>'), 'Markdown headings must be rendered.');
 $assert(str_contains($documentationBody, '<code class="language-silex">'), 'Silex code fences must keep their language.');
+$assert(str_contains($documentationBody, 'func main()'), 'The documentation must use the current Silex function syntax.');
 
 $unsafeHtml = (new MarkdownRenderer())->toHtml(
     '<script>alert("xss")</script>' . "\n\n" . '[unsafe](javascript:alert(1))',
