@@ -102,6 +102,16 @@ $assert(str_contains($documentationBody, '<h1>Silex documentation</h1>'), 'Markd
 $assert(str_contains($documentationBody, '<code class="language-silex">'), 'Silex code fences must keep their language.');
 $assert(str_contains($documentationBody, 'func main()'), 'The documentation must use the current Silex function syntax.');
 
+$frenchRegistry = $handle('https://silex.test/fr/registry');
+$registryBody = (string) $frenchRegistry->getBody();
+$assert($frenchRegistry->getStatusCode() === 200, 'The French registry page must respond with HTTP 200.');
+$assert(str_contains($registryBody, 'Construisez.'), 'The French registry page content is missing.');
+$assert(
+    str_contains($registryBody, 'https://registry.silex-lang.org/v1/index.json'),
+    'The website registry page must link to the autonomous registry API.',
+);
+$assert(str_contains($registryBody, 'href="/en/registry"'), 'The registry language switch must preserve the page.');
+
 $unsafeHtml = (new MarkdownRenderer())->toHtml(
     '<script>alert("xss")</script>' . "\n\n" . '[unsafe](javascript:alert(1))',
 );

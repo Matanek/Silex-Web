@@ -8,6 +8,7 @@ use Silex\Web\Documentation\DocumentRepository;
 use Silex\Web\Http\Action\DocumentationAction;
 use Silex\Web\Http\Action\HomeAction;
 use Silex\Web\Http\Action\LocaleRedirectAction;
+use Silex\Web\Http\Action\RegistryAction;
 use Silex\Web\Http\LanguageNegotiator;
 use Silex\Web\Http\Middleware\LocaleMiddleware;
 use Silex\Web\Rendering\MarkdownRenderer;
@@ -43,11 +44,14 @@ final class ApplicationFactory
         $app->group('/{locale:en|fr}', function (RouteCollectorProxy $group) use ($twig, $documents, $markdown): void {
             $home = new HomeAction($twig);
             $documentation = new DocumentationAction($twig, $documents, $markdown);
+            $registry = new RegistryAction($twig);
 
             $group->get('', $home);
             $group->get('/', $home);
             $group->get('/docs', $documentation);
             $group->get('/docs/', $documentation);
+            $group->get('/registry', $registry);
+            $group->get('/registry/', $registry);
         })->add(new LocaleMiddleware(self::SUPPORTED_LOCALES));
 
         $app->addRoutingMiddleware();

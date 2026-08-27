@@ -1,0 +1,156 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Silex Registry — {{ locale == 'fr' ? 'Construisez. Publiez. Partagez.' : 'Build. Release. Share.' }}{% endblock %}
+
+{% block description %}{{ locale == 'fr'
+    ? 'Découvrez le registre public des packages Silex et apprenez à publier votre package.'
+    : 'Discover the public Silex package registry and learn how to publish your package.' }}{% endblock %}
+
+{% block content %}
+<section class="registry-hero" aria-labelledby="registry-title">
+    <div class="registry-hero-copy">
+        <p class="eyebrow">{{ locale == 'fr' ? 'Registre public de packages · v1' : 'Public package registry · v1' }}</p>
+        <h1 id="registry-title">
+            {{ locale == 'fr' ? 'Construisez.' : 'Build it.' }}<br>
+            <span>{{ locale == 'fr' ? 'Publiez.' : 'Release it.' }}</span><br>
+            {{ locale == 'fr' ? 'Partagez.' : 'Share it.' }}
+        </h1>
+        <p class="lede">
+            {{ locale == 'fr'
+                ? 'Silex grandit grâce aux logiciels qui fonctionnent. Améliorez le langage, renforcez ses packages ou publiez une capacité réutilisable.'
+                : 'Silex grows through working software. Improve the language, strengthen its packages, or publish a reusable capability.' }}
+        </p>
+        <div class="actions">
+            <a class="button button-primary" href="#publish">{{ locale == 'fr' ? 'Publier un package' : 'Publish a package' }}</a>
+            <a class="button button-secondary" href="https://github.com/Matanek/Silex-Registry">{{ locale == 'fr' ? 'Voir le dépôt du registre' : 'View the registry source' }}</a>
+        </div>
+    </div>
+
+    <aside class="registry-card" aria-labelledby="registry-card-title">
+        <div class="registry-card-titlebar">
+            <span class="status-dot" aria-hidden="true"></span>
+            <strong id="registry-card-title">registry.silex-lang.org</strong>
+            <span>API</span>
+        </div>
+        <dl class="registry-facts">
+            <div><dt>{{ locale == 'fr' ? 'Format' : 'Format' }}</dt><dd>Static JSON</dd></div>
+            <div><dt>{{ locale == 'fr' ? 'Contrat' : 'Contract' }}</dt><dd>{{ locale == 'fr' ? 'Nom → dépôt Git' : 'Name → Git repository' }}</dd></div>
+            <div><dt>{{ locale == 'fr' ? 'Versions' : 'Versions' }}</dt><dd>{{ locale == 'fr' ? 'Tags du dépôt' : 'Repository tags' }}</dd></div>
+        </dl>
+        <a class="registry-endpoint" href="https://registry.silex-lang.org/v1/index.json">
+            <span>GET</span><code>/v1/index.json</code><b aria-hidden="true">→</b>
+        </a>
+    </aside>
+</section>
+
+<section class="registry-section" id="contribute" aria-labelledby="contribute-title">
+    <div class="registry-heading registry-heading-split">
+        <div>
+            <p class="eyebrow">{{ locale == 'fr' ? 'Choisissez votre contribution' : 'Choose your contribution' }}</p>
+            <h2 id="contribute-title">{{ locale == 'fr' ? 'Faites avancer Silex.' : 'Move Silex forward.' }}</h2>
+        </div>
+        <p>
+            {{ locale == 'fr'
+                ? 'Partez d’un besoin concret. Une correction ciblée, un exemple lisible ou un petit package peut améliorer toute l’expérience de développement.'
+                : 'Start from a concrete need. A focused fix, a readable example, or a small package can improve the whole developer experience.' }}
+        </p>
+    </div>
+
+    {% set contributions = locale == 'fr' ? [
+        ['01', 'Langage et toolchain', 'Améliorez les diagnostics, la sémantique, la compilation native, les outils ou les exemples qui prouvent une fonctionnalité.', 'Explorer Silex', 'https://github.com/Matanek/Silex'],
+        ['02', 'Packages officiels', 'Renforcez la bibliothèque standard ou la pile applicative GFX avec des API publiques orientées intention.', 'Voir les fondations', '#packages'],
+        ['03', 'Packages communautaires', 'Regroupez une capacité utile, inscrivez son dépôt une fois, puis publiez directement chaque version avec un tag Git.', 'Voir le parcours', '#publish']
+    ] : [
+        ['01', 'Language & toolchain', 'Improve diagnostics, semantics, native compilation, tooling, or the examples that prove a feature works.', 'Explore Silex', 'https://github.com/Matanek/Silex'],
+        ['02', 'Official packages', 'Strengthen the standard library or the GFX application stack through intention-oriented public APIs.', 'See the foundations', '#packages'],
+        ['03', 'Community packages', 'Package one useful capability, register its repository once, then publish every version directly with a Git tag.', 'Read the release path', '#publish']
+    ] %}
+
+    <div class="contribution-grid">
+        {% for contribution in contributions %}
+            <article class="contribution-card">
+                <span class="card-number">{{ contribution[0] }}</span>
+                <h3>{{ contribution[1] }}</h3>
+                <p>{{ contribution[2] }}</p>
+                <a href="{{ contribution[4] }}">{{ contribution[3] }} <span aria-hidden="true">→</span></a>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="registry-section" id="publish" aria-labelledby="publish-title">
+    <div class="registry-heading registry-heading-split publish-heading">
+        <div>
+            <p class="eyebrow">{{ locale == 'fr' ? 'Publication des packages' : 'Package publication' }}</p>
+            <h2 id="publish-title">{{ locale == 'fr' ? 'Inscrivez une fois.' : 'Register once.' }}<br>{{ locale == 'fr' ? 'Taguez chaque version.' : 'Tag every release.' }}</h2>
+        </div>
+        <p>
+            {% if locale == 'fr' %}
+                La commande <code>silex register</code> ouvre l’unique proposition d’inscription du package. Son propriétaire publie ensuite chaque version directement avec Git.
+            {% else %}
+                <code>silex register</code> opens the package’s single registry proposal. Its owner then publishes every version directly with Git.
+            {% endif %}
+        </p>
+    </div>
+
+    {% set steps = locale == 'fr' ? [
+        ['01', 'Préparer le package', 'Définissez la version sémantique et la compatibilité Silex, puis commitez le contenu complet du package.', null, null],
+        ['02', 'Vérifier si nécessaire', 'Lancez', 'silex check chemin/du/Package', ' pour valider sans modification son contrat et le tag attendu.'],
+        ['03', 'Inscrire une seule fois', 'Lancez', 'silex register chemin/du/Package', '. Silex propose le nom du package et son dépôt canonique au registre.'],
+        ['04', 'Taguer chaque version', 'Créez et poussez le tag', 'vMAJOR.MINOR.PATCH', ' correspondant. Aucune nouvelle pull request au registre n’est nécessaire.']
+    ] : [
+        ['01', 'Prepare the package', 'Set the semantic version and Silex compatibility, then commit the package’s complete contents.', null, null],
+        ['02', 'Check when useful', 'Run', 'silex check path/to/Package', ' to validate its contract and expected tag without changing anything.'],
+        ['03', 'Register only once', 'Run', 'silex register path/to/Package', '. Silex proposes the package name and canonical repository to the registry.'],
+        ['04', 'Tag every version', 'Create and push the matching', 'vMAJOR.MINOR.PATCH', ' tag. No additional registry pull request is required.']
+    ] %}
+
+    <div class="publish-layout">
+        <ol class="release-steps">
+            {% for step in steps %}
+                <li>
+                    <span>{{ step[0] }}</span>
+                    <div>
+                        <h3>{{ step[1] }}</h3>
+                        <p>{{ step[2] }}{% if step[3] %} <code>{{ step[3] }}</code>{% endif %}{% if step[4] %}{{ step[4] }}{% endif %}</p>
+                    </div>
+                </li>
+            {% endfor %}
+        </ol>
+
+        <div class="manifest-window" aria-label="{{ locale == 'fr' ? 'Publier un package avec la ligne de commande Silex' : 'Publish a package with the Silex command line' }}">
+            <div class="registry-card-titlebar"><span class="file-mark" aria-hidden="true">$</span><strong>Example 1.0.0</strong></div>
+            <pre><code><span class="key">$</span> silex check Packages/Example
+<span class="value">silex: package Example@1.0.0 is valid;
+its release tag is v1.0.0</span>
+
+<span class="key">$</span> silex register Packages/Example
+
+<span class="value">silex: submitted registration of Example
+for registry review</span>
+
+<span class="key">$</span> git tag v1.0.0
+<span class="key">$</span> git push origin v1.0.0</code></pre>
+            <a href="https://github.com/Matanek/Silex-Registry/blob/main/CONTRIBUTING.md">{{ locale == 'fr' ? 'Lire le contrat d’inscription' : 'Read the registration contract' }} <span aria-hidden="true">→</span></a>
+        </div>
+    </div>
+</section>
+
+<section class="registry-section" id="packages" aria-labelledby="packages-title">
+    <div class="registry-heading compact-heading">
+        <p class="eyebrow">{{ locale == 'fr' ? 'Fondations officielles' : 'Official foundations' }}</p>
+        <h2 id="packages-title">{{ locale == 'fr' ? 'Packages maintenus avec Silex.' : 'Packages maintained with Silex.' }}</h2>
+    </div>
+    <div class="registry-package-list">
+        <a href="https://github.com/Matanek/Silex-Lib-STD"><strong>STD</strong><span>{{ locale == 'fr' ? 'Capacités standard pour les applications Silex.' : 'Standard capabilities for Silex applications.' }}</span><b aria-hidden="true">→</b></a>
+        <a href="https://github.com/Matanek/Silex-Lib-GFX"><strong>GFX</strong><span>{{ locale == 'fr' ? 'Capacités 2D, 3D, GPU et applicatives.' : '2D, 3D, GPU and application capabilities.' }}</span><b aria-hidden="true">→</b></a>
+    </div>
+</section>
+
+<section class="registry-closing" aria-labelledby="closing-title">
+    <p class="eyebrow">{{ locale == 'fr' ? 'Un petit écosystème, construit avec soin' : 'A small ecosystem, deliberately built' }}</p>
+    <h2 id="closing-title">{{ locale == 'fr' ? 'Apportez une idée utile.' : 'Bring one useful idea.' }}</h2>
+    <p>{{ locale == 'fr' ? 'Rendez-la directe à utiliser, assez complète pour convaincre et assez claire pour être découverte.' : 'Make it direct to use, complete enough to prove, and clear enough for the next developer to discover.' }}</p>
+    <a class="button button-primary" href="https://github.com/Matanek/Silex-Registry">{{ locale == 'fr' ? 'Ouvrir le dépôt du registre' : 'Open the registry repository' }}</a>
+</section>
+{% endblock %}
