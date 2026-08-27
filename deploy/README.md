@@ -20,6 +20,9 @@ The expected virtual host is versioned in
 server automatically: Apache configuration remains an explicit administrator
 operation, separate from application deployments.
 
+The VPS requires OpenSSH, `rsync`, Apache, and PHP 8.2-FPM. The GitHub-hosted
+runner requires PHP, Composer, OpenSSH, and `rsync`.
+
 ## GitHub secrets
 
 - `VPS_HOST`: VPS hostname or address;
