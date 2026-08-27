@@ -1,0 +1,103 @@
+name: Validate and deploy Silex Web
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: silex-web-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: staging
+      url: https://silex.nekmata.com/
+    runs-on: ubuntu-latest
+    env:
+      VPS_HOST: ${{ secrets.VPS_HOST }}
+      VPS_USER: ${{ secrets.VPS_USER }}
+      VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+      VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+      VPS_SSH_PORT: ${{ vars.VPS_SSH_PORT || '22' }}
+      VPS_SITE_ROOT: ${{ vars.VPS_SITE_ROOT || '/srv/silex/web' }}
+
+    steps:
+      - name: Check out the website
+        uses: actions/checkout@v6
+
+      - name: Install locked PHP dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Validate the website
+        run: |
+          composer validate --strict
+          composer check
+
+      - name: Validate deployment configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "$VPS_HOST" || -z "$VPS_USER" || -z "$VPS_SSH_KEY" || -z "$VPS_KNOWN_HOSTS" ]]; then
+            echo "The VPS deployment secrets must all be configured" >&2
+            exit 1
+          fi
+          if [[ ! "$VPS_SSH_PORT" =~ ^[0-9]+$ ]]; then
+            echo "VPS_SSH_PORT must be numeric" >&2
+            exit 1
+          fi
+          if [[ ! "$VPS_SITE_ROOT" =~ ^/[A-Za-z0-9._/-]+$ ]]; then
+            echo "VPS_SITE_ROOT must be an absolute path without spaces" >&2
+            exit 1
+          fi
+
+      - name: Configure the deployment key
+        shell: bash
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/id_ed25519
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/id_ed25519 ~/.ssh/known_hosts
+
+      - name: Upload and activate the immutable release
+        shell: bash
+        run: |
+          set -euo pipefail
+          target="$VPS_USER@$VPS_HOST"
+          release="$VPS_SITE_ROOT/releases/$GITHUB_SHA"
+
+          if ! ssh -p "$VPS_SSH_PORT" "$target" "test -f '$release/.complete'"; then
+            ssh -p "$VPS_SSH_PORT" "$target" "mkdir -p '$release'"
+            rsync -az --delete \
+              --exclude '.git/' \
+              --exclude '.github/' \
+              --exclude 'deploy/' \
+              --exclude 'scripts/' \
+              -e "ssh -p $VPS_SSH_PORT" \
+              ./ "$target:$release/"
+            ssh -p "$VPS_SSH_PORT" "$target" \
+              "test -f '$release/public/index.php' && touch '$release/.complete'"
+          fi
+
+          ssh -p "$VPS_SSH_PORT" "$target" sh -s -- "$VPS_SITE_ROOT" "$GITHUB_SHA" <<'REMOTE'
+          set -eu
+          site_root=$1
+          release=$2
+          release_root="$site_root/releases/$release"
+          test -f "$release_root/.complete"
+          next_link="$site_root/.current-$release"
+          ln -sfn "$release_root" "$next_link"
+          mv -Tf "$next_link" "$site_root/current"
+          REMOTE
+
+      - name: Check the public deployment
+        run: |
+          curl --fail --show-error --silent \
+            --retry 6 --retry-delay 2 --retry-connrefused \
+            https://silex.nekmata.com/ \
+            | grep -F "Automated VPS deployment is working."
