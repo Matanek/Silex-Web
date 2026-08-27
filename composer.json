@@ -4,12 +4,25 @@
     "license": "Apache-2.0",
     "type": "project",
     "require": {
-        "php": ">=8.2"
+        "php": ">=8.2",
+        "league/commonmark": "^2.10",
+        "slim/psr7": "^1.8",
+        "slim/slim": "^4.15",
+        "twig/twig": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Silex\\Web\\": "src/"
+        }
     },
     "scripts": {
-        "check": "@php scripts/check.php"
+        "check": "@php scripts/check.php",
+        "serve": "@php -S 127.0.0.1:8080 -t public public/router.php"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "php": "8.2.0"
+        }
     }
 }

@@ -34,9 +34,16 @@ jobs:
       - name: Install locked PHP dependencies
         run: composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader
 
+      - name: Install locked frontend dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build the Tailwind stylesheet
+        run: npm run build
+
       - name: Validate the website
         run: |
           composer validate --strict
+          composer audit --locked
           composer check
 
       - name: Validate deployment configuration
@@ -74,10 +81,12 @@ jobs:
           if ! ssh -p "$VPS_SSH_PORT" "$target" "test -f '$release/.complete'"; then
             ssh -p "$VPS_SSH_PORT" "$target" "mkdir -p '$release'"
             rsync -az --delete \
-              --exclude '.git/' \
-              --exclude '.github/' \
-              --exclude 'deploy/' \
-              --exclude 'scripts/' \
+              --exclude '/.git/' \
+              --exclude '/.github/' \
+              --exclude '/assets/' \
+              --exclude '/deploy/' \
+              --exclude '/node_modules/' \
+              --exclude '/scripts/' \
               -e "ssh -p $VPS_SSH_PORT" \
               ./ "$target:$release/"
             ssh -p "$VPS_SSH_PORT" "$target" \
@@ -98,6 +107,7 @@ jobs:
       - name: Check the public deployment
         run: |
           curl --fail --show-error --silent \
+            --location \
             --retry 6 --retry-delay 2 --retry-connrefused \
             https://silex.nekmata.com/ \
             | grep -F "Automated VPS deployment is working."

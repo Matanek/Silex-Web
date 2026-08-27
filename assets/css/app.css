@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@source "../../templates";
+@source "../../src";
+
+@theme {
+    --color-silex-950: #071014;
+}
+
+@layer base {
+    :focus-visible {
+        outline: 2px solid var(--color-cyan-400);
+        outline-offset: 3px;
+    }
+}
+
+@layer components {
+    .prose-silex {
+        color: var(--color-slate-300);
+        font-size: 1.0625rem;
+        line-height: 1.8;
+    }
+
+    .prose-silex h1,
+    .prose-silex h2 {
+        color: white;
+        font-weight: 650;
+        letter-spacing: -0.025em;
+    }
+
+    .prose-silex h1 {
+        margin-bottom: 1.5rem;
+        font-size: 2.5rem;
+        line-height: 1.1;
+    }
+
+    .prose-silex h2 {
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .prose-silex p,
+    .prose-silex ul,
+    .prose-silex pre {
+        margin-top: 1.25rem;
+    }
+
+    .prose-silex ul {
+        list-style: disc;
+        padding-left: 1.5rem;
+    }
+
+    .prose-silex code {
+        border-radius: 0.35rem;
+        background: color-mix(in srgb, var(--color-cyan-400) 10%, transparent);
+        padding: 0.15rem 0.35rem;
+        color: var(--color-cyan-200);
+        font-family: var(--font-mono);
+        font-size: 0.9em;
+    }
+
+    .prose-silex pre {
+        overflow-x: auto;
+        border: 1px solid color-mix(in srgb, white 10%, transparent);
+        border-radius: 0.75rem;
+        background: #03090c;
+        padding: 1.25rem;
+    }
+
+    .prose-silex pre code {
+        background: transparent;
+        padding: 0;
+        color: var(--color-slate-200);
+    }
+
+    .prose-silex a {
+        color: var(--color-cyan-300);
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+    }
+}

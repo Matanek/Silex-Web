@@ -1,0 +1,19 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ locale == 'fr' ? 'Documentation Silex' : 'Silex Documentation' }}{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-6xl px-6 py-16">
+    <div class="grid gap-12 lg:grid-cols-[14rem_minmax(0,1fr)]">
+        <aside>
+            <p class="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">Guides</p>
+            <nav class="mt-4" aria-label="Documentation">
+                <a class="block rounded-lg bg-white/5 px-4 py-3 font-medium text-white" href="/{{ locale }}/docs">
+                    {{ locale == 'fr' ? 'Vue d’ensemble' : 'Overview' }}
+                </a>
+            </nav>
+        </aside>
+        <article class="prose-silex min-w-0">{{ documentation_html|raw }}</article>
+    </div>
+</div>
+{% endblock %}

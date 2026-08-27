@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="{{ locale }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{% block description %}Silex programming language{% endblock %}">
+    <title>{% block title %}Silex{% endblock %}</title>
+    <link rel="stylesheet" href="/assets/app.css">
+</head>
+<body class="min-h-screen bg-silex-950 text-slate-100 antialiased">
+    <!-- Automated VPS deployment is working. -->
+    <header class="border-b border-white/10 bg-silex-950/90 backdrop-blur">
+        <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5" aria-label="Main navigation">
+            <a class="font-mono text-xl font-semibold tracking-tight text-white" href="/{{ locale }}/">
+                <span class="text-cyan-400">&lt;</span>Silex<span class="text-cyan-400">/&gt;</span>
+            </a>
+            <div class="flex items-center gap-5 text-sm text-slate-300">
+                <a class="transition hover:text-white" href="/{{ locale }}/docs">Documentation</a>
+                <a class="rounded-full border border-white/15 px-3 py-1.5 transition hover:border-cyan-400/60 hover:text-white" href="{{ alternate_path }}">
+                    {{ alternate_label }}
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main>{% block content %}{% endblock %}</main>
+
+    <footer class="mx-auto max-w-6xl px-6 py-10 text-sm text-slate-500">
+        {{ locale == 'fr' ? 'Construit avec Silex.' : 'Built with Silex.' }}
+    </footer>
+</body>
+</html>

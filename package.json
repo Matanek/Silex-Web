@@ -1,0 +1,12 @@
+{
+  "name": "silex-web",
+  "private": true,
+  "scripts": {
+    "build": "tailwindcss -i ./assets/css/app.css -o ./public/assets/app.css --minify",
+    "dev": "tailwindcss -i ./assets/css/app.css -o ./public/assets/app.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.0",
+    "tailwindcss": "^4.1.0"
+  }
+}

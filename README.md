@@ -8,17 +8,34 @@ that implement Silex and its packages. It must not become a second editable
 copy of those Markdown sources. The current production website remains in
 `Matanek/Silex-Website` until an explicit cutover.
 
+The application deliberately uses no database. Slim 4 owns HTTP routing and
+middleware, Twig renders pages, League CommonMark converts documentation, and
+Tailwind CSS produces the static stylesheet.
+
 ## Requirements
 
 - PHP 8.2 or newer;
-- Composer 2.
+- Composer 2;
+- Node.js and npm for the Tailwind build.
 
 ## Validate
 
 ```sh
 composer install
+npm ci
+npm run build
 composer check
 ```
+
+Start the local front controller with:
+
+```sh
+composer serve
+```
+
+The website is then available at <http://127.0.0.1:8080/>. For live CSS
+rebuilds, run `npm run dev` in a second terminal. With Laravel Herd, link the
+`public/` directory under an explicit name such as `silex`.
 
 ## Deployment
 
