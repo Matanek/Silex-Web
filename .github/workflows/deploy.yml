@@ -38,7 +38,9 @@ jobs:
         run: npm ci --no-audit --no-fund
 
       - name: Build the Tailwind stylesheet
-        run: npm run build
+        run: |
+          npm run build
+          printf '%s\n' "$GITHUB_SHA" > release.txt
 
       - name: Validate the website
         run: |
@@ -110,4 +112,4 @@ jobs:
             --location \
             --retry 6 --retry-delay 2 --retry-connrefused \
             https://silex.nekmata.com/ \
-            | grep -F "Automated VPS deployment is working."
+            | grep -F "Silex Web release: $GITHUB_SHA"

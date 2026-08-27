@@ -20,6 +20,10 @@ The expected virtual host is versioned in
 server automatically: Apache configuration remains an explicit administrator
 operation, separate from application deployments.
 
+The dedicated PHP-FPM pool is versioned in `deploy/php/silex-web.conf`. Its
+OPcache settings revalidate the real path behind the atomic `current` symlink;
+without this, PHP-FPM may continue serving a previous release after a switch.
+
 The VPS requires OpenSSH, `rsync`, Apache, and PHP 8.2-FPM. The GitHub-hosted
 runner requires PHP, Composer, Node.js, npm, OpenSSH, and `rsync`. Tailwind is
 built by GitHub Actions; Node.js is not required on the VPS.

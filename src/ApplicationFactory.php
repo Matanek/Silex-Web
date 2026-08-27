@@ -31,6 +31,7 @@ final class ApplicationFactory
                 'strict_variables' => true,
             ],
         );
+        $twig->addGlobal('release', self::releaseIdentifier($root));
 
         $documents = new DocumentRepository($root . '/content');
         $markdown = new MarkdownRenderer();
@@ -58,5 +59,22 @@ final class ApplicationFactory
     private static function debugEnabled(): bool
     {
         return filter_var(getenv('SILEX_WEB_DEBUG') ?: false, FILTER_VALIDATE_BOOL);
+    }
+
+    private static function releaseIdentifier(string $root): string
+    {
+        $path = $root . '/release.txt';
+
+        if (!is_file($path)) {
+            return 'development';
+        }
+
+        $release = file_get_contents($path);
+
+        if ($release === false || trim($release) === '') {
+            return 'development';
+        }
+
+        return trim($release);
     }
 }

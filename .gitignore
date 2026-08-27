@@ -1,4 +1,5 @@
 /vendor/
 /node_modules/
 /public/assets/app.css
+/release.txt
 /.composer-cache/

@@ -85,7 +85,7 @@ $frenchHome = $handle('https://silex.test/fr/');
 $frenchBody = (string) $frenchHome->getBody();
 $assert($frenchHome->getStatusCode() === 200, 'The French home page must respond with HTTP 200.');
 $assert(str_contains($frenchBody, 'Construire clairement.'), 'The French home page content is missing.');
-$assert(str_contains($frenchBody, 'Automated VPS deployment is working.'), 'The deployment marker is missing.');
+$assert(str_contains($frenchBody, 'Silex Web release: development'), 'The deployment marker is missing.');
 $assert(str_contains($frenchHome->getHeaderLine('Set-Cookie'), 'silex_locale=fr'), 'The selected locale must be remembered.');
 $assert(str_contains($frenchHome->getHeaderLine('Set-Cookie'), 'Secure'), 'HTTPS locale cookies must be secure.');
 
