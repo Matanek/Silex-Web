@@ -1,0 +1,51 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{ document_title }} — {{ package.name }}{% endblock %}
+
+{% block content %}
+<div class="docs-shell package-docs-shell">
+    <aside class="docs-sidebar">
+        <div class="docs-sidebar-heading">
+            <span>{{ package.name }}</span>
+            <a href="/{{ locale }}/packages">Packages</a>
+        </div>
+
+        <div class="package-sidebar-meta">
+            {% if package.version %}<span>v{{ package.version }}</span>{% endif %}
+            <p>{{ package.description }}</p>
+            {% if package.dependencies is not empty %}
+                <p><strong>{{ locale == 'fr' ? 'Dépend de' : 'Depends on' }}</strong> {{ package.dependencies|join(' · ') }}</p>
+            {% endif %}
+        </div>
+
+        <nav aria-label="{{ package.name }} documentation">
+            {% for group in navigation %}
+                <div class="docs-nav-group">
+                    <h2>{{ group.label }}</h2>
+                    <ul>
+                        {% for item in group.items %}
+                            <li>
+                                <a
+                                    {% if item.path == current_path %}aria-current="page"{% endif %}
+                                    href="/{{ locale }}/packages/{{ package.name|url_encode }}{{ item.path == 'README.md' ? '' : '/docs/' ~ item.path }}"
+                                >{{ item.label }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </nav>
+    </aside>
+
+    <div class="docs-main">
+        <div class="docs-toolbar">
+            <div>
+                <span>Packages / {{ package.name }}</span>
+                {% if locale == 'fr' %}<span>Documentation en anglais</span>{% endif %}
+            </div>
+            {% if source_url %}<a href="{{ source_url }}">{{ locale == 'fr' ? 'Source canonique ↗' : 'Canonical source ↗' }}</a>{% endif %}
+        </div>
+        <article class="prose-silex">{{ documentation_html|raw }}</article>
+    </div>
+</div>
+{% endblock %}

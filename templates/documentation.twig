@@ -1,6 +1,6 @@
 {% extends 'layout.twig' %}
 
-{% block title %}{{ locale == 'fr' ? 'Documentation Silex' : 'Silex Documentation' }}{% endblock %}
+{% block title %}{{ document_title }} — Silex Docs{% endblock %}
 
 {% block content %}
 <div class="docs-shell">
@@ -10,23 +10,31 @@
             <a href="/{{ locale }}/">{{ locale == 'fr' ? 'Accueil' : 'Home' }}</a>
         </div>
         <nav aria-label="Documentation">
-            <div class="docs-nav-group">
-                <h2>{{ locale == 'fr' ? 'Commencer' : 'Start' }}</h2>
-                <ul>
-                    <li><a aria-current="page" href="/{{ locale }}/docs">{{ locale == 'fr' ? 'Vue d’ensemble' : 'Overview' }}</a></li>
-                </ul>
-            </div>
-            <div class="docs-nav-group docs-nav-future">
-                <h2>{{ locale == 'fr' ? 'À venir' : 'Coming next' }}</h2>
-                <p>{{ locale == 'fr' ? 'Guide du langage et packages.' : 'Language guide and packages.' }}</p>
-            </div>
+            {% for group in navigation %}
+                <div class="docs-nav-group">
+                    <h2>{{ group.label }}</h2>
+                    <ul>
+                        {% for item in group.items %}
+                            <li>
+                                <a
+                                    {% if item.path == current_path %}aria-current="page"{% endif %}
+                                    href="/{{ locale }}/docs{{ item.path == 'README.md' ? '' : '/' ~ item.path }}"
+                                >{{ item.label }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
         </nav>
     </aside>
 
     <div class="docs-main">
         <div class="docs-toolbar">
-            <span>Silex / Docs / {{ locale|upper }}</span>
-            <a href="https://github.com/Matanek/Silex/tree/main/Docs">{{ locale == 'fr' ? 'Sources canoniques ↗' : 'Canonical sources ↗' }}</a>
+            <div>
+                <span>Silex {{ silex_version == 'development' ? 'dev' : 'v' ~ silex_version }} / Docs</span>
+                {% if locale == 'fr' %}<span>Contenu source en anglais</span>{% endif %}
+            </div>
+            <a href="{{ source_url }}">{{ locale == 'fr' ? 'Source canonique ↗' : 'Canonical source ↗' }}</a>
         </div>
         <article class="prose-silex">{{ documentation_html|raw }}</article>
     </div>

@@ -1,0 +1,8 @@
+{
+  "name": "Example",
+  "version": "1.2.3",
+  "description": "A synthetic package used to validate website content ingestion.",
+  "dependencies": {
+    "STD": "^1.0.0"
+  }
+}

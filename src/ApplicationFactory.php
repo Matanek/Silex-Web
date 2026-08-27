@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Silex\Web;
 
 use Silex\Web\Documentation\DocumentRepository;
+use Silex\Web\Ecosystem\SilexVersionResolver;
 use Silex\Web\Http\Action\DocumentationAction;
 use Silex\Web\Http\Action\HomeAction;
 use Silex\Web\Http\Action\LocaleRedirectAction;
+use Silex\Web\Http\Action\PackageDocumentationAction;
+use Silex\Web\Http\Action\PackagesAction;
 use Silex\Web\Http\Action\RegistryAction;
 use Silex\Web\Http\LanguageNegotiator;
 use Silex\Web\Http\Middleware\LocaleMiddleware;
@@ -24,6 +27,7 @@ final class ApplicationFactory
 
     public static function create(string $root): App
     {
+        $workspaceRoot = dirname($root);
         $twig = new Environment(
             new FilesystemLoader($root . '/templates'),
             [
@@ -33,8 +37,14 @@ final class ApplicationFactory
             ],
         );
         $twig->addGlobal('release', self::releaseIdentifier($root));
+        $twig->addGlobal('silex_version', SilexVersionResolver::resolve($root, $workspaceRoot));
 
-        $documents = new DocumentRepository($root . '/content');
+        $documents = new DocumentRepository(
+            $root . '/content',
+            self::sourceRoot('SILEX_DOCS_ROOT', $workspaceRoot . '/Silex/Docs'),
+            self::sourceRoot('SILEX_PACKAGES_ROOT', $workspaceRoot . '/Packages'),
+            self::sourceRoot('SILEX_REGISTRY_ROOT', $workspaceRoot . '/Silex-Registry'),
+        );
         $markdown = new MarkdownRenderer();
         $languages = new LanguageNegotiator(self::SUPPORTED_LOCALES, 'en');
 
@@ -44,12 +54,19 @@ final class ApplicationFactory
         $app->group('/{locale:en|fr}', function (RouteCollectorProxy $group) use ($twig, $documents, $markdown): void {
             $home = new HomeAction($twig);
             $documentation = new DocumentationAction($twig, $documents, $markdown);
+            $packages = new PackagesAction($twig, $documents);
+            $packageDocumentation = new PackageDocumentationAction($twig, $documents, $markdown);
             $registry = new RegistryAction($twig);
 
             $group->get('', $home);
             $group->get('/', $home);
             $group->get('/docs', $documentation);
             $group->get('/docs/', $documentation);
+            $group->get('/docs/{document:.+}', $documentation);
+            $group->get('/packages', $packages);
+            $group->get('/packages/', $packages);
+            $group->get('/packages/{package:[A-Za-z_][A-Za-z0-9_.]*}', $packageDocumentation);
+            $group->get('/packages/{package:[A-Za-z_][A-Za-z0-9_.]*}/docs/{document:.+}', $packageDocumentation);
             $group->get('/registry', $registry);
             $group->get('/registry/', $registry);
         })->add(new LocaleMiddleware(self::SUPPORTED_LOCALES));
@@ -80,5 +97,12 @@ final class ApplicationFactory
         }
 
         return trim($release);
+    }
+
+    private static function sourceRoot(string $environmentName, string $fallback): string
+    {
+        $configured = trim((string) getenv($environmentName));
+
+        return $configured !== '' ? $configured : $fallback;
     }
 }

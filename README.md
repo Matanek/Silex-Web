@@ -8,6 +8,17 @@ that implement Silex and its packages. It must not become a second editable
 copy of those Markdown sources. The current production website remains in
 `Matanek/Silex-Website` until an explicit cutover.
 
+In a Silex workspace checkout, the application automatically reads the sibling
+`Silex/Docs`, `Packages/`, and `Silex-Registry/` directories. Override those
+sources for another environment with `SILEX_DOCS_ROOT`, `SILEX_PACKAGES_ROOT`,
+and `SILEX_REGISTRY_ROOT`. French routes currently render the same canonical
+English documentation with a localized interface.
+
+The displayed Silex version resolves, in order, from `SILEX_VERSION`, from
+`var/content/silex-version.txt`, or locally from
+`../Silex/Toolchain/build.zig.zon`. A Silex release hook can therefore publish
+content and version metadata without making this repository their owner.
+
 The application deliberately uses no database. Slim 4 owns HTTP routing and
 middleware, Twig renders pages, League CommonMark converts documentation, and
 Tailwind CSS produces the static stylesheet.
