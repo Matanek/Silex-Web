@@ -1,4 +1,4 @@
-# Documentation
+# Silex documentation
 
 Read the [language guide](Language/README.md).
 

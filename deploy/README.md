@@ -11,8 +11,9 @@ GitHub Actions deploys each validated `main` commit as an immutable release:
       var/content/
         silex-version.txt
         sources/
-          Silex/Docs/
-          Packages/
+          Silex-Documentation/
+            EN/
+            FR/
           Silex-Registry/
 ```
 
@@ -51,7 +52,7 @@ TTL: 300
 ```
 
 After public DNS resolves to the VPS, run the Certbot command above and verify
-the home page, `/docs`, `/packages/STD`, and `/registry` over HTTPS. Only then
+the home page, `/fr/docs`, `/fr/packages`, and `/fr/registry` over HTTPS. Only then
 disable GitHub Pages in `Matanek/Silex-Website`.
 
 The dedicated PHP-FPM pool is versioned in `deploy/php/silex-web.conf`. Its
@@ -74,15 +75,14 @@ Optional GitHub variables:
 - `VPS_SSH_PORT`, default `22`;
 - `VPS_SITE_ROOT`, default `/srv/silex/web`.
 
-The workflow fetches canonical sources from the latest semantic release tag of
-Silex and every registered package, while reading current immutable
-registrations from the registry. It copies only the package manifests and
-Markdown needed by the website into the immutable release. These files are a
-deployment snapshot: their owning repositories remain the only editable
-sources of truth.
+The workflow fetches the latest semantic Silex release, its matching
+`Silex-Documentation` release branch, and current immutable registrations from
+the registry. It copies the mirrored `EN/` and `FR/` Markdown trees plus the
+registry entries into the immutable release. Package sources and package
+documentation are never copied; catalog links lead to their canonical
+repositories.
 
 Website pushes, manual runs, and `ecosystem-content-updated` repository
-dispatches rebuild the snapshot immediately. A six-hour schedule provides
-eventual reconciliation if a release hook is delayed or unavailable. The
-release directory combines the website SHA with the snapshot digest, making a
-content-only refresh immutable and independently deployable.
+dispatches rebuild the snapshot immediately. The release directory combines
+the website SHA with the snapshot digest, making a content-only refresh
+immutable and independently deployable.

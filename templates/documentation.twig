@@ -5,7 +5,7 @@
 {% block content %}
 <div class="docs-shell">
     <aside class="docs-sidebar">
-        <div class="docs-sidebar-heading"><span>Documentation</span><a href="/">Home</a></div>
+        <div class="docs-sidebar-heading"><span>Documentation</span><a href="/{{ locale }}/">{{ locale == 'fr' ? 'Accueil' : 'Home' }}</a></div>
         <nav aria-label="Documentation">
             {% for group in navigation %}
                 <div class="docs-nav-group">
@@ -13,30 +13,19 @@
                     <ul>
                         {% for item in group.items %}
                             <li>
-                                <a {% if item.path == current_path %}aria-current="page"{% endif %} href="/docs{{ item.path == 'README.md' ? '' : '/' ~ item.path }}">{{ item.label }}</a>
+                                <a {% if item.path == current_path %}aria-current="page"{% endif %} href="/{{ locale }}/docs{{ item.path == 'README.md' ? '' : '/' ~ item.path }}">{{ item.label }}</a>
                             </li>
                         {% endfor %}
                     </ul>
                 </div>
             {% endfor %}
-
-            {% if packages is not empty %}
-                <div class="docs-nav-group docs-package-index">
-                    <h2>Packages</h2>
-                    <ul>
-                        {% for package in packages %}
-                            <li><a href="/packages/{{ package.name|url_encode }}">{{ package.name }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% endif %}
         </nav>
     </aside>
 
     <div class="docs-main">
         <div class="docs-toolbar">
             <span>Silex {{ silex_version == 'development' ? 'dev' : 'v' ~ silex_version }} / Docs</span>
-            <a href="{{ source_url }}">Canonical source ↗</a>
+            <a href="{{ source_url }}">{{ locale == 'fr' ? 'Source canonique ↗' : 'Canonical source ↗' }}</a>
         </div>
         <article class="prose-silex">{{ documentation_html|raw }}</article>
     </div>

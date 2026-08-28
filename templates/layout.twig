@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ locale }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{% block description %}Silex is an experimental native language and compiler.{% endblock %}">
+    <meta name="description" content="{% block description %}{{ locale == 'fr' ? 'Silex est un langage et un compilateur natif expérimental.' : 'Silex is an experimental native language and compiler.' }}{% endblock %}">
     <meta name="theme-color" content="#0c0c0d">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <title>{% block title %}Silex{% endblock %}</title>
@@ -12,17 +12,18 @@
 <body>
     <!-- Silex Web release: {{ release }} -->
     <header class="site-header">
-        <a class="brand" href="/" aria-label="Silex home">
+        <a class="brand" href="/{{ locale }}/" aria-label="{{ locale == 'fr' ? 'Accueil Silex' : 'Silex home' }}">
             <img class="brand-mark" src="/icon.svg" alt="">
             <span>Silex</span>
         </a>
 
-        <nav class="site-navigation" aria-label="Main navigation">
-            <a href="/docs">Docs</a>
-            <a href="/#install">Install</a>
-            <a href="/packages">Packages</a>
-            <a class="wide-link" href="/registry">Registry</a>
+        <nav class="site-navigation" aria-label="{{ locale == 'fr' ? 'Navigation principale' : 'Main navigation' }}">
+            <a href="/{{ locale }}/docs">{{ locale == 'fr' ? 'Documentation' : 'Docs' }}</a>
+            <a href="/{{ locale }}/#install">{{ locale == 'fr' ? 'Installer' : 'Install' }}</a>
+            <a href="/{{ locale }}/packages">Packages</a>
+            <a class="wide-link" href="/{{ locale }}/registry">{{ locale == 'fr' ? 'Registre' : 'Registry' }}</a>
             <a class="wide-link" href="https://github.com/Matanek/Silex">GitHub</a>
+            <a class="locale-link" href="{{ alternate_path }}" lang="{{ alternate_locale }}">{{ alternate_label }}</a>
         </nav>
     </header>
 
@@ -30,8 +31,8 @@
 
     <footer class="site-footer">
         <span>
-            <a href="https://github.com/Matanek/Silex">Silex language</a>
-            developed by
+            <a href="https://github.com/Matanek/Silex">{{ locale == 'fr' ? 'Langage Silex' : 'Silex language' }}</a>
+            {{ locale == 'fr' ? 'développé par' : 'developed by' }}
             <a href="https://github.com/Matanek">Matanek</a>.
         </span>
         <a href="https://github.com/Matanek/Silex/blob/main/LICENSE">Apache-2.0 with LLVM exception</a>

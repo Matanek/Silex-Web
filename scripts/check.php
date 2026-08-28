@@ -10,43 +10,22 @@ use Silex\Web\Rendering\MarkdownRenderer;
 use Slim\Psr7\Factory\ServerRequestFactory;
 
 $root = dirname(__DIR__);
-putenv('SILEX_DOCS_ROOT=' . $root . '/tests/fixtures/Silex/Docs');
-putenv('SILEX_PACKAGES_ROOT=' . $root . '/tests/fixtures/Packages');
+putenv('SILEX_DOCUMENTATION_ROOT=' . $root . '/tests/fixtures/Silex-Documentation');
 putenv('SILEX_REGISTRY_ROOT=' . $root . '/tests/fixtures/Silex-Registry');
 putenv('SILEX_VERSION=9.8.7');
-$directories = [
-    $root . '/public',
-    $root . '/scripts',
-    $root . '/src',
-];
+
 $phpFiles = [];
-
-foreach ($directories as $directory) {
-    if (!is_dir($directory)) {
-        continue;
-    }
-
-    $iterator = new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
-    );
-
+foreach ([$root . '/public', $root . '/scripts', $root . '/src'] as $directory) {
+    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS));
     foreach ($iterator as $file) {
         if ($file->isFile() && $file->getExtension() === 'php') {
             $phpFiles[] = $file->getPathname();
         }
     }
 }
-
 sort($phpFiles);
-
-if ($phpFiles === []) {
-    fwrite(STDERR, "No PHP source files were found.\n");
-    exit(1);
-}
-
 foreach ($phpFiles as $file) {
-    $command = escapeshellarg(PHP_BINARY) . ' -l ' . escapeshellarg($file);
-    passthru($command, $status);
+    passthru(escapeshellarg(PHP_BINARY) . ' -l ' . escapeshellarg($file), $status);
     if ($status !== 0) {
         exit($status);
     }
@@ -64,11 +43,9 @@ $assert = static function (bool $condition, string $message): void {
 $requestFactory = new ServerRequestFactory();
 $handle = static function (string $uri, array $headers = [], array $cookies = []) use ($root, $requestFactory): ResponseInterface {
     $request = $requestFactory->createServerRequest('GET', $uri);
-
     foreach ($headers as $name => $value) {
         $request = $request->withHeader($name, $value);
     }
-
     if ($cookies !== []) {
         $request = $request->withCookieParams($cookies);
     }
@@ -76,129 +53,88 @@ $handle = static function (string $uri, array $headers = [], array $cookies = []
     return ApplicationFactory::create($root)->handle($request);
 };
 
-$home = $handle(
+$frenchRedirect = $handle('https://silex.test/', ['Accept-Language' => 'fr-FR, en;q=0.8']);
+$assert($frenchRedirect->getStatusCode() === 302, 'The root must redirect to the negotiated language.');
+$assert($frenchRedirect->getHeaderLine('Location') === '/fr/', 'French browser preferences must select /fr/.');
+
+$cookieRedirect = $handle(
     'https://silex.test/',
-    ['Accept-Language' => 'fr-FR, en;q=0.8'],
-    ['silex_locale' => 'fr'],
+    ['Accept-Language' => 'fr-FR'],
+    ['silex_locale' => 'en'],
 );
+$assert($cookieRedirect->getHeaderLine('Location') === '/en/', 'The saved language must override browser preferences.');
+
+$home = $handle('https://silex.test/fr/');
 $homeBody = (string) $home->getBody();
 $releaseFile = $root . '/release.txt';
 $expectedRelease = is_file($releaseFile) ? trim((string) file_get_contents($releaseFile)) : 'development';
-$assert($home->getStatusCode() === 200, 'The direct home page must respond with HTTP 200.');
-$assert($home->getHeaderLine('Location') === '', 'The home page must not redirect by browser language.');
-$assert(!str_contains($home->getHeaderLine('Set-Cookie'), 'silex_locale'), 'The website must not set a locale cookie.');
-$assert(str_contains($homeBody, 'Modern Code'), 'The English home page content is missing.');
+$assert($home->getStatusCode() === 200, 'The French home page must respond with HTTP 200.');
+$assert(str_contains($homeBody, '<html lang="fr">'), 'The French page language is missing.');
+$assert(str_contains($homeBody, 'Code moderne'), 'The French home page content is missing.');
+$assert(str_contains($homeBody, 'href="/en/"'), 'The home page language switch must preserve the page.');
+$assert(str_contains($home->getHeaderLine('Set-Cookie'), 'silex_locale=fr'), 'Localized routes must save the selected language.');
+$assert(str_contains($home->getHeaderLine('Set-Cookie'), 'Secure'), 'HTTPS locale cookies must be secure.');
 $assert(str_contains($homeBody, 'silex run Main.sx'), 'The canonical quickstart command is missing.');
 $assert(str_contains($homeBody, 'v9.8.7'), 'The configured Silex version is missing.');
-$assert(
-    str_contains($homeBody, '<link rel="icon" href="/icon.svg" type="image/svg+xml">')
-        && str_contains($homeBody, '<img class="brand-mark" src="/icon.svg" alt="">'),
-    'The Silex icon is missing from the page shell.',
-);
-$assert(str_contains($homeBody, 'data-package-count="1"'), 'The home page package list is missing.');
-$assert(str_contains($homeBody, 'class="package-card"'), 'The home page must use the shared package card.');
-$assert(str_contains($homeBody, 'href="/packages/Example"'), 'The home page must link to package documentation.');
-$assert(
-    str_contains($homeBody, 'href="https://github.com/Matanek/Silex-Lib-Example"'),
-    'The home page package list must link directly to the package repository.',
-);
-$assert(
-    str_contains($homeBody, 'Silex Web release: ' . $expectedRelease),
-    'The deployment marker does not match release.txt.',
-);
-$assert(
-    str_contains($homeBody, 'href="https://github.com/Matanek/Silex">Silex language</a>')
-        && str_contains($homeBody, 'href="https://github.com/Matanek">Matanek</a>'),
-    'The footer must credit Matanek and link to the Silex repository.',
-);
+$assert(str_contains($homeBody, 'data-package-count="1"'), 'The home page package catalog is missing.');
+$assert(str_contains($homeBody, 'href="https://github.com/Matanek/Silex-Lib-Example"'), 'Package cards must link to their canonical repository.');
+$assert(!str_contains($homeBody, '/fr/packages/Example'), 'Package cards must not link to local package documentation.');
+$assert(str_contains($homeBody, 'Silex Web release: ' . $expectedRelease), 'The deployment marker does not match release.txt.');
+$assert(str_contains($homeBody, '<link rel="icon" href="/icon.svg" type="image/svg+xml">'), 'The Silex icon is missing.');
 
-$documentation = $handle('https://silex.test/docs');
-$documentationBody = (string) $documentation->getBody();
-$assert($documentation->getStatusCode() === 200, 'The documentation must respond with HTTP 200.');
-$assert(str_contains($documentationBody, '<h1>Documentation</h1>'), 'Canonical Markdown headings must be rendered.');
-$assert(str_contains($documentationBody, '<code class="language-silex">'), 'Silex code fences must keep their language.');
-$assert(str_contains($documentationBody, 'func main()'), 'The documentation must use the current Silex function syntax.');
-$assert(
-    str_contains($documentationBody, 'href="/docs/Language/README.md"'),
-    'Relative canonical documentation links must be routed through the website.',
-);
-$assert(
-    str_contains($documentationBody, 'href="/packages/Example"'),
-    'Language documentation navigation must expose package documentation.',
-);
+$englishHome = $handle('https://silex.test/en/');
+$englishHomeBody = (string) $englishHome->getBody();
+$assert($englishHome->getStatusCode() === 200, 'The English home page must respond with HTTP 200.');
+$assert(str_contains($englishHomeBody, '<html lang="en">') && str_contains($englishHomeBody, 'Modern Code'), 'The English home page is missing.');
+$assert(str_contains($englishHomeBody, 'href="/fr/"'), 'The English language switch is missing.');
 
-$languageGuide = $handle('https://silex.test/docs/Language/README.md');
-$languageGuideBody = (string) $languageGuide->getBody();
-$assert($languageGuide->getStatusCode() === 200, 'A nested language guide must respond with HTTP 200.');
-$assert(str_contains($languageGuideBody, '<h1>Silex language</h1>'), 'The nested language guide is missing.');
+$frenchDocumentation = $handle('https://silex.test/fr/docs');
+$frenchDocumentationBody = (string) $frenchDocumentation->getBody();
+$assert($frenchDocumentation->getStatusCode() === 200, 'French documentation must respond with HTTP 200.');
+$assert(str_contains($frenchDocumentationBody, '<h1>Documentation Silex</h1>'), 'French Markdown must be rendered from FR/.');
+$assert(str_contains($frenchDocumentationBody, 'Bonjour depuis Silex'), 'The French code example is missing.');
+$assert(str_contains($frenchDocumentationBody, 'href="/fr/docs/Language/README.md"'), 'French relative links must stay in the French route tree.');
+$assert(str_contains($frenchDocumentationBody, 'href="/en/docs"'), 'The documentation switch must preserve the document path.');
+$assert(str_contains($frenchDocumentationBody, '/Silex-Documentation/blob/main/FR/README.md'), 'The French canonical source URL is wrong.');
+$assert(!str_contains($frenchDocumentationBody, 'docs-package-index'), 'Language navigation must not include package documentation.');
 
-$packages = $handle('https://silex.test/packages');
+$englishGuide = $handle('https://silex.test/en/docs/Language/README.md');
+$englishGuideBody = (string) $englishGuide->getBody();
+$assert($englishGuide->getStatusCode() === 200, 'An English nested guide must respond with HTTP 200.');
+$assert(str_contains($englishGuideBody, '<h1>Understand the Silex language</h1>'), 'English Markdown must be rendered from EN/.');
+$assert(str_contains($englishGuideBody, 'href="/fr/docs/Language/README.md"'), 'The nested documentation switch must preserve the path.');
+
+$packages = $handle('https://silex.test/fr/packages');
 $packagesBody = (string) $packages->getBody();
-$assert($packages->getStatusCode() === 200, 'The package catalog must respond with HTTP 200.');
-$assert(str_contains($packagesBody, 'data-package-count="1"'), 'The package catalog must expose its package count.');
-$assert(str_contains($packagesBody, 'class="package-card"'), 'The package catalog must use the shared package card.');
-$assert(str_contains($packagesBody, 'href="/packages/Example"'), 'The package catalog entry is missing.');
-$assert(
-    str_contains($packagesBody, 'href="https://github.com/Matanek/Silex-Lib-Example"'),
-    'The package catalog must link directly to the package repository.',
-);
+$assert($packages->getStatusCode() === 200, 'The French package catalog must respond with HTTP 200.');
+$assert(str_contains($packagesBody, 'Packages enregistrés.'), 'The French package catalog content is missing.');
+$assert(str_contains($packagesBody, 'data-package-count="1"'), 'The package count is missing.');
+$assert(str_contains($packagesBody, 'href="https://github.com/Matanek/Silex-Lib-Example"'), 'The package repository link is missing.');
+$assert(!str_contains($packagesBody, 'Docs <span'), 'The catalog must not advertise aggregated package documentation.');
 
-$package = $handle('https://silex.test/packages/Example');
-$packageBody = (string) $package->getBody();
-$assert($package->getStatusCode() === 200, 'Package documentation must respond with HTTP 200.');
-$assert(str_contains($packageBody, '<h1>Example package</h1>'), 'The package README must be rendered.');
-$assert(
-    str_contains($packageBody, 'href="/packages/Example/docs/Docs/Guide.md"'),
-    'Relative package documentation links must stay inside the package route.',
-);
-$assert(
-    str_contains($packageBody, 'href="https://github.com/Matanek/Silex-Lib-Example/blob/main/Tests/Example.sx"'),
-    'Relative package source links must resolve to the canonical repository.',
-);
-$assert(
-    str_contains($packageBody, '>Repository ↗</a>'),
-    'Package documentation must expose the package repository independently from its canonical document source.',
-);
-$missingDocumentation = $handle('https://silex.test/docs/Missing.md');
-$assert($missingDocumentation->getStatusCode() === 404, 'Missing canonical documentation must respond with HTTP 404.');
-$missingPackageDocument = $handle('https://silex.test/packages/Example/docs/Package.json');
-$assert($missingPackageDocument->getStatusCode() === 404, 'Files outside package documentation must not be exposed.');
-
-$registry = $handle('https://silex.test/registry');
+$registry = $handle('https://silex.test/fr/registry');
 $registryBody = (string) $registry->getBody();
-$assert($registry->getStatusCode() === 200, 'The registry page must respond with HTTP 200.');
-$assert(str_contains($registryBody, 'Build it.'), 'The registry page content is missing.');
-$assert(
-    str_contains($registryBody, 'https://registry.silex-lang.org/v1/index.json'),
-    'The website registry page must link to the autonomous registry API.',
-);
-$assert(!str_contains($registryBody, 'locale-link'), 'The single-language site must not expose a locale switch.');
+$assert($registry->getStatusCode() === 200, 'The French registry page must respond with HTTP 200.');
+$assert(str_contains($registryBody, 'Construisez.'), 'The French registry content is missing.');
+$assert(str_contains($registryBody, 'href="/en/registry"'), 'The registry language switch must preserve the page.');
+$assert(str_contains($registryBody, 'https://registry.silex-lang.org/v1/index.json'), 'The registry API link is missing.');
+$assert(str_contains($registryBody, 'https://github.com/Matanek/Silex-Lib-STD'), 'Official package links must point to repositories.');
 
-$assert($handle('https://silex.test/fr/')->getStatusCode() === 404, 'Legacy localized home routes must not redirect.');
-$assert($handle('https://silex.test/en/docs')->getStatusCode() === 404, 'Legacy localized documentation routes must not redirect.');
+$assert($handle('https://silex.test/fr/docs/Missing.md')->getStatusCode() === 404, 'Missing documentation must respond with HTTP 404.');
 
-$unsafeHtml = (new MarkdownRenderer())->toHtml(
-    '<script>alert("xss")</script>' . "\n\n" . '[unsafe](javascript:alert(1))',
-);
+$unsafeHtml = (new MarkdownRenderer())->toHtml('<script>alert("xss")</script>' . "\n\n" . '[unsafe](javascript:alert(1))');
 $assert(!str_contains($unsafeHtml, '<script'), 'Raw HTML must not survive Markdown rendering.');
 $assert(!str_contains($unsafeHtml, 'javascript:'), 'Unsafe Markdown links must be removed.');
 
 $snapshotDocuments = new DocumentRepository(
-    $root . '/content',
-    $root . '/tests/fixtures/Silex/Docs',
-    $root . '/tests/fixtures/Packages',
+    $root . '/tests/fixtures/Silex-Documentation',
     $root . '/tests/fixtures/Silex-Registry',
     $root . '/tests/fixtures/snapshot.json',
 );
-$snapshotLanguageDocument = $snapshotDocuments->languageDocument('README.md');
-$snapshotPackageDocument = $snapshotDocuments->packageDocument('Example', 'README.md');
+$snapshotDocument = $snapshotDocuments->languageDocument('en', 'README.md');
 $assert(
-    $snapshotLanguageDocument !== null && str_contains($snapshotLanguageDocument['source_url'], '/blob/v1.2.3/'),
-    'Release documentation must link to the exact published Silex tag.',
-);
-$assert(
-    $snapshotPackageDocument !== null && str_contains((string) $snapshotPackageDocument['source_url'], '/blob/v9.8.7/'),
-    'Release package documentation must link to the exact published package tag.',
+    $snapshotDocument !== null && str_contains($snapshotDocument['source_url'], '/blob/3333333333333333333333333333333333333333/EN/'),
+    'Release documentation must link to the exact documentation commit.',
 );
 
 putenv('SILEX_VERSION');

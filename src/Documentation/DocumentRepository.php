@@ -12,223 +12,139 @@ use SplFileInfo;
 
 final readonly class DocumentRepository
 {
-    /** @var array{silex: string, packages: array<string, string>} */
-    private array $sourceReferences;
+    private string $documentationReference;
 
     public function __construct(
-        private string $fallbackContentRoot,
-        private string $silexDocsRoot,
-        private string $packagesRoot,
+        private string $documentationRoot,
         private string $registryRoot,
         ?string $snapshotManifest = null,
     ) {
-        $this->sourceReferences = $this->readSourceReferences($snapshotManifest);
+        $this->documentationReference = $this->readDocumentationReference($snapshotManifest);
     }
 
     /** @return array{path: string, title: string, markdown: string, source_url: string}|null */
-    public function languageDocument(string $path): ?array
+    public function languageDocument(string $locale, string $path): ?array
     {
-        if (!is_dir($this->silexDocsRoot)) {
-            if ($path !== '' && $path !== 'README.md') {
-                return null;
-            }
-            $markdown = $this->readFile($this->fallbackContentRoot . '/overview.md');
-
-            return [
-                'path' => 'README.md',
-                'title' => $this->extractTitle($markdown, 'Silex documentation'),
-                'markdown' => $markdown,
-                'source_url' => 'https://github.com/Matanek/Silex/tree/main/Docs',
-            ];
+        $language = $this->languageDirectory($locale);
+        if ($language === null) {
+            return null;
         }
 
-        $document = $this->readMarkdown($this->silexDocsRoot, $path);
+        $document = $this->readMarkdown($this->documentationRoot . '/' . $language, $path);
         if ($document === null) {
             return null;
         }
 
         return $document + [
-            'source_url' => 'https://github.com/Matanek/Silex/blob/' . rawurlencode($this->sourceReferences['silex']) . '/Docs/' . $document['path'],
+            'source_url' => 'https://github.com/Matanek/Silex-Documentation/blob/'
+                . $this->encodedReference($this->documentationReference)
+                . '/' . $language . '/' . $document['path'],
         ];
     }
 
     /** @return list<array{label: string, items: list<array{path: string, label: string}>}> */
-    public function languageNavigation(): array
+    public function languageNavigation(string $locale): array
     {
-        if (!is_dir($this->silexDocsRoot)) {
-            return [['label' => 'Documentation', 'items' => [['path' => 'README.md', 'label' => 'Overview']]]];
+        $language = $this->languageDirectory($locale);
+        if ($language === null) {
+            return [];
         }
 
+        $root = $this->documentationRoot . '/' . $language;
         $groups = [];
-        foreach ($this->markdownFiles($this->silexDocsRoot) as $path) {
-            $parts = explode('/', $path);
-            $group = match (true) {
-                count($parts) === 1 => 'Overview',
-                $parts[0] === 'Language' && count($parts) >= 3 => $this->humanize($parts[1]),
-                $parts[0] === 'Language' => 'Language',
-                default => $this->humanize($parts[0]),
-            };
-
-            $groups[$group][] = [
+        foreach ($this->markdownFiles($root) as $path) {
+            $key = $this->navigationGroup($path);
+            $markdown = $this->readFile($root . '/' . $path);
+            $groups[$key][] = [
                 'path' => $path,
-                'label' => $this->documentLabel($path),
+                'label' => basename($path) === 'README.md'
+                    ? ($locale === 'fr' ? 'Vue d’ensemble' : 'Overview')
+                    : $this->extractTitle($markdown, $this->humanize(pathinfo($path, PATHINFO_FILENAME))),
             ];
         }
 
-        $priority = ['Overview', 'Language', 'Getting started', 'Functions', 'Modules', 'Data types', 'Collections', 'Ownership', 'Reference'];
+        $priority = [
+            'Overview',
+            'Learn',
+            'Language',
+            'Language/Values',
+            'Language/Control-flow',
+            'Language/Functions',
+            'Language/Data-types',
+            'Language/Collections',
+            'Language/Ownership',
+            'Language/Modules',
+            'Language/Interop',
+            'Tools',
+            'Reference',
+        ];
         uksort($groups, static function (string $left, string $right) use ($priority): int {
             $leftIndex = array_search($left, $priority, true);
             $rightIndex = array_search($right, $priority, true);
-            $leftRank = $leftIndex === false ? PHP_INT_MAX : $leftIndex;
-            $rightRank = $rightIndex === false ? PHP_INT_MAX : $rightIndex;
 
-            return $leftRank <=> $rightRank ?: strcasecmp($left, $right);
+            return ($leftIndex === false ? PHP_INT_MAX : $leftIndex)
+                <=> ($rightIndex === false ? PHP_INT_MAX : $rightIndex)
+                ?: strcasecmp($left, $right);
         });
 
         $navigation = [];
-        foreach ($groups as $label => $items) {
-            usort($items, static function (array $left, array $right): int {
-                if ($left['path'] === 'README.md') {
+        foreach ($groups as $key => $items) {
+            $order = $this->linkedDocumentOrder($root, $this->groupOverviewPath($key));
+            usort($items, static function (array $left, array $right) use ($order): int {
+                if ($left['path'] === 'README.md' || str_ends_with($left['path'], '/README.md')) {
                     return -1;
                 }
-                if ($right['path'] === 'README.md') {
+                if ($right['path'] === 'README.md' || str_ends_with($right['path'], '/README.md')) {
                     return 1;
                 }
+                $leftRank = $order[$left['path']] ?? PHP_INT_MAX;
+                $rightRank = $order[$right['path']] ?? PHP_INT_MAX;
 
-                return strcasecmp($left['label'], $right['label']);
+                return $leftRank <=> $rightRank ?: strcasecmp($left['label'], $right['label']);
             });
-            $navigation[] = ['label' => $label, 'items' => $items];
+            $navigation[] = [
+                'label' => $this->groupLabel($key, $locale),
+                'items' => $items,
+            ];
         }
 
         return $navigation;
     }
 
-    /** @return list<array{name: string, version: string, description: string, repository: ?string, document_count: int}> */
+    /** @return list<array{name: string, repository: string}> */
     public function packages(): array
     {
-        if (!is_dir($this->packagesRoot)) {
+        $root = $this->registryRoot . '/registry/v1/packages';
+        if (!is_dir($root)) {
             return [];
         }
 
-        $directories = glob($this->packagesRoot . '/*', GLOB_ONLYDIR);
-        if ($directories === false) {
+        $entries = glob($root . '/*.json');
+        if ($entries === false) {
             return [];
         }
 
         $packages = [];
-        foreach ($directories as $directory) {
-            $manifestPath = $directory . '/Package.json';
-            if (!is_file($manifestPath)) {
-                continue;
+        foreach ($entries as $path) {
+            $registration = $this->decodeJson($path, 'Registry entry');
+            $name = $registration['name'] ?? null;
+            $repository = $registration['repository'] ?? null;
+            if (!is_string($name) || !$this->validPackageName($name) || basename($path) !== $name . '.json') {
+                throw new RuntimeException(sprintf('Registry entry "%s" has an invalid package name.', $path));
             }
-
-            $manifest = $this->decodeManifest($manifestPath);
-            $name = $manifest['name'] ?? null;
-            if (!is_string($name) || !$this->validPackageName($name)) {
-                throw new RuntimeException(sprintf('Package manifest "%s" has an invalid name.', $manifestPath));
+            if (!is_string($repository) || preg_match('#^https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(?:\.git)?$#', $repository) !== 1) {
+                throw new RuntimeException(sprintf('Registry entry "%s" has an invalid repository.', $path));
             }
 
             $packages[] = [
                 'name' => $name,
-                'version' => is_string($manifest['version'] ?? null) ? $manifest['version'] : '',
-                'description' => is_string($manifest['description'] ?? null) ? $manifest['description'] : '',
-                'repository' => $this->packageRepository($name),
-                'document_count' => count($this->packageMarkdownFiles($directory)),
+                'repository' => preg_replace('/\.git$/', '', $repository) ?? $repository,
             ];
         }
 
         usort($packages, static fn (array $left, array $right): int => strcasecmp($left['name'], $right['name']));
 
         return $packages;
-    }
-
-    /** @return array{name: string, version: string, description: string, repository: ?string, source_ref: string, dependencies: list<string>, document_count: int}|null */
-    public function package(string $name): ?array
-    {
-        if (!$this->validPackageName($name)) {
-            return null;
-        }
-
-        $root = $this->packagesRoot . '/' . $name;
-        $manifestPath = $root . '/Package.json';
-        if (!is_file($manifestPath)) {
-            return null;
-        }
-
-        $manifest = $this->decodeManifest($manifestPath);
-        if (($manifest['name'] ?? null) !== $name) {
-            return null;
-        }
-
-        $dependencies = array_keys(is_array($manifest['dependencies'] ?? null) ? $manifest['dependencies'] : []);
-        sort($dependencies, SORT_NATURAL | SORT_FLAG_CASE);
-
-        return [
-            'name' => $name,
-            'version' => is_string($manifest['version'] ?? null) ? $manifest['version'] : '',
-            'description' => is_string($manifest['description'] ?? null) ? $manifest['description'] : '',
-            'repository' => $this->packageRepository($name),
-            'source_ref' => $this->sourceReferences['packages'][$name] ?? 'main',
-            'dependencies' => $dependencies,
-            'document_count' => count($this->packageMarkdownFiles($root)),
-        ];
-    }
-
-    /** @return array{path: string, title: string, markdown: string, source_url: ?string}|null */
-    public function packageDocument(string $name, string $path): ?array
-    {
-        $package = $this->package($name);
-        if ($package === null) {
-            return null;
-        }
-
-        $document = $this->readMarkdown($this->packagesRoot . '/' . $name, $path);
-        if ($document === null || ($document['path'] !== 'README.md' && !str_starts_with($document['path'], 'Docs/'))) {
-            return null;
-        }
-
-        $sourceUrl = $package['repository'];
-        if ($sourceUrl !== null) {
-            $sourceUrl .= '/blob/' . rawurlencode($package['source_ref']) . '/' . $document['path'];
-        }
-
-        return $document + ['source_url' => $sourceUrl];
-    }
-
-    /** @return list<array{label: string, items: list<array{path: string, label: string}>}> */
-    public function packageNavigation(string $name): array
-    {
-        if (!$this->validPackageName($name)) {
-            return [];
-        }
-
-        $root = $this->packagesRoot . '/' . $name;
-        $files = $this->packageMarkdownFiles($root);
-        if ($files === []) {
-            return [];
-        }
-
-        $overview = [];
-        $guides = [];
-        foreach ($files as $path) {
-            $item = ['path' => $path, 'label' => $this->documentLabel($path)];
-            if ($path === 'README.md') {
-                $overview[] = $item;
-            } else {
-                $guides[] = $item;
-            }
-        }
-
-        usort($guides, static fn (array $left, array $right): int => strcasecmp($left['label'], $right['label']));
-        $navigation = [];
-        if ($overview !== []) {
-            $navigation[] = ['label' => 'Package', 'items' => $overview];
-        }
-        if ($guides !== []) {
-            $navigation[] = ['label' => 'Guides', 'items' => $guides];
-        }
-
-        return $navigation;
     }
 
     /** @return array{path: string, title: string, markdown: string}|null */
@@ -255,7 +171,7 @@ final readonly class DocumentRepository
 
         return [
             'path' => str_replace(DIRECTORY_SEPARATOR, '/', substr($filePath, strlen($rootPath) + 1)),
-            'title' => $this->extractTitle($markdown, $this->documentLabel($path)),
+            'title' => $this->extractTitle($markdown, $this->humanize(pathinfo($path, PATHINFO_FILENAME))),
             'markdown' => $markdown,
         ];
     }
@@ -263,10 +179,6 @@ final readonly class DocumentRepository
     /** @return list<string> */
     private function markdownFiles(string $root): array
     {
-        if (!is_dir($root)) {
-            return [];
-        }
-
         $rootPath = realpath($root);
         if ($rootPath === false) {
             return [];
@@ -285,83 +197,161 @@ final readonly class DocumentRepository
         return $files;
     }
 
-    /** @return list<string> */
-    private function packageMarkdownFiles(string $root): array
+    private function navigationGroup(string $path): string
     {
-        $files = [];
-        if (is_file($root . '/README.md')) {
-            $files[] = 'README.md';
+        $parts = explode('/', $path);
+        if (count($parts) === 1) {
+            return 'Overview';
         }
-        foreach ($this->markdownFiles($root . '/Docs') as $path) {
-            $files[] = 'Docs/' . $path;
+        if ($parts[0] === 'Language' && count($parts) >= 3) {
+            return 'Language/' . $parts[1];
         }
 
-        return $files;
+        return $parts[0];
+    }
+
+    private function groupOverviewPath(string $key): string
+    {
+        return match ($key) {
+            'Overview' => 'README.md',
+            default => $key . '/README.md',
+        };
+    }
+
+    /** @return array<string, int> */
+    private function linkedDocumentOrder(string $root, string $overviewPath): array
+    {
+        $path = $root . '/' . $overviewPath;
+        if (!is_file($path)) {
+            return [];
+        }
+
+        preg_match_all('/\[[^]]+\]\(([^)#]+\.md)(?:#[^)]*)?\)/', $this->readFile($path), $matches);
+        $base = dirname($overviewPath);
+        $order = [];
+        foreach ($matches[1] as $index => $linkedPath) {
+            $candidate = ($base === '.' ? '' : $base . '/') . rawurldecode($linkedPath);
+            $normalized = [];
+            foreach (explode('/', $candidate) as $segment) {
+                if ($segment === '' || $segment === '.') {
+                    continue;
+                }
+                if ($segment === '..') {
+                    array_pop($normalized);
+                    continue;
+                }
+                $normalized[] = $segment;
+            }
+            $order[implode('/', $normalized)] = $index;
+        }
+
+        return $order;
+    }
+
+    private function groupLabel(string $key, string $locale): string
+    {
+        $labels = $locale === 'fr' ? [
+            'Overview' => 'Accueil',
+            'Learn' => 'Apprendre',
+            'Language' => 'Langage',
+            'Language/Values' => 'Valeurs',
+            'Language/Control-flow' => 'Contrôle de l’exécution',
+            'Language/Functions' => 'Fonctions',
+            'Language/Data-types' => 'Types de données',
+            'Language/Collections' => 'Collections',
+            'Language/Ownership' => 'Possession',
+            'Language/Modules' => 'Modules',
+            'Language/Interop' => 'Interopérabilité',
+            'Tools' => 'Outils',
+            'Reference' => 'Référence',
+        ] : [
+            'Overview' => 'Overview',
+            'Learn' => 'Learn',
+            'Language' => 'Language',
+            'Language/Values' => 'Values',
+            'Language/Control-flow' => 'Control flow',
+            'Language/Functions' => 'Functions',
+            'Language/Data-types' => 'Data types',
+            'Language/Collections' => 'Collections',
+            'Language/Ownership' => 'Ownership',
+            'Language/Modules' => 'Modules',
+            'Language/Interop' => 'Interoperability',
+            'Tools' => 'Tools',
+            'Reference' => 'Reference',
+        ];
+
+        return $labels[$key] ?? $this->humanize(basename($key));
+    }
+
+    private function languageDirectory(string $locale): ?string
+    {
+        return match ($locale) {
+            'en' => 'EN',
+            'fr' => 'FR',
+            default => null,
+        };
+    }
+
+    private function readDocumentationReference(?string $snapshotManifest): string
+    {
+        if ($snapshotManifest === null || !is_file($snapshotManifest)) {
+            return $this->localDocumentationReference() ?? 'main';
+        }
+
+        $snapshot = $this->decodeJson($snapshotManifest, 'Content snapshot');
+        $documentation = $snapshot['documentation'] ?? null;
+        $reference = is_array($documentation) ? ($documentation['commit'] ?? $documentation['reference'] ?? null) : null;
+        if (!is_string($reference) || preg_match('/^[0-9A-Za-z._\/-]+$/', $reference) !== 1 || str_contains($reference, '..')) {
+            throw new RuntimeException(sprintf('Content snapshot "%s" has an invalid documentation reference.', $snapshotManifest));
+        }
+
+        return $reference;
+    }
+
+    private function localDocumentationReference(): ?string
+    {
+        $gitPath = $this->documentationRoot . '/.git';
+        if (is_file($gitPath)) {
+            $pointer = trim($this->readFile($gitPath));
+            if (!str_starts_with($pointer, 'gitdir: ')) {
+                return null;
+            }
+            $directory = substr($pointer, strlen('gitdir: '));
+            $gitPath = str_starts_with($directory, '/')
+                ? $directory
+                : $this->documentationRoot . '/' . $directory;
+        }
+        $headPath = $gitPath . '/HEAD';
+        if (!is_file($headPath)) {
+            return null;
+        }
+
+        $head = trim($this->readFile($headPath));
+        if (str_starts_with($head, 'ref: refs/heads/')) {
+            return substr($head, strlen('ref: refs/heads/'));
+        }
+
+        return preg_match('/^[0-9a-f]{40}$/', $head) === 1 ? $head : null;
     }
 
     /** @return array<string, mixed> */
-    private function decodeManifest(string $path): array
+    private function decodeJson(string $path, string $label): array
     {
         try {
-            $manifest = json_decode($this->readFile($path), true, flags: JSON_THROW_ON_ERROR);
+            $value = json_decode($this->readFile($path), true, flags: JSON_THROW_ON_ERROR);
         } catch (JsonException $error) {
-            throw new RuntimeException(sprintf('Package manifest "%s" is invalid: %s', $path, $error->getMessage()), 0, $error);
+            throw new RuntimeException(sprintf('%s "%s" is invalid: %s', $label, $path, $error->getMessage()), 0, $error);
+        }
+        if (!is_array($value)) {
+            throw new RuntimeException(sprintf('%s "%s" must contain an object.', $label, $path));
         }
 
-        if (!is_array($manifest)) {
-            throw new RuntimeException(sprintf('Package manifest "%s" must contain an object.', $path));
-        }
-
-        return $manifest;
+        return $value;
     }
 
-    private function packageRepository(string $name): ?string
+    private function encodedReference(string $reference): string
     {
-        $path = $this->registryRoot . '/registry/v1/packages/' . $name . '.json';
-        if (!is_file($path)) {
-            return null;
-        }
-
-        try {
-            $registration = json_decode($this->readFile($path), true, flags: JSON_THROW_ON_ERROR);
-        } catch (JsonException) {
-            return null;
-        }
-        $repository = is_array($registration) ? ($registration['repository'] ?? null) : null;
-
-        return is_string($repository) ? preg_replace('/\.git$/', '', $repository) : null;
-    }
-
-    /** @return array{silex: string, packages: array<string, string>} */
-    private function readSourceReferences(?string $snapshotManifest): array
-    {
-        if ($snapshotManifest === null || !is_file($snapshotManifest)) {
-            return ['silex' => 'main', 'packages' => []];
-        }
-
-        $snapshot = $this->decodeManifest($snapshotManifest);
-        $silexTag = $snapshot['silex']['tag'] ?? null;
-        $packages = $snapshot['packages'] ?? null;
-        if (($silexTag !== null && !$this->validSourceReference($silexTag)) || !is_array($packages)) {
-            throw new RuntimeException(sprintf('Content snapshot "%s" has invalid source references.', $snapshotManifest));
-        }
-
-        $packageReferences = [];
-        foreach ($packages as $package) {
-            $name = is_array($package) ? ($package['name'] ?? null) : null;
-            $tag = is_array($package) ? ($package['tag'] ?? null) : null;
-            if (!is_string($name) || !$this->validPackageName($name) || ($tag !== null && !$this->validSourceReference($tag))) {
-                throw new RuntimeException(sprintf('Content snapshot "%s" has an invalid package reference.', $snapshotManifest));
-            }
-            $packageReferences[$name] = $tag ?? 'main';
-        }
-
-        return ['silex' => $silexTag ?? 'main', 'packages' => $packageReferences];
-    }
-
-    private function validSourceReference(string $reference): bool
-    {
-        return preg_match('/^v\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/', $reference) === 1;
+        return implode('/', array_map('rawurlencode', explode('/', $reference)));
     }
 
     private function readFile(string $path): string
@@ -377,19 +367,6 @@ final readonly class DocumentRepository
     private function extractTitle(string $markdown, string $fallback): string
     {
         return preg_match('/^#\s+(.+)$/m', $markdown, $match) === 1 ? trim($match[1]) : $fallback;
-    }
-
-    private function documentLabel(string $path): string
-    {
-        $filename = pathinfo($path, PATHINFO_FILENAME);
-        if (strcasecmp($filename, 'README') === 0) {
-            $parent = basename(dirname($path));
-            return $parent === '.' || strcasecmp($parent, 'Language') === 0 || strcasecmp($parent, 'Docs') === 0
-                ? 'Overview'
-                : $this->humanize($parent);
-        }
-
-        return $this->humanize($filename);
     }
 
     private function humanize(string $value): string

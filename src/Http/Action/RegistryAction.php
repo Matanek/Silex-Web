@@ -16,7 +16,14 @@ final readonly class RegistryAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $response->getBody()->write($this->twig->render('registry.twig'));
+        $locale = (string) $request->getAttribute('locale');
+        $alternateLocale = $locale === 'fr' ? 'en' : 'fr';
+        $response->getBody()->write($this->twig->render('registry.twig', [
+            'locale' => $locale,
+            'alternate_locale' => $alternateLocale,
+            'alternate_label' => $locale === 'fr' ? 'English' : 'Français',
+            'alternate_path' => '/' . $alternateLocale . '/registry',
+        ]));
 
         return $response->withHeader('Content-Type', 'text/html; charset=utf-8');
     }

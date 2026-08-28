@@ -3,28 +3,30 @@
 This repository owns the next Silex website implementation. The public
 staging deployment is available at <https://silex.nekmata.com/>.
 
-The website renders and publishes documentation owned by the repositories
-that implement Silex and its packages. It must not become a second editable
-copy of those Markdown sources. The current production website remains in
+The website renders the public language and tool documentation owned by
+`Matanek/Silex-Documentation`. It must not become a second editable copy of
+those Markdown sources. The current production website remains in
 `Matanek/Silex-Website` until an explicit cutover.
 
 In a Silex workspace checkout, the application automatically reads the sibling
-`Silex/Docs`, `Packages/`, and `Silex-Registry/` directories. Override those
-sources for another environment with `SILEX_DOCS_ROOT`, `SILEX_PACKAGES_ROOT`,
-and `SILEX_REGISTRY_ROOT`. The website and all published documentation use one
-direct English route tree; no locale negotiation or translation is required.
+`Silex-Documentation/` and `Silex-Registry/` directories. Override those
+sources for another environment with `SILEX_DOCUMENTATION_ROOT` and
+`SILEX_REGISTRY_ROOT`. The `/fr/` and `/en/` route trees read the mirrored
+`FR/` and `EN/` documentation trees. The root route uses the saved preference,
+then the browser language, and exposes a switch that preserves the current
+page.
 
 Production releases contain an immutable snapshot under `var/content/sources`.
-The deployment build fetches Silex, the registry, and every registered package,
-checks out the latest semantic release tag of Silex and each package, then
-copies only their manifests and canonical Markdown documentation. Local
-workspace sources keep priority so Herd continues to reflect live repository
-changes without rebuilding that snapshot.
+The deployment build fetches the Silex release, its matching documentation
+branch, and the registry. It copies both documentation languages and immutable
+package registrations; package repositories and their documentation are not
+ingested. Package cards link directly to each canonical repository. Local
+workspace sources keep priority so Herd reflects live documentation changes
+without rebuilding that snapshot.
 
-The deployment runs for website pushes, manual requests, ecosystem dispatches,
-and a six-hour reconciliation schedule. Its immutable release identifier
-combines the website commit with the content-snapshot digest, so a new Silex or
-package tag can never be hidden behind an already completed website release.
+The deployment runs for website pushes, manual requests, and ecosystem
+dispatches. Its immutable release identifier combines the website commit with
+the content-snapshot digest.
 
 The displayed Silex version resolves, in order, from `SILEX_VERSION`, locally
 from `../Silex/Toolchain/build.zig.zon`, or from the immutable release file
