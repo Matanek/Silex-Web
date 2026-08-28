@@ -106,6 +106,11 @@ $assert(
     str_contains($homeBody, 'Silex Web release: ' . $expectedRelease),
     'The deployment marker does not match release.txt.',
 );
+$assert(
+    str_contains($homeBody, 'href="https://github.com/Matanek/Silex">Silex language</a>')
+        && str_contains($homeBody, 'href="https://github.com/Matanek">Matanek</a>'),
+    'The footer must credit Matanek and link to the Silex repository.',
+);
 
 $documentation = $handle('https://silex.test/docs');
 $documentationBody = (string) $documentation->getBody();
