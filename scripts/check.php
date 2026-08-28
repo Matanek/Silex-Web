@@ -94,6 +94,8 @@ $assert($frenchHome->getStatusCode() === 200, 'The French home page must respond
 $assert(str_contains($frenchBody, 'Code moderne'), 'The French home page content is missing.');
 $assert(str_contains($frenchBody, 'silex run Main.sx'), 'The canonical quickstart command is missing.');
 $assert(str_contains($frenchBody, 'v9.8.7'), 'The configured Silex version is missing.');
+$assert(str_contains($frenchBody, 'data-package-count="1"'), 'The home page package list is missing.');
+$assert(str_contains($frenchBody, 'href="/fr/packages/Example"'), 'The home page must link to package documentation.');
 $assert(
     str_contains($frenchBody, 'Silex Web release: ' . $expectedRelease),
     'The deployment marker does not match release.txt.',
@@ -110,6 +112,10 @@ $assert(str_contains($documentationBody, 'func main()'), 'The documentation must
 $assert(
     str_contains($documentationBody, 'href="/en/docs/Language/README.md"'),
     'Relative canonical documentation links must be routed through the website.',
+);
+$assert(
+    str_contains($documentationBody, 'href="/en/packages/Example"'),
+    'Language documentation navigation must expose package documentation.',
 );
 
 $frenchLanguageGuide = $handle('https://silex.test/fr/docs/Language/README.md');

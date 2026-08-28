@@ -109,4 +109,35 @@
         </div>
     </div>
 </section>
+
+{% if packages is not empty %}
+<section class="section home-packages" id="packages" aria-labelledby="home-packages-title">
+    <div class="section-heading home-packages-heading">
+        <p class="eyebrow">{{ locale == 'fr' ? 'Écosystème public' : 'Public ecosystem' }}</p>
+        <h2 id="home-packages-title">
+            {{ packages|length }} {{ locale == 'fr' ? 'packages disponibles.' : 'packages available.' }}
+        </h2>
+        <p>
+            {{ locale == 'fr'
+                ? 'Chaque package conserve son manifeste et sa documentation canonique ; le site les rassemble pour les rendre directement explorables.'
+                : 'Each package owns its manifest and canonical documentation; the website brings them together for direct discovery.' }}
+        </p>
+    </div>
+
+    <div class="home-package-list" data-package-count="{{ packages|length }}">
+        {% for package in packages %}
+            <a href="/{{ locale }}/packages/{{ package.name|url_encode }}">
+                <div><strong>{{ package.name }}</strong>{% if package.version %}<span>v{{ package.version }}</span>{% endif %}</div>
+                <p>{{ package.description ?: (locale == 'fr' ? 'Package Silex.' : 'Silex package.') }}</p>
+                <b aria-hidden="true">→</b>
+            </a>
+        {% endfor %}
+    </div>
+
+    <div class="home-packages-actions">
+        <a class="button button-secondary" href="/{{ locale }}/packages">{{ locale == 'fr' ? 'Explorer tous les packages' : 'Explore all packages' }}</a>
+        <a class="text-link" href="/{{ locale }}/registry">{{ locale == 'fr' ? 'Comment publier un package' : 'How to publish a package' }} <span aria-hidden="true">→</span></a>
+    </div>
+</section>
+{% endif %}
 {% endblock %}

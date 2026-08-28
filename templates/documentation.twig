@@ -25,6 +25,17 @@
                     </ul>
                 </div>
             {% endfor %}
+
+            {% if packages is not empty %}
+                <div class="docs-nav-group docs-package-index">
+                    <h2>Packages</h2>
+                    <ul>
+                        {% for package in packages %}
+                            <li><a href="/{{ locale }}/packages/{{ package.name|url_encode }}">{{ package.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
         </nav>
     </aside>
 

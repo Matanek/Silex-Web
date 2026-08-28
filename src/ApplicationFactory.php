@@ -52,7 +52,7 @@ final class ApplicationFactory
         $app->get('/', new LocaleRedirectAction($languages));
 
         $app->group('/{locale:en|fr}', function (RouteCollectorProxy $group) use ($twig, $documents, $markdown): void {
-            $home = new HomeAction($twig);
+            $home = new HomeAction($twig, $documents);
             $documentation = new DocumentationAction($twig, $documents, $markdown);
             $packages = new PackagesAction($twig, $documents);
             $packageDocumentation = new PackageDocumentationAction($twig, $documents, $markdown);

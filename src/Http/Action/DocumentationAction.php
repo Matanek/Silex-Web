@@ -46,6 +46,7 @@ final readonly class DocumentationAction
             'current_path' => $document['path'],
             'document_title' => $document['title'],
             'navigation' => $this->documents->languageNavigation(),
+            'packages' => $this->documents->packages(),
             'source_url' => $document['source_url'],
             'documentation_html' => $documentation,
         ]));
