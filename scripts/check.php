@@ -97,6 +97,12 @@ $assert(str_contains($frenchDocumentationBody, 'href="/fr/docs/Language/README.m
 $assert(str_contains($frenchDocumentationBody, 'href="/en/docs"'), 'The documentation switch must preserve the document path.');
 $assert(str_contains($frenchDocumentationBody, '/Silex-Documentation/blob/main/FR/README.md'), 'The French canonical source URL is wrong.');
 $assert(!str_contains($frenchDocumentationBody, 'docs-package-index'), 'Language navigation must not include package documentation.');
+$assert(
+    preg_match('/<aside class="docs-sidebar">(.*?)<\/aside>/s', $frenchDocumentationBody, $sidebarMatch) === 1
+        && !str_contains($sidebarMatch[1], 'README.md')
+        && !str_contains($sidebarMatch[1], 'href="/fr/docs"'),
+    'README index pages must not appear in documentation navigation.',
+);
 
 $englishGuide = $handle('https://silex.test/en/docs/Language/README.md');
 $englishGuideBody = (string) $englishGuide->getBody();

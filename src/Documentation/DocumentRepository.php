@@ -53,13 +53,15 @@ final readonly class DocumentRepository
         $root = $this->documentationRoot . '/' . $language;
         $groups = [];
         foreach ($this->markdownFiles($root) as $path) {
+            if (basename($path) === 'README.md') {
+                continue;
+            }
+
             $key = $this->navigationGroup($path);
             $markdown = $this->readFile($root . '/' . $path);
             $groups[$key][] = [
                 'path' => $path,
-                'label' => basename($path) === 'README.md'
-                    ? ($locale === 'fr' ? 'Vue d’ensemble' : 'Overview')
-                    : $this->extractTitle($markdown, $this->humanize(pathinfo($path, PATHINFO_FILENAME))),
+                'label' => $this->extractTitle($markdown, $this->humanize(pathinfo($path, PATHINFO_FILENAME))),
             ];
         }
 
@@ -91,12 +93,6 @@ final readonly class DocumentRepository
         foreach ($groups as $key => $items) {
             $order = $this->linkedDocumentOrder($root, $this->groupOverviewPath($key));
             usort($items, static function (array $left, array $right) use ($order): int {
-                if ($left['path'] === 'README.md' || str_ends_with($left['path'], '/README.md')) {
-                    return -1;
-                }
-                if ($right['path'] === 'README.md' || str_ends_with($right['path'], '/README.md')) {
-                    return 1;
-                }
                 $leftRank = $order[$left['path']] ?? PHP_INT_MAX;
                 $rightRank = $order[$right['path']] ?? PHP_INT_MAX;
 
