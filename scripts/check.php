@@ -90,7 +90,12 @@ $assert(str_contains($homeBody, 'Modern Code'), 'The English home page content i
 $assert(str_contains($homeBody, 'silex run Main.sx'), 'The canonical quickstart command is missing.');
 $assert(str_contains($homeBody, 'v9.8.7'), 'The configured Silex version is missing.');
 $assert(str_contains($homeBody, 'data-package-count="1"'), 'The home page package list is missing.');
+$assert(str_contains($homeBody, 'class="package-card"'), 'The home page must use the shared package card.');
 $assert(str_contains($homeBody, 'href="/packages/Example"'), 'The home page must link to package documentation.');
+$assert(
+    str_contains($homeBody, 'href="https://github.com/Matanek/Silex-Lib-Example"'),
+    'The home page package list must link directly to the package repository.',
+);
 $assert(
     str_contains($homeBody, 'Silex Web release: ' . $expectedRelease),
     'The deployment marker does not match release.txt.',
@@ -120,7 +125,12 @@ $packages = $handle('https://silex.test/packages');
 $packagesBody = (string) $packages->getBody();
 $assert($packages->getStatusCode() === 200, 'The package catalog must respond with HTTP 200.');
 $assert(str_contains($packagesBody, 'data-package-count="1"'), 'The package catalog must expose its package count.');
+$assert(str_contains($packagesBody, 'class="package-card"'), 'The package catalog must use the shared package card.');
 $assert(str_contains($packagesBody, 'href="/packages/Example"'), 'The package catalog entry is missing.');
+$assert(
+    str_contains($packagesBody, 'href="https://github.com/Matanek/Silex-Lib-Example"'),
+    'The package catalog must link directly to the package repository.',
+);
 
 $package = $handle('https://silex.test/packages/Example');
 $packageBody = (string) $package->getBody();
@@ -133,6 +143,10 @@ $assert(
 $assert(
     str_contains($packageBody, 'href="https://github.com/Matanek/Silex-Lib-Example/blob/main/Tests/Example.sx"'),
     'Relative package source links must resolve to the canonical repository.',
+);
+$assert(
+    str_contains($packageBody, '>Repository ↗</a>'),
+    'Package documentation must expose the package repository independently from its canonical document source.',
 );
 $missingDocumentation = $handle('https://silex.test/docs/Missing.md');
 $assert($missingDocumentation->getStatusCode() === 404, 'Missing canonical documentation must respond with HTTP 404.');

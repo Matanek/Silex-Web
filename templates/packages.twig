@@ -16,14 +16,7 @@
     {% else %}
         <div class="package-catalog" data-package-count="{{ packages|length }}">
             {% for package in packages %}
-                <a class="package-catalog-card" href="/packages/{{ package.name|url_encode }}">
-                    <div class="package-catalog-meta">
-                        <strong>{{ package.name }}</strong>
-                        {% if package.version %}<span>v{{ package.version }}</span>{% endif %}
-                    </div>
-                    <p>{{ package.description ?: 'Silex package.' }}</p>
-                    <div class="package-catalog-footer"><span>{{ package.document_count }} pages</span><b aria-hidden="true">→</b></div>
-                </a>
+                {% include '_package-card.twig' with {package: package} only %}
             {% endfor %}
         </div>
     {% endif %}

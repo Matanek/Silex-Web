@@ -94,13 +94,9 @@
         <p>Each package owns its manifest and canonical documentation; the website brings them together for direct discovery.</p>
     </div>
 
-    <div class="home-package-list" data-package-count="{{ packages|length }}">
+    <div class="package-catalog" data-package-count="{{ packages|length }}">
         {% for package in packages %}
-            <a href="/packages/{{ package.name|url_encode }}">
-                <div><strong>{{ package.name }}</strong>{% if package.version %}<span>v{{ package.version }}</span>{% endif %}</div>
-                <p>{{ package.description ?: 'Silex package.' }}</p>
-                <b aria-hidden="true">→</b>
-            </a>
+            {% include '_package-card.twig' with {package: package} only %}
         {% endfor %}
     </div>
 

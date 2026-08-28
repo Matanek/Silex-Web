@@ -1,0 +1,16 @@
+<article class="package-card">
+    <div class="package-card-meta">
+        <a href="/packages/{{ package.name|url_encode }}">{{ package.name }}</a>
+        {% if package.version %}<span>v{{ package.version }}</span>{% endif %}
+    </div>
+    <p>{{ package.description ?: 'Silex package.' }}</p>
+    <div class="package-card-footer">
+        <span>{{ package.document_count }} pages</span>
+        <div class="package-card-links">
+            <a href="/packages/{{ package.name|url_encode }}">Docs <span aria-hidden="true">→</span></a>
+            {% if package.repository %}
+                <a href="{{ package.repository }}">Repository <span aria-hidden="true">↗</span></a>
+            {% endif %}
+        </div>
+    </div>
+</article>

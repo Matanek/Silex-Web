@@ -34,7 +34,10 @@
     <div class="docs-main">
         <div class="docs-toolbar">
             <span>Packages / {{ package.name }}</span>
-            {% if source_url %}<a href="{{ source_url }}">Canonical source ↗</a>{% endif %}
+            <div class="docs-toolbar-links">
+                {% if package.repository %}<a href="{{ package.repository }}">Repository ↗</a>{% endif %}
+                {% if source_url %}<a href="{{ source_url }}">Canonical source ↗</a>{% endif %}
+            </div>
         </div>
         <article class="prose-silex">{{ documentation_html|raw }}</article>
     </div>
