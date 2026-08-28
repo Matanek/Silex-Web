@@ -21,7 +21,6 @@ final readonly class PackageDocumentationAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $locale = (string) $request->getAttribute('locale');
         $name = (string) $request->getAttribute('package');
         $path = (string) ($request->getAttribute('document') ?? 'README.md');
         $package = $this->documents->package($name);
@@ -31,17 +30,11 @@ final readonly class PackageDocumentationAction
             return $response->withStatus(404)->withHeader('Content-Type', 'text/plain; charset=utf-8');
         }
 
-        $routeBase = '/' . $locale . '/packages/' . rawurlencode($name) . '/docs';
+        $routeBase = '/packages/' . rawurlencode($name) . '/docs';
         $sourceBase = $package['repository'] === null ? '' : $package['repository'] . '/blob/main';
         $documentation = $this->markdown->toHtml($document['markdown'], $document['path'], $routeBase, $sourceBase);
-        $alternateLocale = $locale === 'fr' ? 'en' : 'fr';
-        $suffix = $document['path'] === 'README.md' ? '' : '/docs/' . $document['path'];
 
         $response->getBody()->write($this->twig->render('package-documentation.twig', [
-            'locale' => $locale,
-            'alternate_locale' => $alternateLocale,
-            'alternate_label' => $locale === 'fr' ? 'English' : 'Français',
-            'alternate_path' => '/' . $alternateLocale . '/packages/' . rawurlencode($name) . $suffix,
             'package' => $package,
             'current_path' => $document['path'],
             'document_title' => $document['title'],

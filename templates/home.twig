@@ -1,36 +1,26 @@
 {% extends 'layout.twig' %}
 
-{% block title %}Silex — {{ locale == 'fr' ? 'Code moderne. Puissance native.' : 'Modern Code. Native Power.' }}{% endblock %}
+{% block title %}Silex — Modern Code. Native Power.{% endblock %}
 
 {% block content %}
 <section class="hero" aria-labelledby="hero-title">
     <div class="hero-copy">
         <div class="hero-meta">
-            <p class="eyebrow">{{ locale == 'fr' ? 'Langage natif moderne' : 'Modern native language' }}</p>
+            <p class="eyebrow">Modern native language</p>
             <a class="version-badge" href="{{ silex_version == 'development' ? 'https://github.com/Matanek/Silex/releases' : 'https://github.com/Matanek/Silex/releases/tag/v' ~ silex_version }}">
-                {{ locale == 'fr' ? 'Version Silex' : 'Silex release' }} <strong>{{ silex_version == 'development' ? 'dev' : 'v' ~ silex_version }}</strong>
+                Silex release <strong>{{ silex_version == 'development' ? 'dev' : 'v' ~ silex_version }}</strong>
             </a>
         </div>
-        <h1 id="hero-title">
-            <span>{{ locale == 'fr' ? 'Code moderne' : 'Modern Code' }}</span>
-            <span>{{ locale == 'fr' ? 'Puissance native' : 'Native Power' }}</span>
-        </h1>
-        <p class="lede">
-            {{ locale == 'fr'
-                ? 'Silex est un langage et un compilateur natif expérimental, avec des modules, des packages et une toolchain intégrée.'
-                : 'Silex is an experimental native language and compiler, with modules, packages and an integrated toolchain.' }}
-        </p>
+        <h1 id="hero-title"><span>Modern Code</span><span>Native Power</span></h1>
+        <p class="lede">Silex is an experimental native language and compiler, with modules, packages and an integrated toolchain.</p>
         <div class="actions">
-            <a class="button button-primary" href="#install">{{ locale == 'fr' ? 'Installer Silex' : 'Install Silex' }}</a>
-            <a class="button button-secondary" href="/{{ locale }}/docs">{{ locale == 'fr' ? 'Lire la documentation' : 'Read the docs' }}</a>
+            <a class="button button-primary" href="#install">Install Silex</a>
+            <a class="button button-secondary" href="/docs">Read the docs</a>
         </div>
     </div>
 
-    <div class="code-window" aria-label="{{ locale == 'fr' ? 'Exemple de code Silex' : 'Silex code example' }}">
-        <div class="code-titlebar">
-            <span></span><span></span><span></span>
-            <strong>Main.sx</strong>
-        </div>
+    <div class="code-window" aria-label="Silex code example">
+        <div class="code-titlebar"><span></span><span></span><span></span><strong>Main.sx</strong></div>
         <pre><code><span class="keyword">func</span> answer() <span class="type">int</span> {
     <span class="keyword">return</span> 40 + 2
 }
@@ -42,17 +32,12 @@
     </div>
 </section>
 
-<section class="principles" aria-label="{{ locale == 'fr' ? 'Principes de Silex' : 'Silex principles' }}">
-    {% set principles = locale == 'fr' ? [
-        ['01', 'Simple', 'Un langage ciblé et une toolchain intégrée rendent l’écriture, la compilation et l’exécution directes.'],
-        ['02', 'Sémantique explicite', 'Valeurs, références et déplacements expriment clairement la manière dont les données circulent.'],
-        ['03', 'Exécutables natifs', 'Le compilateur produit directement des exécutables natifs pour les plateformes prises en charge.']
-    ] : [
-        ['01', 'Simple', 'A focused language and integrated toolchain keep writing, building and running programs direct.'],
-        ['02', 'Explicit semantics', 'Values, references and moves make the way data flows through a program clear.'],
-        ['03', 'Native executables', 'The compiler directly produces native executables for its supported targets.']
-    ] %}
-
+{% set principles = [
+    ['01', 'Simple', 'A focused language and integrated toolchain keep writing, building and running programs direct.'],
+    ['02', 'Explicit semantics', 'Values, references and moves make the way data flows through a program clear.'],
+    ['03', 'Native executables', 'The compiler directly produces native executables for its supported targets.']
+] %}
+<section class="principles" aria-label="Silex principles">
     {% for principle in principles %}
         <article>
             <span class="number">{{ principle[0] }}</span>
@@ -64,13 +49,9 @@
 
 <section class="section install" id="install" aria-labelledby="install-title">
     <div class="section-heading">
-        <p class="eyebrow">{{ locale == 'fr' ? 'Commencer ici' : 'Start here' }}</p>
-        <h2 id="install-title">{{ locale == 'fr' ? 'Installer Silex' : 'Install Silex' }}</h2>
-        <p>
-            {{ locale == 'fr'
-                ? 'Le compilateur autonome ne demande ni Zig, ni Git sur la machine du développeur.'
-                : 'The standalone compiler does not require Zig or Git on the developer machine.' }}
-        </p>
+        <p class="eyebrow">Start here</p>
+        <h2 id="install-title">Install Silex</h2>
+        <p>The standalone compiler does not require Zig or Git on the developer machine.</p>
     </div>
 
     <div class="install-grid">
@@ -90,21 +71,16 @@
 
     <div class="quickstart" aria-labelledby="quickstart-title">
         <div class="quickstart-copy">
-            <p class="eyebrow">{{ locale == 'fr' ? 'Premiers pas' : 'Next steps' }}</p>
-            <h3 id="quickstart-title">{{ locale == 'fr' ? 'De l’installation au premier programme.' : 'From install to first program.' }}</h3>
-            <p>
-                {{ locale == 'fr'
-                    ? 'Vérifiez le compilateur, préparez la toolchain optionnelle puis lancez votre source.'
-                    : 'Verify the compiler, prepare the optional toolchain, then run your source.' }}
-            </p>
+            <p class="eyebrow">Next steps</p>
+            <h3 id="quickstart-title">From install to first program.</h3>
+            <p>Verify the compiler, prepare the optional toolchain, then run your source.</p>
         </div>
-
-        <div class="quickstart-terminal" aria-label="{{ locale == 'fr' ? 'Commandes de démarrage Silex' : 'Silex quickstart commands' }}">
+        <div class="quickstart-terminal" aria-label="Silex quickstart commands">
             <div class="quickstart-titlebar"><span></span><span></span><span></span><strong>Terminal</strong></div>
             <ol class="quickstart-steps">
-                <li><span class="step-number">01</span><div><span class="step-label">{{ locale == 'fr' ? 'Vérifier l’installation' : 'Verify the installation' }}</span><code><b>$</b> silex --version</code></div></li>
-                <li><span class="step-number">02</span><div><span class="step-label">{{ locale == 'fr' ? 'Préparer les outils optionnels' : 'Prepare optional tools' }}</span><code><b>$</b> silex setup</code></div></li>
-                <li><span class="step-number">03</span><div><span class="step-label">{{ locale == 'fr' ? 'Lancer le programme' : 'Run the program' }}</span><code><b>$</b> silex run Main.sx</code></div></li>
+                <li><span class="step-number">01</span><div><span class="step-label">Verify the installation</span><code><b>$</b> silex --version</code></div></li>
+                <li><span class="step-number">02</span><div><span class="step-label">Prepare optional tools</span><code><b>$</b> silex setup</code></div></li>
+                <li><span class="step-number">03</span><div><span class="step-label">Run the program</span><code><b>$</b> silex run Main.sx</code></div></li>
             </ol>
         </div>
     </div>
@@ -113,30 +89,24 @@
 {% if packages is not empty %}
 <section class="section home-packages" id="packages" aria-labelledby="home-packages-title">
     <div class="section-heading home-packages-heading">
-        <p class="eyebrow">{{ locale == 'fr' ? 'Écosystème public' : 'Public ecosystem' }}</p>
-        <h2 id="home-packages-title">
-            {{ packages|length }} {{ locale == 'fr' ? 'packages disponibles.' : 'packages available.' }}
-        </h2>
-        <p>
-            {{ locale == 'fr'
-                ? 'Chaque package conserve son manifeste et sa documentation canonique ; le site les rassemble pour les rendre directement explorables.'
-                : 'Each package owns its manifest and canonical documentation; the website brings them together for direct discovery.' }}
-        </p>
+        <p class="eyebrow">Public ecosystem</p>
+        <h2 id="home-packages-title">{{ packages|length }} packages available.</h2>
+        <p>Each package owns its manifest and canonical documentation; the website brings them together for direct discovery.</p>
     </div>
 
     <div class="home-package-list" data-package-count="{{ packages|length }}">
         {% for package in packages %}
-            <a href="/{{ locale }}/packages/{{ package.name|url_encode }}">
+            <a href="/packages/{{ package.name|url_encode }}">
                 <div><strong>{{ package.name }}</strong>{% if package.version %}<span>v{{ package.version }}</span>{% endif %}</div>
-                <p>{{ package.description ?: (locale == 'fr' ? 'Package Silex.' : 'Silex package.') }}</p>
+                <p>{{ package.description ?: 'Silex package.' }}</p>
                 <b aria-hidden="true">→</b>
             </a>
         {% endfor %}
     </div>
 
     <div class="home-packages-actions">
-        <a class="button button-secondary" href="/{{ locale }}/packages">{{ locale == 'fr' ? 'Explorer tous les packages' : 'Explore all packages' }}</a>
-        <a class="text-link" href="/{{ locale }}/registry">{{ locale == 'fr' ? 'Comment publier un package' : 'How to publish a package' }} <span aria-hidden="true">→</span></a>
+        <a class="button button-secondary" href="/packages">Explore all packages</a>
+        <a class="text-link" href="/registry">How to publish a package <span aria-hidden="true">→</span></a>
     </div>
 </section>
 {% endif %}

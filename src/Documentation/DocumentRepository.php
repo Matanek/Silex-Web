@@ -27,7 +27,7 @@ final readonly class DocumentRepository
             if ($path !== '' && $path !== 'README.md') {
                 return null;
             }
-            $markdown = $this->readFile($this->fallbackContentRoot . '/en/overview.md');
+            $markdown = $this->readFile($this->fallbackContentRoot . '/overview.md');
 
             return [
                 'path' => 'README.md',

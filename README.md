@@ -11,8 +11,8 @@ copy of those Markdown sources. The current production website remains in
 In a Silex workspace checkout, the application automatically reads the sibling
 `Silex/Docs`, `Packages/`, and `Silex-Registry/` directories. Override those
 sources for another environment with `SILEX_DOCS_ROOT`, `SILEX_PACKAGES_ROOT`,
-and `SILEX_REGISTRY_ROOT`. French routes currently render the same canonical
-English documentation with a localized interface.
+and `SILEX_REGISTRY_ROOT`. The website and all published documentation use one
+direct English route tree; no locale negotiation or translation is required.
 
 The displayed Silex version resolves, in order, from `SILEX_VERSION`, from
 `var/content/silex-version.txt`, or locally from

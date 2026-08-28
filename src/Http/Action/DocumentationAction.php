@@ -21,7 +21,6 @@ final readonly class DocumentationAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $locale = (string) $request->getAttribute('locale');
         $path = (string) ($request->getAttribute('document') ?? 'README.md');
         $document = $this->documents->languageDocument($path);
         if ($document === null) {
@@ -32,17 +31,11 @@ final readonly class DocumentationAction
         $documentation = $this->markdown->toHtml(
             $document['markdown'],
             $document['path'],
-            '/' . $locale . '/docs',
+            '/docs',
             'https://github.com/Matanek/Silex/blob/main/Docs',
         );
-        $alternateLocale = $locale === 'fr' ? 'en' : 'fr';
-        $suffix = $document['path'] === 'README.md' ? '' : '/' . $document['path'];
 
         $response->getBody()->write($this->twig->render('documentation.twig', [
-            'locale' => $locale,
-            'alternate_locale' => $alternateLocale,
-            'alternate_label' => $locale === 'fr' ? 'English' : 'Français',
-            'alternate_path' => '/' . $alternateLocale . '/docs' . $suffix,
             'current_path' => $document['path'],
             'document_title' => $document['title'],
             'navigation' => $this->documents->languageNavigation(),

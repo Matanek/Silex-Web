@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="{{ locale }}">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{% block description %}{{ locale == 'fr' ? 'Silex est un langage et un compilateur natif expérimental.' : 'Silex is an experimental native language and compiler.' }}{% endblock %}">
+    <meta name="description" content="{% block description %}Silex is an experimental native language and compiler.{% endblock %}">
     <meta name="theme-color" content="#0c0c0d">
     <title>{% block title %}Silex{% endblock %}</title>
     <link rel="stylesheet" href="/assets/app.css">
@@ -11,25 +11,24 @@
 <body>
     <!-- Silex Web release: {{ release }} -->
     <header class="site-header">
-        <a class="brand" href="/{{ locale }}/" aria-label="{{ locale == 'fr' ? 'Accueil Silex' : 'Silex home' }}">
+        <a class="brand" href="/" aria-label="Silex home">
             <span class="brand-mark" aria-hidden="true">S</span>
             <span>Silex</span>
         </a>
 
-        <nav class="site-navigation" aria-label="{{ locale == 'fr' ? 'Navigation principale' : 'Main navigation' }}">
-            <a href="/{{ locale }}/docs">Docs</a>
-            <a href="/{{ locale }}/#install">{{ locale == 'fr' ? 'Installer' : 'Install' }}</a>
-            <a href="/{{ locale }}/packages">Packages</a>
-            <a class="wide-link" href="/{{ locale }}/registry">Registry</a>
+        <nav class="site-navigation" aria-label="Main navigation">
+            <a href="/docs">Docs</a>
+            <a href="/#install">Install</a>
+            <a href="/packages">Packages</a>
+            <a class="wide-link" href="/registry">Registry</a>
             <a class="wide-link" href="https://github.com/Matanek/Silex">GitHub</a>
-            <a class="locale-link" href="{{ alternate_path }}" lang="{{ alternate_locale }}">{{ alternate_label }}</a>
         </nav>
     </header>
 
     <main>{% block content %}{% endblock %}</main>
 
     <footer class="site-footer">
-        <span>{{ locale == 'fr' ? 'Silex est un logiciel expérimental.' : 'Silex is experimental software.' }}</span>
+        <span>Silex is experimental software.</span>
         <a href="https://github.com/Matanek/Silex/blob/main/LICENSE">Apache-2.0 with LLVM exception</a>
     </footer>
 </body>

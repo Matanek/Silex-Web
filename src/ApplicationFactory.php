@@ -8,23 +8,17 @@ use Silex\Web\Documentation\DocumentRepository;
 use Silex\Web\Ecosystem\SilexVersionResolver;
 use Silex\Web\Http\Action\DocumentationAction;
 use Silex\Web\Http\Action\HomeAction;
-use Silex\Web\Http\Action\LocaleRedirectAction;
 use Silex\Web\Http\Action\PackageDocumentationAction;
 use Silex\Web\Http\Action\PackagesAction;
 use Silex\Web\Http\Action\RegistryAction;
-use Silex\Web\Http\LanguageNegotiator;
-use Silex\Web\Http\Middleware\LocaleMiddleware;
 use Silex\Web\Rendering\MarkdownRenderer;
 use Slim\App;
 use Slim\Factory\AppFactory as SlimAppFactory;
-use Slim\Routing\RouteCollectorProxy;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
 final class ApplicationFactory
 {
-    private const SUPPORTED_LOCALES = ['en', 'fr'];
-
     public static function create(string $root): App
     {
         $workspaceRoot = dirname($root);
@@ -46,30 +40,24 @@ final class ApplicationFactory
             self::sourceRoot('SILEX_REGISTRY_ROOT', $workspaceRoot . '/Silex-Registry'),
         );
         $markdown = new MarkdownRenderer();
-        $languages = new LanguageNegotiator(self::SUPPORTED_LOCALES, 'en');
 
         $app = SlimAppFactory::create();
-        $app->get('/', new LocaleRedirectAction($languages));
+        $home = new HomeAction($twig, $documents);
+        $documentation = new DocumentationAction($twig, $documents, $markdown);
+        $packages = new PackagesAction($twig, $documents);
+        $packageDocumentation = new PackageDocumentationAction($twig, $documents, $markdown);
+        $registry = new RegistryAction($twig);
 
-        $app->group('/{locale:en|fr}', function (RouteCollectorProxy $group) use ($twig, $documents, $markdown): void {
-            $home = new HomeAction($twig, $documents);
-            $documentation = new DocumentationAction($twig, $documents, $markdown);
-            $packages = new PackagesAction($twig, $documents);
-            $packageDocumentation = new PackageDocumentationAction($twig, $documents, $markdown);
-            $registry = new RegistryAction($twig);
-
-            $group->get('', $home);
-            $group->get('/', $home);
-            $group->get('/docs', $documentation);
-            $group->get('/docs/', $documentation);
-            $group->get('/docs/{document:.+}', $documentation);
-            $group->get('/packages', $packages);
-            $group->get('/packages/', $packages);
-            $group->get('/packages/{package:[A-Za-z_][A-Za-z0-9_.]*}', $packageDocumentation);
-            $group->get('/packages/{package:[A-Za-z_][A-Za-z0-9_.]*}/docs/{document:.+}', $packageDocumentation);
-            $group->get('/registry', $registry);
-            $group->get('/registry/', $registry);
-        })->add(new LocaleMiddleware(self::SUPPORTED_LOCALES));
+        $app->get('/', $home);
+        $app->get('/docs', $documentation);
+        $app->get('/docs/', $documentation);
+        $app->get('/docs/{document:.+}', $documentation);
+        $app->get('/packages', $packages);
+        $app->get('/packages/', $packages);
+        $app->get('/packages/{package:[A-Za-z_][A-Za-z0-9_.]*}', $packageDocumentation);
+        $app->get('/packages/{package:[A-Za-z_][A-Za-z0-9_.]*}/docs/{document:.+}', $packageDocumentation);
+        $app->get('/registry', $registry);
+        $app->get('/registry/', $registry);
 
         $app->addRoutingMiddleware();
         $app->addErrorMiddleware(self::debugEnabled(), true, true);
