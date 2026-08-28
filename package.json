@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "build": "tailwindcss -i ./assets/css/app.css -o ./public/assets/app.css --minify",
+    "content:build": "node scripts/build-content-snapshot.mjs",
+    "content:fetch": "node scripts/fetch-content-sources.mjs",
     "dev": "tailwindcss -i ./assets/css/app.css -o ./public/assets/app.css --watch"
   },
   "devDependencies": {

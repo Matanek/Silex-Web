@@ -31,7 +31,7 @@ final readonly class PackageDocumentationAction
         }
 
         $routeBase = '/packages/' . rawurlencode($name) . '/docs';
-        $sourceBase = $package['repository'] === null ? '' : $package['repository'] . '/blob/main';
+        $sourceBase = $package['repository'] === null ? '' : $package['repository'] . '/blob/' . rawurlencode($package['source_ref']);
         $documentation = $this->markdown->toHtml($document['markdown'], $document['path'], $routeBase, $sourceBase);
 
         $response->getBody()->write($this->twig->render('package-documentation.twig', [

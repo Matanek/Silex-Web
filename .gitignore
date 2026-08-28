@@ -3,4 +3,5 @@
 /public/assets/app.css
 /release.txt
 /.composer-cache/
+/.content/
 /var/content/

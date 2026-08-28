@@ -5,6 +5,11 @@ on:
     branches:
       - main
   workflow_dispatch:
+  repository_dispatch:
+    types:
+      - ecosystem-content-updated
+  schedule:
+    - cron: '17 */6 * * *'
 
 permissions:
   contents: read
@@ -31,6 +36,21 @@ jobs:
       - name: Check out the website
         uses: actions/checkout@v6
 
+      - name: Fetch canonical Silex ecosystem content
+        run: npm run content:fetch
+
+      - name: Build the immutable documentation snapshot
+        run: npm run content:build -- .content/Silex .content/Silex-Registry .content/Packages var/content/sources
+
+      - name: Identify the website and content release
+        shell: bash
+        run: |
+          set -euo pipefail
+          content_digest=$(sha256sum var/content/sources/snapshot.json | cut -c1-16)
+          release="$GITHUB_SHA-$content_digest"
+          printf '%s\n' "$release" > release.txt
+          printf 'SILEX_WEB_RELEASE=%s\n' "$release" >> "$GITHUB_ENV"
+
       - name: Install locked PHP dependencies
         run: composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader
 
@@ -38,9 +58,7 @@ jobs:
         run: npm ci --no-audit --no-fund
 
       - name: Build the Tailwind stylesheet
-        run: |
-          npm run build
-          printf '%s\n' "$GITHUB_SHA" > release.txt
+        run: npm run build
 
       - name: Validate the website
         run: |
@@ -78,11 +96,12 @@ jobs:
         run: |
           set -euo pipefail
           target="$VPS_USER@$VPS_HOST"
-          release="$VPS_SITE_ROOT/releases/$GITHUB_SHA"
+          release="$VPS_SITE_ROOT/releases/$SILEX_WEB_RELEASE"
 
           if ! ssh -p "$VPS_SSH_PORT" "$target" "test -f '$release/.complete'"; then
             ssh -p "$VPS_SSH_PORT" "$target" "mkdir -p '$release'"
             rsync -az --delete \
+              --exclude '/.content/' \
               --exclude '/.git/' \
               --exclude '/.github/' \
               --exclude '/assets/' \
@@ -95,7 +114,7 @@ jobs:
               "test -f '$release/public/index.php' && touch '$release/.complete'"
           fi
 
-          ssh -p "$VPS_SSH_PORT" "$target" sh -s -- "$VPS_SITE_ROOT" "$GITHUB_SHA" <<'REMOTE'
+          ssh -p "$VPS_SSH_PORT" "$target" sh -s -- "$VPS_SITE_ROOT" "$SILEX_WEB_RELEASE" <<'REMOTE'
           set -eu
           site_root=$1
           release=$2
@@ -108,8 +127,17 @@ jobs:
 
       - name: Check the public deployment
         run: |
+          set -euo pipefail
           curl --fail --show-error --silent \
             --location \
             --retry 6 --retry-delay 2 --retry-connrefused \
             https://silex.nekmata.com/ \
-            | grep -F "Silex Web release: $GITHUB_SHA"
+            | grep -F "Silex Web release: $SILEX_WEB_RELEASE"
+          curl --fail --show-error --silent \
+            --retry 6 --retry-delay 2 --retry-connrefused \
+            https://silex.nekmata.com/docs \
+            | grep -F '<h1>Documentation</h1>'
+          curl --fail --show-error --silent \
+            --retry 6 --retry-delay 2 --retry-connrefused \
+            https://silex.nekmata.com/packages/STD \
+            | grep -F '<span>Packages / STD</span>'

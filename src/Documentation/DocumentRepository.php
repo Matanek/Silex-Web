@@ -12,12 +12,17 @@ use SplFileInfo;
 
 final readonly class DocumentRepository
 {
+    /** @var array{silex: string, packages: array<string, string>} */
+    private array $sourceReferences;
+
     public function __construct(
         private string $fallbackContentRoot,
         private string $silexDocsRoot,
         private string $packagesRoot,
         private string $registryRoot,
+        ?string $snapshotManifest = null,
     ) {
+        $this->sourceReferences = $this->readSourceReferences($snapshotManifest);
     }
 
     /** @return array{path: string, title: string, markdown: string, source_url: string}|null */
@@ -43,7 +48,7 @@ final readonly class DocumentRepository
         }
 
         return $document + [
-            'source_url' => 'https://github.com/Matanek/Silex/blob/main/Docs/' . $document['path'],
+            'source_url' => 'https://github.com/Matanek/Silex/blob/' . rawurlencode($this->sourceReferences['silex']) . '/Docs/' . $document['path'],
         ];
     }
 
@@ -137,7 +142,7 @@ final readonly class DocumentRepository
         return $packages;
     }
 
-    /** @return array{name: string, version: string, description: string, repository: ?string, dependencies: list<string>, document_count: int}|null */
+    /** @return array{name: string, version: string, description: string, repository: ?string, source_ref: string, dependencies: list<string>, document_count: int}|null */
     public function package(string $name): ?array
     {
         if (!$this->validPackageName($name)) {
@@ -163,6 +168,7 @@ final readonly class DocumentRepository
             'version' => is_string($manifest['version'] ?? null) ? $manifest['version'] : '',
             'description' => is_string($manifest['description'] ?? null) ? $manifest['description'] : '',
             'repository' => $this->packageRepository($name),
+            'source_ref' => $this->sourceReferences['packages'][$name] ?? 'main',
             'dependencies' => $dependencies,
             'document_count' => count($this->packageMarkdownFiles($root)),
         ];
@@ -183,7 +189,7 @@ final readonly class DocumentRepository
 
         $sourceUrl = $package['repository'];
         if ($sourceUrl !== null) {
-            $sourceUrl .= '/blob/main/' . $document['path'];
+            $sourceUrl .= '/blob/' . rawurlencode($package['source_ref']) . '/' . $document['path'];
         }
 
         return $document + ['source_url' => $sourceUrl];
@@ -324,6 +330,38 @@ final readonly class DocumentRepository
         $repository = is_array($registration) ? ($registration['repository'] ?? null) : null;
 
         return is_string($repository) ? preg_replace('/\.git$/', '', $repository) : null;
+    }
+
+    /** @return array{silex: string, packages: array<string, string>} */
+    private function readSourceReferences(?string $snapshotManifest): array
+    {
+        if ($snapshotManifest === null || !is_file($snapshotManifest)) {
+            return ['silex' => 'main', 'packages' => []];
+        }
+
+        $snapshot = $this->decodeManifest($snapshotManifest);
+        $silexTag = $snapshot['silex']['tag'] ?? null;
+        $packages = $snapshot['packages'] ?? null;
+        if (($silexTag !== null && !$this->validSourceReference($silexTag)) || !is_array($packages)) {
+            throw new RuntimeException(sprintf('Content snapshot "%s" has invalid source references.', $snapshotManifest));
+        }
+
+        $packageReferences = [];
+        foreach ($packages as $package) {
+            $name = is_array($package) ? ($package['name'] ?? null) : null;
+            $tag = is_array($package) ? ($package['tag'] ?? null) : null;
+            if (!is_string($name) || !$this->validPackageName($name) || ($tag !== null && !$this->validSourceReference($tag))) {
+                throw new RuntimeException(sprintf('Content snapshot "%s" has an invalid package reference.', $snapshotManifest));
+            }
+            $packageReferences[$name] = $tag ?? 'main';
+        }
+
+        return ['silex' => $silexTag ?? 'main', 'packages' => $packageReferences];
+    }
+
+    private function validSourceReference(string $reference): bool
+    {
+        return preg_match('/^v\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/', $reference) === 1;
     }
 
     private function readFile(string $path): string

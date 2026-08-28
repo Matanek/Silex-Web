@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "silex": {
+    "version": "1.2.3",
+    "commit": "1111111111111111111111111111111111111111",
+    "tag": "v1.2.3",
+    "documents": 2
+  },
+  "registry": {
+    "commit": "2222222222222222222222222222222222222222"
+  },
+  "packages": [
+    {
+      "name": "Example",
+      "repository": "https://github.com/Matanek/Silex-Lib-Example.git",
+      "commit": "3333333333333333333333333333333333333333",
+      "tag": "v9.8.7",
+      "documents": 2
+    }
+  ]
+}

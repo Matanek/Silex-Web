@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Psr\Http\Message\ResponseInterface;
 use Silex\Web\ApplicationFactory;
+use Silex\Web\Documentation\DocumentRepository;
 use Silex\Web\Ecosystem\SilexVersionResolver;
 use Silex\Web\Rendering\MarkdownRenderer;
 use Slim\Psr7\Factory\ServerRequestFactory;
@@ -171,6 +172,24 @@ $unsafeHtml = (new MarkdownRenderer())->toHtml(
 );
 $assert(!str_contains($unsafeHtml, '<script'), 'Raw HTML must not survive Markdown rendering.');
 $assert(!str_contains($unsafeHtml, 'javascript:'), 'Unsafe Markdown links must be removed.');
+
+$snapshotDocuments = new DocumentRepository(
+    $root . '/content',
+    $root . '/tests/fixtures/Silex/Docs',
+    $root . '/tests/fixtures/Packages',
+    $root . '/tests/fixtures/Silex-Registry',
+    $root . '/tests/fixtures/snapshot.json',
+);
+$snapshotLanguageDocument = $snapshotDocuments->languageDocument('README.md');
+$snapshotPackageDocument = $snapshotDocuments->packageDocument('Example', 'README.md');
+$assert(
+    $snapshotLanguageDocument !== null && str_contains($snapshotLanguageDocument['source_url'], '/blob/v1.2.3/'),
+    'Release documentation must link to the exact published Silex tag.',
+);
+$assert(
+    $snapshotPackageDocument !== null && str_contains((string) $snapshotPackageDocument['source_url'], '/blob/v9.8.7/'),
+    'Release package documentation must link to the exact published package tag.',
+);
 
 putenv('SILEX_VERSION');
 $assert(

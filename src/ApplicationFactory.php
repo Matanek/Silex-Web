@@ -33,11 +33,20 @@ final class ApplicationFactory
         $twig->addGlobal('release', self::releaseIdentifier($root));
         $twig->addGlobal('silex_version', SilexVersionResolver::resolve($root, $workspaceRoot));
 
+        $releaseSourcesRoot = $root . '/var/content/sources';
+        $silexDocsRoot = self::sourceRoot('SILEX_DOCS_ROOT', $workspaceRoot . '/Silex/Docs', $releaseSourcesRoot . '/Silex/Docs');
+        $packagesRoot = self::sourceRoot('SILEX_PACKAGES_ROOT', $workspaceRoot . '/Packages', $releaseSourcesRoot . '/Packages');
+        $registryRoot = self::sourceRoot('SILEX_REGISTRY_ROOT', $workspaceRoot . '/Silex-Registry', $releaseSourcesRoot . '/Silex-Registry');
+        $usesReleaseSnapshot = $silexDocsRoot === $releaseSourcesRoot . '/Silex/Docs'
+            && $packagesRoot === $releaseSourcesRoot . '/Packages'
+            && $registryRoot === $releaseSourcesRoot . '/Silex-Registry';
+
         $documents = new DocumentRepository(
             $root . '/content',
-            self::sourceRoot('SILEX_DOCS_ROOT', $workspaceRoot . '/Silex/Docs'),
-            self::sourceRoot('SILEX_PACKAGES_ROOT', $workspaceRoot . '/Packages'),
-            self::sourceRoot('SILEX_REGISTRY_ROOT', $workspaceRoot . '/Silex-Registry'),
+            $silexDocsRoot,
+            $packagesRoot,
+            $registryRoot,
+            $usesReleaseSnapshot ? $releaseSourcesRoot . '/snapshot.json' : null,
         );
         $markdown = new MarkdownRenderer();
 
@@ -87,10 +96,13 @@ final class ApplicationFactory
         return trim($release);
     }
 
-    private static function sourceRoot(string $environmentName, string $fallback): string
+    private static function sourceRoot(string $environmentName, string $workspaceSource, string $releaseSource): string
     {
         $configured = trim((string) getenv($environmentName));
+        if ($configured !== '') {
+            return $configured;
+        }
 
-        return $configured !== '' ? $configured : $fallback;
+        return is_dir($workspaceSource) ? $workspaceSource : $releaseSource;
     }
 }

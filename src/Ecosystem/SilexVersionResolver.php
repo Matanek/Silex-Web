@@ -13,14 +13,14 @@ final class SilexVersionResolver
             return $environmentVersion;
         }
 
-        $publishedVersion = self::readVersionFile($root . '/var/content/silex-version.txt');
-        if ($publishedVersion !== null) {
-            return $publishedVersion;
-        }
-
         $manifest = self::readFile($workspaceRoot . '/Silex/Toolchain/build.zig.zon');
         if ($manifest !== null && preg_match('/\.version\s*=\s*"([^"]+)"/', $manifest, $match) === 1 && self::valid($match[1])) {
             return $match[1];
+        }
+
+        $publishedVersion = self::readVersionFile($root . '/var/content/silex-version.txt');
+        if ($publishedVersion !== null) {
+            return $publishedVersion;
         }
 
         return 'development';
