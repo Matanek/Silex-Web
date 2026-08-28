@@ -20,42 +20,18 @@ GitHub Actions deploys each validated `main` commit as an immutable release:
 ```
 
 Apache serves `/srv/silex/web/current/public` for
-`https://silex.nekmata.com/`. The deployment account owns only
-`/srv/silex/web`; it has no sudo privileges and does not own the Apache
-configuration.
+`https://silex-lang.org/` and `https://silex.nekmata.com/`. The deployment
+account owns only `/srv/silex/web`; it has no sudo privileges and does not own
+the Apache configuration.
 
 The expected virtual host is versioned in
 `deploy/apache/silex.nekmata.com.conf`. Updating that file does not change the
 server automatically: Apache configuration remains an explicit administrator
 operation, separate from application deployments.
 
-The production HTTP bootstrap virtual host is versioned in
-`deploy/apache/silex-lang.org.conf`. It deliberately remains on HTTP until the
-domain points to the VPS. After the DNS change has propagated, obtain and
-install its certificate with:
-
-```sh
-sudo certbot --apache -d silex-lang.org --redirect
-```
-
-Certbot then owns the HTTPS augmentation and renewal configuration on the VPS.
-
-## DNS and production cutover
-
-The former production service used GitHub Pages. Before the production
-cutover, deploy the candidate and pass its staging checks. At OVH, replace the
-four GitHub Pages `A` records for the zone root with:
-
-```text
-Type: A
-Subdomain: @
-Target: 92.222.25.45
-TTL: 300
-```
-
-After public DNS resolves to the VPS, run the Certbot command above and verify
-the home page, `/fr/docs`, `/fr/packages`, and `/fr/registry` over HTTPS. Only
-then remove any remaining GitHub Pages DNS or hosting configuration.
+The production virtual host source is versioned in
+`deploy/apache/silex-lang.org.conf`. Certbot owns its deployed HTTPS
+augmentation and certificate renewal on the VPS.
 
 The dedicated PHP-FPM pool is versioned in `deploy/php/silex-web.conf`. Its
 OPcache settings revalidate the real path behind the atomic `current` symlink;
@@ -85,7 +61,7 @@ release. The manifests supply the canonical plain or localized package
 descriptions; package sources and documentation are never copied. Catalog
 links lead to their canonical repositories.
 
-Website pushes, manual runs, and `ecosystem-content-updated` repository
-dispatches rebuild the snapshot immediately. The release directory combines
-the website SHA with the snapshot digest, making a content-only refresh
-immutable and independently deployable.
+Website pushes, manual runs, `ecosystem-content-updated` dispatches, and
+`silex-released` dispatches rebuild the snapshot immediately. The release
+directory combines the website SHA with the snapshot digest, making a
+content-only refresh immutable and independently deployable.

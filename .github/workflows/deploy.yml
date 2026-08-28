@@ -8,19 +8,20 @@ on:
   repository_dispatch:
     types:
       - ecosystem-content-updated
+      - silex-released
 
 permissions:
   contents: read
 
 concurrency:
-  group: silex-web-staging
+  group: silex-website-production
   cancel-in-progress: false
 
 jobs:
   deploy:
     environment:
       name: staging
-      url: https://silex.nekmata.com/
+      url: https://silex-lang.org/
     runs-on: ubuntu-latest
     env:
       VPS_HOST: ${{ secrets.VPS_HOST }}
@@ -150,11 +151,14 @@ jobs:
           }
 
           wait_for_content \
-            https://silex.nekmata.com/ \
+            https://silex-lang.org/ \
             "Silex Web release: $SILEX_WEB_RELEASE"
           wait_for_content \
-            https://silex.nekmata.com/fr/docs \
+            https://silex-lang.org/fr/docs \
             '<h1>Documentation Silex</h1>'
           wait_for_content \
-            https://silex.nekmata.com/fr/packages \
+            https://silex-lang.org/fr/packages \
             'https://github.com/Matanek/Silex-Lib-STD'
+          wait_for_content \
+            https://silex.nekmata.com/ \
+            "Silex Web release: $SILEX_WEB_RELEASE"

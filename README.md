@@ -1,12 +1,12 @@
 # Silex Website
 
-This repository owns the Silex website implementation. The public
-staging deployment is available at <https://silex.nekmata.com/>.
+This repository owns the Silex website implementation. The public production
+deployment is available at <https://silex-lang.org/>; the historical
+<https://silex.nekmata.com/> address serves the same immutable release.
 
 The website renders the public language and tool documentation owned by
 `Matanek/Silex-Documentation`. It must not become a second editable copy of
-those Markdown sources. Moving the production domain from its former GitHub
-Pages deployment to this application remains an explicit cutover.
+those Markdown sources.
 
 In a Silex workspace checkout, the application automatically reads the sibling
 `Silex-Documentation/`, `Silex-Registry/`, and `Packages/` directories.
@@ -25,9 +25,9 @@ documentation is not ingested. Package cards link directly to each canonical
 repository. Local workspace sources keep priority so Herd reflects live
 documentation and manifest changes without rebuilding that snapshot.
 
-The deployment runs for website pushes, manual requests, and ecosystem
-dispatches. Its immutable release identifier combines the website commit with
-the content-snapshot digest.
+The deployment runs for website pushes, manual requests, ecosystem content
+dispatches, and Silex releases. Its immutable release identifier combines the
+website commit with the content-snapshot digest.
 
 The displayed Silex version resolves, in order, from `SILEX_VERSION`, locally
 from `../Silex/Toolchain/build.zig.zon`, or from the immutable release file
@@ -67,6 +67,6 @@ rebuilds, run `npm run dev` in a second terminal. With Laravel Herd, link the
 ## Deployment
 
 Every push to `main` validates the exact commit, uploads an immutable release
-to the VPS, atomically updates the `current` symlink, and checks the public
-HTTPS endpoint. See [deploy/README.md](deploy/README.md) for the server
-contract and required GitHub settings.
+to the VPS, atomically updates the `current` symlink, and checks the production
+and historical HTTPS endpoints. See [deploy/README.md](deploy/README.md) for
+the server contract and required GitHub settings.
