@@ -126,18 +126,37 @@ jobs:
           REMOTE
 
       - name: Check the public deployment
+        shell: bash
         run: |
           set -euo pipefail
-          curl --fail --show-error --silent \
-            --location \
-            --retry 6 --retry-delay 2 --retry-connrefused \
+
+          wait_for_content() {
+            local url=$1
+            local expected=$2
+            local response
+
+            for attempt in {1..7}; do
+              if response=$(curl --fail --show-error --silent --location "$url") \
+                && grep -Fq "$expected" <<< "$response"; then
+                printf 'Validated %s on attempt %d\n' "$url" "$attempt"
+                return 0
+              fi
+
+              if (( attempt < 7 )); then
+                sleep 2
+              fi
+            done
+
+            printf 'Expected content was not served by %s after 7 attempts\n' "$url" >&2
+            return 1
+          }
+
+          wait_for_content \
             https://silex.nekmata.com/ \
-            | grep -F "Silex Web release: $SILEX_WEB_RELEASE"
-          curl --fail --show-error --silent \
-            --retry 6 --retry-delay 2 --retry-connrefused \
+            "Silex Web release: $SILEX_WEB_RELEASE"
+          wait_for_content \
             https://silex.nekmata.com/docs \
-            | grep -F '<h1>Documentation</h1>'
-          curl --fail --show-error --silent \
-            --retry 6 --retry-delay 2 --retry-connrefused \
+            '<h1>Documentation</h1>'
+          wait_for_content \
             https://silex.nekmata.com/packages/STD \
-            | grep -F '<span>Packages / STD</span>'
+            '<span>Packages / STD</span>'
