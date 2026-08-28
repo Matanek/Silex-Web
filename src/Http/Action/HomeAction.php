@@ -26,7 +26,7 @@ final readonly class HomeAction
             'alternate_locale' => $alternateLocale,
             'alternate_label' => $locale === 'fr' ? 'English' : 'Français',
             'alternate_path' => '/' . $alternateLocale . '/',
-            'packages' => $this->documents->packages(),
+            'packages' => $this->documents->packages($locale),
         ]));
 
         return $response->withHeader('Content-Type', 'text/html; charset=utf-8');

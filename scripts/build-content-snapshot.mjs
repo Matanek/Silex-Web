@@ -2,6 +2,7 @@ import { copyFile, mkdir, readFile, readdir, rename, rm, stat, writeFile } from 
 import { createHash } from "node:crypto";
 import { dirname, join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
+import { normalizePackageDescription } from "./package-description.mjs";
 
 const documentationRoot = resolve(process.argv[2] ?? "../Silex-Documentation");
 const registryRoot = resolve(process.argv[3] ?? "../Silex-Registry");
@@ -99,8 +100,8 @@ try {
     for (const registration of registrations) {
         const manifestSource = join(packagesRoot, registration.name, "Package.json");
         const manifest = await readJson(manifestSource, `${registration.name} package manifest`);
-        const description = typeof manifest.description === "string" ? manifest.description.trim() : "";
-        if (manifest.name !== registration.name || description === "") {
+        const description = normalizePackageDescription(manifest.description);
+        if (manifest.name !== registration.name || description === null) {
             throw new Error(`Package manifest '${manifestSource}' has an invalid name or description`);
         }
         if (typeof manifest.version !== "string" || !/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(manifest.version)) {

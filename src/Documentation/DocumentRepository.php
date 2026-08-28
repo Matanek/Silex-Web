@@ -109,7 +109,7 @@ final readonly class DocumentRepository
     }
 
     /** @return list<array{name: string, repository: string, description: string, version: string}> */
-    public function packages(): array
+    public function packages(string $locale): array
     {
         $root = $this->registryRoot . '/registry/v1/packages';
         if (!is_dir($root)) {
@@ -133,7 +133,7 @@ final readonly class DocumentRepository
                 throw new RuntimeException(sprintf('Registry entry "%s" has an invalid repository.', $path));
             }
 
-            $metadata = $this->packageMetadata($name);
+            $metadata = $this->packageMetadata($name, $locale);
             $packages[] = $metadata + [
                 'name' => $name,
                 'repository' => preg_replace('/\.git$/', '', $repository) ?? $repository,
@@ -146,7 +146,7 @@ final readonly class DocumentRepository
     }
 
     /** @return array{description: string, version: string} */
-    private function packageMetadata(string $name): array
+    private function packageMetadata(string $name, string $locale): array
     {
         $path = $this->packagesRoot . '/' . $name . '/Package.json';
         if (!is_file($path)) {
@@ -158,10 +158,7 @@ final readonly class DocumentRepository
             throw new RuntimeException(sprintf('Package manifest "%s" has an invalid name.', $path));
         }
 
-        $description = $manifest['description'] ?? null;
-        if (!is_string($description) || trim($description) === '') {
-            throw new RuntimeException(sprintf('Package manifest "%s" has no description.', $path));
-        }
+        $description = $this->packageDescription($manifest['description'] ?? null, $locale, $path);
 
         $version = $manifest['version'] ?? null;
         if (!is_string($version) || preg_match('/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/', $version) !== 1) {
@@ -169,9 +166,60 @@ final readonly class DocumentRepository
         }
 
         return [
-            'description' => trim($description),
+            'description' => $description,
             'version' => $version,
         ];
+    }
+
+    private function packageDescription(mixed $value, string $locale, string $path): string
+    {
+        if (is_string($value) && $this->validDescriptionLine($value)) {
+            return $value;
+        }
+        if (!is_array($value) || $value === []) {
+            throw new RuntimeException(sprintf('Package manifest "%s" has no description.', $path));
+        }
+
+        $translations = [];
+        foreach ($value as $language => $description) {
+            if (!is_string($language)
+                || preg_match('/^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*$/', $language) !== 1
+                || !is_string($description)
+                || !$this->validDescriptionLine($description)
+            ) {
+                throw new RuntimeException(sprintf('Package manifest "%s" has an invalid localized description.', $path));
+            }
+            $normalizedLanguage = strtolower($language);
+            if (isset($translations[$normalizedLanguage])) {
+                throw new RuntimeException(sprintf('Package manifest "%s" repeats a description language.', $path));
+            }
+            $translations[$normalizedLanguage] = $description;
+        }
+        if (!isset($translations['en'])) {
+            throw new RuntimeException(sprintf('Package manifest "%s" has no English description fallback.', $path));
+        }
+
+        $requested = strtolower(str_replace('_', '-', $locale));
+        if (isset($translations[$requested])) {
+            return $translations[$requested];
+        }
+        $separator = strpos($requested, '-');
+        if ($separator !== false) {
+            $primary = substr($requested, 0, $separator);
+            if (isset($translations[$primary])) {
+                return $translations[$primary];
+            }
+        }
+
+        return $translations['en'];
+    }
+
+    private function validDescriptionLine(string $description): bool
+    {
+        return $description !== ''
+            && trim($description) === $description
+            && !str_contains($description, "\r")
+            && !str_contains($description, "\n");
     }
 
     /** @return array{path: string, title: string, markdown: string}|null */

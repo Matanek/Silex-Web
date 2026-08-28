@@ -20,10 +20,10 @@ Production releases contain an immutable snapshot under `var/content/sources`.
 The deployment build fetches the Silex release, its matching documentation
 branch, the registry, and the registered package manifests. It copies both
 documentation languages, immutable package registrations, and only the
-manifests needed for package descriptions; package documentation is not
-ingested. Package cards link directly to each canonical repository. Local
-workspace sources keep priority so Herd reflects live documentation and
-manifest changes without rebuilding that snapshot.
+manifests needed for plain or localized package descriptions; package
+documentation is not ingested. Package cards link directly to each canonical
+repository. Local workspace sources keep priority so Herd reflects live
+documentation and manifest changes without rebuilding that snapshot.
 
 The deployment runs for website pushes, manual requests, and ecosystem
 dispatches. Its immutable release identifier combines the website commit with

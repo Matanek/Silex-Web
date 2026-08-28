@@ -1,6 +1,7 @@
 import { mkdir, readFile, readdir, rm } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
+import { normalizePackageDescription } from "./package-description.mjs";
 
 const outputRoot = resolve(process.argv[2] ?? ".content");
 const packagePattern = /^[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*$/;
@@ -75,7 +76,7 @@ for (const entry of registrationEntries.sort((left, right) => left.name.localeCo
     const destination = resolve(outputRoot, "Packages", name);
     clone(registration.repository, destination, null, true);
     const manifest = JSON.parse(await readFile(join(destination, "Package.json"), "utf8"));
-    if (manifest.name !== name || typeof manifest.description !== "string" || manifest.description.trim() === "") {
+    if (manifest.name !== name || normalizePackageDescription(manifest.description) === null) {
         throw new Error(`Package '${name}' has no valid manifest description`);
     }
     packageCount += 1;

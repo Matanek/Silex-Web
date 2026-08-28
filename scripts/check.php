@@ -77,9 +77,10 @@ $assert(str_contains($home->getHeaderLine('Set-Cookie'), 'silex_locale=fr'), 'Lo
 $assert(str_contains($home->getHeaderLine('Set-Cookie'), 'Secure'), 'HTTPS locale cookies must be secure.');
 $assert(str_contains($homeBody, 'silex run Main.sx'), 'The canonical quickstart command is missing.');
 $assert(str_contains($homeBody, 'v9.8.7'), 'The configured Silex version is missing.');
-$assert(str_contains($homeBody, 'data-package-count="1"'), 'The home page package catalog is missing.');
+$assert(str_contains($homeBody, 'data-package-count="2"'), 'The home page package catalog is missing.');
 $assert(str_contains($homeBody, 'href="https://github.com/Matanek/Silex-Lib-Example"'), 'Package cards must link to their canonical repository.');
-$assert(str_contains($homeBody, 'Demonstrates reusable Silex package metadata.'), 'Package cards must display their manifest description.');
+$assert(str_contains($homeBody, 'Présente des métadonnées réutilisables pour un package Silex.'), 'French package cards must display their localized manifest description.');
+$assert(str_contains($homeBody, 'Uses one package description for every locale.'), 'Plain package descriptions must remain valid.');
 $assert(str_contains($homeBody, '<span>v1.0.0</span>'), 'Package cards must display their manifest version.');
 $assert(!str_contains($homeBody, '<span>GitHub</span>'), 'Package cards must not repeat their repository host.');
 $assert(!str_contains($homeBody, 'Consultez le code, les versions'), 'Package cards must not repeat generic repository guidance.');
@@ -93,6 +94,7 @@ $assert($englishHome->getStatusCode() === 200, 'The English home page must respo
 $assert(str_contains($englishHomeBody, '<html lang="en">') && str_contains($englishHomeBody, 'Modern Code'), 'The English home page is missing.');
 $assert(str_contains($englishHomeBody, 'href="/fr/"'), 'The English language switch is missing.');
 $assert(str_contains($englishHomeBody, 'Demonstrates reusable Silex package metadata.'), 'The English package card must display the canonical manifest description.');
+$assert(!str_contains($englishHomeBody, 'Présente des métadonnées réutilisables'), 'The English package card must not display the French translation.');
 
 $frenchDocumentation = $handle('https://silex.test/fr/docs');
 $frenchDocumentationBody = (string) $frenchDocumentation->getBody();
@@ -120,9 +122,9 @@ $packages = $handle('https://silex.test/fr/packages');
 $packagesBody = (string) $packages->getBody();
 $assert($packages->getStatusCode() === 200, 'The French package catalog must respond with HTTP 200.');
 $assert(str_contains($packagesBody, 'Packages enregistrés.'), 'The French package catalog content is missing.');
-$assert(str_contains($packagesBody, 'data-package-count="1"'), 'The package count is missing.');
+$assert(str_contains($packagesBody, 'data-package-count="2"'), 'The package count is missing.');
 $assert(str_contains($packagesBody, 'href="https://github.com/Matanek/Silex-Lib-Example"'), 'The package repository link is missing.');
-$assert(str_contains($packagesBody, 'Demonstrates reusable Silex package metadata.'), 'The package description is missing.');
+$assert(str_contains($packagesBody, 'Présente des métadonnées réutilisables pour un package Silex.'), 'The localized package description is missing.');
 $assert(str_contains($packagesBody, '<span>v1.0.0</span>'), 'The package version is missing.');
 $assert(!str_contains($packagesBody, 'Docs <span'), 'The catalog must not advertise aggregated package documentation.');
 
@@ -150,6 +152,17 @@ $snapshotDocument = $snapshotDocuments->languageDocument('en', 'README.md');
 $assert(
     $snapshotDocument !== null && str_contains($snapshotDocument['source_url'], '/blob/3333333333333333333333333333333333333333/EN/'),
     'Release documentation must link to the exact documentation commit.',
+);
+$canadianPackages = $snapshotDocuments->packages('fr-CA');
+$assert(
+    isset($canadianPackages[0]['description'])
+        && str_contains(implode(' ', array_column($canadianPackages, 'description')), 'Présente des métadonnées réutilisables'),
+    'A regional locale must fall back to its primary package-description language.',
+);
+$fallbackPackages = $snapshotDocuments->packages('de');
+$assert(
+    str_contains(implode(' ', array_column($fallbackPackages, 'description')), 'Demonstrates reusable Silex package metadata.'),
+    'An unavailable package-description language must fall back to English.',
 );
 
 putenv('SILEX_VERSION');

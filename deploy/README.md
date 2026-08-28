@@ -81,9 +81,9 @@ The workflow fetches the latest semantic Silex release, its matching
 `Silex-Documentation` release branch, and current immutable registrations from
 the registry. It copies the mirrored `EN/` and `FR/` Markdown trees, the
 registry entries, and each registered package manifest into the immutable
-release. The manifests supply the canonical package descriptions; package
-sources and documentation are never copied. Catalog links lead to their
-canonical repositories.
+release. The manifests supply the canonical plain or localized package
+descriptions; package sources and documentation are never copied. Catalog
+links lead to their canonical repositories.
 
 Website pushes, manual runs, and `ecosystem-content-updated` repository
 dispatches rebuild the snapshot immediately. The release directory combines

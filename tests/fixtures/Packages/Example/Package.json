@@ -1,5 +1,8 @@
 {
   "name": "Example",
   "version": "1.0.0",
-  "description": "Demonstrates reusable Silex package metadata."
+  "description": {
+    "en": "Demonstrates reusable Silex package metadata.",
+    "fr": "Présente des métadonnées réutilisables pour un package Silex."
+  }
 }
