@@ -155,7 +155,7 @@ jobs:
             "Silex Web release: $SILEX_WEB_RELEASE"
           wait_for_content \
             https://silex-lang.org/fr/docs \
-            '<h1>Documentation Silex</h1>'
+            '<h1>Documentation de Silex</h1>'
           wait_for_content \
             https://silex-lang.org/fr/packages \
             'https://github.com/Matanek/Silex-Lib-STD'
