@@ -1,12 +1,12 @@
-# Silex Web
+# Silex Website
 
-This repository owns the next Silex website implementation. The public
+This repository owns the Silex website implementation. The public
 staging deployment is available at <https://silex.nekmata.com/>.
 
 The website renders the public language and tool documentation owned by
 `Matanek/Silex-Documentation`. It must not become a second editable copy of
-those Markdown sources. The current production website remains in
-`Matanek/Silex-Website` until an explicit cutover.
+those Markdown sources. Moving the production domain from its former GitHub
+Pages deployment to this application remains an explicit cutover.
 
 In a Silex workspace checkout, the application automatically reads the sibling
 `Silex-Documentation/`, `Silex-Registry/`, and `Packages/` directories.

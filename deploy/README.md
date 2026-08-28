@@ -42,9 +42,9 @@ Certbot then owns the HTTPS augmentation and renewal configuration on the VPS.
 
 ## DNS and production cutover
 
-GitHub Pages remains the production service until the candidate has deployed
-and passed its staging checks. At OVH, replace the four GitHub Pages `A`
-records for the zone root with:
+The former production service used GitHub Pages. Before the production
+cutover, deploy the candidate and pass its staging checks. At OVH, replace the
+four GitHub Pages `A` records for the zone root with:
 
 ```text
 Type: A
@@ -54,8 +54,8 @@ TTL: 300
 ```
 
 After public DNS resolves to the VPS, run the Certbot command above and verify
-the home page, `/fr/docs`, `/fr/packages`, and `/fr/registry` over HTTPS. Only then
-disable GitHub Pages in `Matanek/Silex-Website`.
+the home page, `/fr/docs`, `/fr/packages`, and `/fr/registry` over HTTPS. Only
+then remove any remaining GitHub Pages DNS or hosting configuration.
 
 The dedicated PHP-FPM pool is versioned in `deploy/php/silex-web.conf`. Its
 OPcache settings revalidate the real path behind the atomic `current` symlink;
