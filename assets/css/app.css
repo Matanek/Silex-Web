@@ -57,7 +57,7 @@ main,
 }
 
 .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--text); text-decoration: none; font-size: 1.05rem; font-weight: 760; letter-spacing: -0.02em; }
-.brand-mark { width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid var(--accent); border-radius: 50%; color: var(--accent); font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 0.86rem; }
+.brand-mark { width: 32px; height: 32px; display: block; flex: none; }
 .site-navigation { display: flex; align-items: center; gap: 28px; }
 .site-navigation a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 150ms ease, border-color 150ms ease; }
 .site-navigation a:hover,

@@ -90,6 +90,11 @@ $assert(!str_contains($home->getHeaderLine('Set-Cookie'), 'silex_locale'), 'The 
 $assert(str_contains($homeBody, 'Modern Code'), 'The English home page content is missing.');
 $assert(str_contains($homeBody, 'silex run Main.sx'), 'The canonical quickstart command is missing.');
 $assert(str_contains($homeBody, 'v9.8.7'), 'The configured Silex version is missing.');
+$assert(
+    str_contains($homeBody, '<link rel="icon" href="/icon.svg" type="image/svg+xml">')
+        && str_contains($homeBody, '<img class="brand-mark" src="/icon.svg" alt="">'),
+    'The Silex icon is missing from the page shell.',
+);
 $assert(str_contains($homeBody, 'data-package-count="1"'), 'The home page package list is missing.');
 $assert(str_contains($homeBody, 'class="package-card"'), 'The home page must use the shared package card.');
 $assert(str_contains($homeBody, 'href="/packages/Example"'), 'The home page must link to package documentation.');
@@ -199,5 +204,7 @@ $assert(
 
 $cssPath = $root . '/public/assets/app.css';
 $assert(is_file($cssPath) && filesize($cssPath) > 1_000, 'The compiled Tailwind stylesheet is missing.');
+$iconPath = $root . '/public/icon.svg';
+$assert(is_file($iconPath) && str_contains((string) file_get_contents($iconPath), '#e6ff55'), 'The Silex icon is missing or uses the wrong accent.');
 
 echo "Silex Web checks passed.\n";
