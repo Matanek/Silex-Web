@@ -12,6 +12,7 @@ use Slim\Psr7\Factory\ServerRequestFactory;
 $root = dirname(__DIR__);
 putenv('SILEX_DOCUMENTATION_ROOT=' . $root . '/tests/fixtures/Silex-Documentation');
 putenv('SILEX_REGISTRY_ROOT=' . $root . '/tests/fixtures/Silex-Registry');
+putenv('SILEX_PACKAGES_ROOT=' . $root . '/tests/fixtures/Packages');
 putenv('SILEX_VERSION=9.8.7');
 
 $phpFiles = [];
@@ -78,6 +79,10 @@ $assert(str_contains($homeBody, 'silex run Main.sx'), 'The canonical quickstart 
 $assert(str_contains($homeBody, 'v9.8.7'), 'The configured Silex version is missing.');
 $assert(str_contains($homeBody, 'data-package-count="1"'), 'The home page package catalog is missing.');
 $assert(str_contains($homeBody, 'href="https://github.com/Matanek/Silex-Lib-Example"'), 'Package cards must link to their canonical repository.');
+$assert(str_contains($homeBody, 'Demonstrates reusable Silex package metadata.'), 'Package cards must display their manifest description.');
+$assert(str_contains($homeBody, '<span>v1.0.0</span>'), 'Package cards must display their manifest version.');
+$assert(!str_contains($homeBody, '<span>GitHub</span>'), 'Package cards must not repeat their repository host.');
+$assert(!str_contains($homeBody, 'Consultez le code, les versions'), 'Package cards must not repeat generic repository guidance.');
 $assert(!str_contains($homeBody, '/fr/packages/Example'), 'Package cards must not link to local package documentation.');
 $assert(str_contains($homeBody, 'Silex Web release: ' . $expectedRelease), 'The deployment marker does not match release.txt.');
 $assert(str_contains($homeBody, '<link rel="icon" href="/icon.svg" type="image/svg+xml">'), 'The Silex icon is missing.');
@@ -87,6 +92,7 @@ $englishHomeBody = (string) $englishHome->getBody();
 $assert($englishHome->getStatusCode() === 200, 'The English home page must respond with HTTP 200.');
 $assert(str_contains($englishHomeBody, '<html lang="en">') && str_contains($englishHomeBody, 'Modern Code'), 'The English home page is missing.');
 $assert(str_contains($englishHomeBody, 'href="/fr/"'), 'The English language switch is missing.');
+$assert(str_contains($englishHomeBody, 'Demonstrates reusable Silex package metadata.'), 'The English package card must display the canonical manifest description.');
 
 $frenchDocumentation = $handle('https://silex.test/fr/docs');
 $frenchDocumentationBody = (string) $frenchDocumentation->getBody();
@@ -116,6 +122,8 @@ $assert($packages->getStatusCode() === 200, 'The French package catalog must res
 $assert(str_contains($packagesBody, 'Packages enregistrés.'), 'The French package catalog content is missing.');
 $assert(str_contains($packagesBody, 'data-package-count="1"'), 'The package count is missing.');
 $assert(str_contains($packagesBody, 'href="https://github.com/Matanek/Silex-Lib-Example"'), 'The package repository link is missing.');
+$assert(str_contains($packagesBody, 'Demonstrates reusable Silex package metadata.'), 'The package description is missing.');
+$assert(str_contains($packagesBody, '<span>v1.0.0</span>'), 'The package version is missing.');
 $assert(!str_contains($packagesBody, 'Docs <span'), 'The catalog must not advertise aggregated package documentation.');
 
 $registry = $handle('https://silex.test/fr/registry');
@@ -135,6 +143,7 @@ $assert(!str_contains($unsafeHtml, 'javascript:'), 'Unsafe Markdown links must b
 $snapshotDocuments = new DocumentRepository(
     $root . '/tests/fixtures/Silex-Documentation',
     $root . '/tests/fixtures/Silex-Registry',
+    $root . '/tests/fixtures/Packages',
     $root . '/tests/fixtures/snapshot.json',
 );
 $snapshotDocument = $snapshotDocuments->languageDocument('en', 'README.md');

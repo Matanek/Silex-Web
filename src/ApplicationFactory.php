@@ -45,12 +45,15 @@ final class ApplicationFactory
             $releaseSourcesRoot . '/Silex-Documentation',
         );
         $registryRoot = self::sourceRoot('SILEX_REGISTRY_ROOT', $workspaceRoot . '/Silex-Registry', $releaseSourcesRoot . '/Silex-Registry');
+        $packagesRoot = self::sourceRoot('SILEX_PACKAGES_ROOT', $workspaceRoot . '/Packages', $releaseSourcesRoot . '/Packages');
         $usesReleaseSnapshot = $documentationRoot === $releaseSourcesRoot . '/Silex-Documentation'
-            && $registryRoot === $releaseSourcesRoot . '/Silex-Registry';
+            && $registryRoot === $releaseSourcesRoot . '/Silex-Registry'
+            && $packagesRoot === $releaseSourcesRoot . '/Packages';
 
         $documents = new DocumentRepository(
             $documentationRoot,
             $registryRoot,
+            $packagesRoot,
             $usesReleaseSnapshot ? $releaseSourcesRoot . '/snapshot.json' : null,
         );
         $markdown = new MarkdownRenderer();

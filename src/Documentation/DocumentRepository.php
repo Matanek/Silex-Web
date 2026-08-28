@@ -17,6 +17,7 @@ final readonly class DocumentRepository
     public function __construct(
         private string $documentationRoot,
         private string $registryRoot,
+        private string $packagesRoot,
         ?string $snapshotManifest = null,
     ) {
         $this->documentationReference = $this->readDocumentationReference($snapshotManifest);
@@ -107,7 +108,7 @@ final readonly class DocumentRepository
         return $navigation;
     }
 
-    /** @return list<array{name: string, repository: string}> */
+    /** @return list<array{name: string, repository: string, description: string, version: string}> */
     public function packages(): array
     {
         $root = $this->registryRoot . '/registry/v1/packages';
@@ -132,7 +133,8 @@ final readonly class DocumentRepository
                 throw new RuntimeException(sprintf('Registry entry "%s" has an invalid repository.', $path));
             }
 
-            $packages[] = [
+            $metadata = $this->packageMetadata($name);
+            $packages[] = $metadata + [
                 'name' => $name,
                 'repository' => preg_replace('/\.git$/', '', $repository) ?? $repository,
             ];
@@ -141,6 +143,35 @@ final readonly class DocumentRepository
         usort($packages, static fn (array $left, array $right): int => strcasecmp($left['name'], $right['name']));
 
         return $packages;
+    }
+
+    /** @return array{description: string, version: string} */
+    private function packageMetadata(string $name): array
+    {
+        $path = $this->packagesRoot . '/' . $name . '/Package.json';
+        if (!is_file($path)) {
+            throw new RuntimeException(sprintf('Package "%s" has no manifest available.', $name));
+        }
+
+        $manifest = $this->decodeJson($path, 'Package manifest');
+        if (($manifest['name'] ?? null) !== $name) {
+            throw new RuntimeException(sprintf('Package manifest "%s" has an invalid name.', $path));
+        }
+
+        $description = $manifest['description'] ?? null;
+        if (!is_string($description) || trim($description) === '') {
+            throw new RuntimeException(sprintf('Package manifest "%s" has no description.', $path));
+        }
+
+        $version = $manifest['version'] ?? null;
+        if (!is_string($version) || preg_match('/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/', $version) !== 1) {
+            throw new RuntimeException(sprintf('Package manifest "%s" has an invalid version.', $path));
+        }
+
+        return [
+            'description' => trim($description),
+            'version' => $version,
+        ];
     }
 
     /** @return array{path: string, title: string, markdown: string}|null */

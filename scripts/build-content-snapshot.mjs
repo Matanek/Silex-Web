@@ -1,11 +1,13 @@
 import { copyFile, mkdir, readFile, readdir, rename, rm, stat, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import { dirname, join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 
 const documentationRoot = resolve(process.argv[2] ?? "../Silex-Documentation");
 const registryRoot = resolve(process.argv[3] ?? "../Silex-Registry");
 const silexRoot = resolve(process.argv[4] ?? "../Silex");
-const outputRoot = resolve(process.argv[5] ?? "var/content/sources");
+const packagesRoot = resolve(process.argv[5] ?? "../Packages");
+const outputRoot = resolve(process.argv[6] ?? "var/content/sources");
 const stagingRoot = `${outputRoot}.tmp-${process.pid}`;
 const packagePattern = /^[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*$/;
 const repositoryPattern = /^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\.git$/;
@@ -88,10 +90,31 @@ try {
     }
 
     for (const registration of registrations) {
-        const destination = join(stagingRoot, "Silex-Registry/registry/v1/packages", `${registration.name}.json`);
-        await mkdir(dirname(destination), { recursive: true });
-        await copyFile(registration.source, destination);
+        const registrationDestination = join(stagingRoot, "Silex-Registry/registry/v1/packages", `${registration.name}.json`);
+        await mkdir(dirname(registrationDestination), { recursive: true });
+        await copyFile(registration.source, registrationDestination);
     }
+
+    const packageMetadata = [];
+    for (const registration of registrations) {
+        const manifestSource = join(packagesRoot, registration.name, "Package.json");
+        const manifest = await readJson(manifestSource, `${registration.name} package manifest`);
+        const description = typeof manifest.description === "string" ? manifest.description.trim() : "";
+        if (manifest.name !== registration.name || description === "") {
+            throw new Error(`Package manifest '${manifestSource}' has an invalid name or description`);
+        }
+        if (typeof manifest.version !== "string" || !/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(manifest.version)) {
+            throw new Error(`Package manifest '${manifestSource}' has an invalid version`);
+        }
+
+        const manifestDestination = join(stagingRoot, "Packages", registration.name, "Package.json");
+        await mkdir(dirname(manifestDestination), { recursive: true });
+        await copyFile(manifestSource, manifestDestination);
+        packageMetadata.push({ name: registration.name, version: manifest.version, description });
+    }
+    const packageMetadataDigest = createHash("sha256")
+        .update(JSON.stringify(packageMetadata))
+        .digest("hex");
 
     const toolchainManifest = await readFile(join(silexRoot, "Toolchain/build.zig.zon"), "utf8");
     const version = toolchainManifest.match(/\.version\s*=\s*"([^"]+)"/)?.[1];
@@ -110,6 +133,7 @@ try {
                 documents: documentCounts,
             },
             registry: { commit: gitValue(registryRoot, ["rev-parse", "HEAD"]), packages: registrations.length },
+            packages: { manifests: packageMetadata.length, digest: packageMetadataDigest },
         }, null, 2)}\n`,
     );
 
@@ -117,7 +141,7 @@ try {
     await mkdir(dirname(outputRoot), { recursive: true });
     await rename(stagingRoot, outputRoot);
     await writeFile(join(dirname(outputRoot), "silex-version.txt"), `${version}\n`);
-    console.log(`Built Silex ${version} content: ${documentCounts.en} mirrored documents and ${registrations.length} registry entries`);
+    console.log(`Built Silex ${version} content: ${documentCounts.en} mirrored documents and ${packageMetadata.length} package descriptions`);
 } catch (error) {
     await rm(stagingRoot, { recursive: true, force: true });
     throw error;

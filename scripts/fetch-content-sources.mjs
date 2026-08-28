@@ -1,11 +1,14 @@
-import { mkdir, rm } from "node:fs/promises";
-import { resolve } from "node:path";
+import { mkdir, readFile, readdir, rm } from "node:fs/promises";
+import { join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 
 const outputRoot = resolve(process.argv[2] ?? ".content");
+const packagePattern = /^[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*$/;
+const repositoryPattern = /^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\.git$/;
 
-function clone(repository, destination, reference = null) {
+function clone(repository, destination, reference = null, sparse = false) {
     const arguments_ = ["-c", "advice.detachedHead=false", "clone", "--quiet", "--depth=1", "--filter=blob:none", "--single-branch"];
+    if (sparse) arguments_.push("--sparse");
     if (reference === null) {
         arguments_.push("--no-tags");
     } else {
@@ -50,4 +53,32 @@ clone(silexRepository, resolve(outputRoot, "Silex"), silexVersion.tag);
 clone("https://github.com/Matanek/Silex-Documentation.git", resolve(outputRoot, "Silex-Documentation"), documentationReference);
 clone("https://github.com/Matanek/Silex-Registry.git", resolve(outputRoot, "Silex-Registry"));
 
-console.log(`Fetched Silex ${silexVersion.tag}, documentation ${documentationReference}, and the package registry`);
+const registryPackagesRoot = resolve(outputRoot, "Silex-Registry/registry/v1/packages");
+const registrationEntries = await readdir(registryPackagesRoot, { withFileTypes: true });
+let packageCount = 0;
+for (const entry of registrationEntries.sort((left, right) => left.name.localeCompare(right.name, "en"))) {
+    if (!entry.isFile() || !entry.name.endsWith(".json")) continue;
+
+    const registrationPath = join(registryPackagesRoot, entry.name);
+    const registration = JSON.parse(await readFile(registrationPath, "utf8"));
+    const name = entry.name.slice(0, -5);
+    if (
+        registration.schema !== 1
+        || !packagePattern.test(name)
+        || registration.name !== name
+        || typeof registration.repository !== "string"
+        || !repositoryPattern.test(registration.repository)
+    ) {
+        throw new Error(`Registry entry '${entry.name}' has an invalid package contract`);
+    }
+
+    const destination = resolve(outputRoot, "Packages", name);
+    clone(registration.repository, destination, null, true);
+    const manifest = JSON.parse(await readFile(join(destination, "Package.json"), "utf8"));
+    if (manifest.name !== name || typeof manifest.description !== "string" || manifest.description.trim() === "") {
+        throw new Error(`Package '${name}' has no valid manifest description`);
+    }
+    packageCount += 1;
+}
+
+console.log(`Fetched Silex ${silexVersion.tag}, documentation ${documentationReference}, the registry, and ${packageCount} package manifests`);

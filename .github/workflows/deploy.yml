@@ -38,7 +38,7 @@ jobs:
         run: npm run content:fetch
 
       - name: Build the immutable documentation snapshot
-        run: npm run content:build -- .content/Silex-Documentation .content/Silex-Registry .content/Silex var/content/sources
+        run: npm run content:build -- .content/Silex-Documentation .content/Silex-Registry .content/Silex .content/Packages var/content/sources
 
       - name: Identify the website and content release
         shell: bash

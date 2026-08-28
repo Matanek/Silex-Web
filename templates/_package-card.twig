@@ -2,9 +2,9 @@
     <div class="package-card-meta">
         <a href="{{ package.repository }}">{{ package.name }}</a>
     </div>
-    <p>{{ locale == 'fr' ? 'Consultez le code, les versions et la documentation dans le dépôt du package.' : 'Browse the package code, releases, and documentation in its repository.' }}</p>
+    <p>{{ package.description }}</p>
     <div class="package-card-footer">
-        <span>GitHub</span>
+        <span>v{{ package.version }}</span>
         <div class="package-card-links">
             <a href="{{ package.repository }}">{{ locale == 'fr' ? 'Dépôt' : 'Repository' }} <span aria-hidden="true">↗</span></a>
         </div>

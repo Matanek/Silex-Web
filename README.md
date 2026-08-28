@@ -9,20 +9,21 @@ those Markdown sources. The current production website remains in
 `Matanek/Silex-Website` until an explicit cutover.
 
 In a Silex workspace checkout, the application automatically reads the sibling
-`Silex-Documentation/` and `Silex-Registry/` directories. Override those
-sources for another environment with `SILEX_DOCUMENTATION_ROOT` and
-`SILEX_REGISTRY_ROOT`. The `/fr/` and `/en/` route trees read the mirrored
-`FR/` and `EN/` documentation trees. The root route uses the saved preference,
-then the browser language, and exposes a switch that preserves the current
-page.
+`Silex-Documentation/`, `Silex-Registry/`, and `Packages/` directories.
+Override those sources for another environment with
+`SILEX_DOCUMENTATION_ROOT`, `SILEX_REGISTRY_ROOT`, and `SILEX_PACKAGES_ROOT`.
+The `/fr/` and `/en/` route trees read the mirrored `FR/` and `EN/`
+documentation trees. The root route uses the saved preference, then the
+browser language, and exposes a switch that preserves the current page.
 
 Production releases contain an immutable snapshot under `var/content/sources`.
 The deployment build fetches the Silex release, its matching documentation
-branch, and the registry. It copies both documentation languages and immutable
-package registrations; package repositories and their documentation are not
+branch, the registry, and the registered package manifests. It copies both
+documentation languages, immutable package registrations, and only the
+manifests needed for package descriptions; package documentation is not
 ingested. Package cards link directly to each canonical repository. Local
-workspace sources keep priority so Herd reflects live documentation changes
-without rebuilding that snapshot.
+workspace sources keep priority so Herd reflects live documentation and
+manifest changes without rebuilding that snapshot.
 
 The deployment runs for website pushes, manual requests, and ecosystem
 dispatches. Its immutable release identifier combines the website commit with
