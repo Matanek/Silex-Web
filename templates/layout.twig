@@ -9,7 +9,7 @@
     <title>{% block title %}Silex{% endblock %}</title>
     <link rel="stylesheet" href="/assets/app.css">
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
     <!-- Silex Web release: {{ release }} -->
     <header class="site-header">
         <div class="site-header-inner">
