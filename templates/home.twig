@@ -14,7 +14,7 @@
             </a>
         </div>
         <h1 id="hero-title"><span>{{ locale == 'fr' ? 'Code moderne' : 'Modern Code' }}</span><span>{{ locale == 'fr' ? 'Puissance native' : 'Native Power' }}</span></h1>
-        <p class="lede">{{ locale == 'fr' ? 'Un langage simple et moderne pour créer des programmes natifs performants, sans passer plus de temps à configurer qu’à construire.' : 'A simple, modern language for building fast native programs—without spending more time configuring tools than creating.' }}</p>
+        <p class="lede">{{ locale == 'fr' ? 'Concentrez-vous sur votre jeu, pas sur sa configuration. Silex réunit un langage compilé moderne, une toolchain intégrée et un socle graphique cohérent pour passer plus vite du code à l’écran.' : 'Focus on your game, not its setup. Silex brings together a modern compiled language, an integrated toolchain, and a coherent graphics foundation so you can get from code to screen faster.' }}</p>
         <div class="actions">
             <a class="button button-primary" href="#install">{{ locale == 'fr' ? 'Installer Silex' : 'Install Silex' }}</a>
             <a class="button button-secondary" href="/{{ locale }}/docs">{{ locale == 'fr' ? 'Lire la documentation' : 'Read the docs' }}</a>
@@ -39,13 +39,13 @@
 </section>
 
 {% set principles = locale == 'fr' ? [
-    ['01', 'Déployez vos idées', 'Silex limite les détours et la configuration pour vous laisser concentré sur ce que vous voulez construire.'],
-    ['02', 'Clarté durable', 'Une syntaxe moderne et lisible rend le code plus simple à comprendre, à faire évoluer et à partager.'],
-    ['03', 'Trois plateformes', 'Profitez d’exécutables natifs pour Windows, macOS et Linux, sans sacrifier la simplicité du code qui les produit.']
+    ['01', 'Moins de setup', 'Une seule CLI pour les packages, la compilation et l’exécution : vous passez plus vite de l’idée au jeu qui tourne.'],
+    ['02', 'Code maintenable', 'Une syntaxe explicite et un ownership visible rendent le code plus facile à relire, déboguer et faire évoluer.'],
+    ['03', 'Trois OS', 'Un même projet peut produire des exécutables pour Windows x64, macOS Apple Silicon et Linux x64.']
 ] : [
-    ['01', 'Ship your ideas', 'Silex cuts down on detours and configuration so you can stay focused on what you want to build.'],
-    ['02', 'Lasting clarity', 'Modern, readable syntax makes code easier to understand, evolve, and share.'],
-    ['03', 'Three platforms', 'Enjoy native executables for Windows, macOS, and Linux without sacrificing the simplicity of the code that produces them.']
+    ['01', 'Less setup', 'One CLI handles packages, compilation, and execution, so you get from idea to a running game faster.'],
+    ['02', 'Maintainable code', 'Explicit syntax and visible ownership make code easier to read, debug, and evolve.'],
+    ['03', 'Three OSes', 'One project can produce executables for Windows x64, macOS on Apple Silicon, and Linux x64.']
 ] %}
 <section class="principles" aria-label="{{ locale == 'fr' ? 'Principes de Silex' : 'Silex principles' }}">
     <div class="section-container">
