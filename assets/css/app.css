@@ -140,10 +140,7 @@ h1, h2, h3, p { margin-top: 0; }
 .zed-path-status::before { width: 6px; height: 6px; border-radius: 50%; content: ""; }
 .zed-path-status-pending { color: #77767c; }
 .zed-path-status-pending::before { background: #5f5e64; }
-.zed-path-status-live { border-color: rgb(230 255 85 / 25%); color: var(--accent); }
-.zed-path-status-live::before { background: var(--accent); box-shadow: 0 0 10px rgb(230 255 85 / 50%); }
-.zed-setup-terminal .quickstart-titlebar strong { margin-left: 0; }
-.zed-setup-terminal .quickstart-titlebar .zed-path-status { margin-left: auto; }
+.zed-setup-terminal .zed-titlebar-availability { max-width: calc(100% - 70px); overflow: hidden; color: var(--accent); text-overflow: ellipsis; white-space: nowrap; }
 .zed-manual-steps { padding-block: 6px; }
 .zed-manual-steps li { padding-block: 15px; }
 .zed-step-commands { display: grid; gap: 2px; }
@@ -317,7 +314,6 @@ h1, h2, h3, p { margin-top: 0; }
     .packages-index-heading { margin-bottom: 44px; }
     .package-catalog { grid-template-columns: 1fr; }
     .quickstart { padding: 28px 20px; }
-    .zed-setup-terminal .quickstart-titlebar .zed-path-status { display: none; }
     .docs-shell { display: block; }
     .docs-sidebar { position: static; max-height: none; padding: 28px 0; border-right: 0; border-bottom: 1px solid var(--line); }
     .docs-nav-future { display: none; }

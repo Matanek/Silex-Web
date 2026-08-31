@@ -80,6 +80,7 @@ $assert(str_contains($homeBody, 'id="zed"'), 'The Zed installation section is mi
 $assert(str_contains($homeBody, 'Installer l’extension Silex pour Zed.'), 'The French Zed installation heading is missing.');
 $assert(str_contains($homeBody, 'Installation rapide') && str_contains($homeBody, 'En attente de validation'), 'The unavailable French Zed gallery path is missing.');
 $assert(str_contains($homeBody, 'Installation manuelle') && str_contains($homeBody, 'Disponible maintenant'), 'The available French Zed manual path is missing.');
+$assert(str_contains($homeBody, '<strong class="zed-titlebar-availability">Disponible maintenant</strong>'), 'The French Zed title bar must contain one readable availability label.');
 $assert(str_contains($homeBody, 'rustup target add wasm32-wasip2'), 'The Zed WebAssembly target setup is missing.');
 $assert(str_contains($homeBody, 'git clone https://github.com/Matanek/Silex-Extension-Zed.git'), 'The Zed extension clone command is missing.');
 $assert(str_contains($homeBody, 'zed: install dev extension'), 'The Zed development installation command is missing.');
@@ -104,6 +105,7 @@ $assert(str_contains($englishHomeBody, 'href="/fr/"'), 'The English language swi
 $assert(str_contains($englishHomeBody, 'Install the Silex extension for Zed.'), 'The English Zed installation heading is missing.');
 $assert(str_contains($englishHomeBody, 'Quick installation') && str_contains($englishHomeBody, 'Awaiting approval'), 'The unavailable English Zed gallery path is missing.');
 $assert(str_contains($englishHomeBody, 'Manual installation') && str_contains($englishHomeBody, 'Available now'), 'The available English Zed manual path is missing.');
+$assert(str_contains($englishHomeBody, '<strong class="zed-titlebar-availability">Available now</strong>'), 'The English Zed title bar must contain one readable availability label.');
 $assert(str_contains($englishHomeBody, 'Demonstrates reusable Silex package metadata.'), 'The English package card must display the canonical manifest description.');
 $assert(!str_contains($englishHomeBody, 'Présente des métadonnées réutilisables'), 'The English package card must not display the French translation.');
 
