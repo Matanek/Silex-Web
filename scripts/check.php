@@ -79,8 +79,9 @@ $assert(str_contains($homeBody, 'href="/en/"'), 'The home page language switch m
 $assert(str_contains($home->getHeaderLine('Set-Cookie'), 'silex_locale=fr'), 'Localized routes must save the selected language.');
 $assert(str_contains($home->getHeaderLine('Set-Cookie'), 'Secure'), 'HTTPS locale cookies must be secure.');
 $assert(str_contains($homeBody, 'silex run Main.sx'), 'The canonical quickstart command is missing.');
-$assert(str_contains($homeBody, 'Plugins.Grid3D()') && str_contains($homeBody, 'Plugins.ViewportCamera3D()'), 'The GFX hero example is missing.');
-$assert(str_contains($homeBody, 'Hello World !!!'), 'The GFX hero output is missing.');
+$assert(str_contains($homeBody, 'struct</span> <span class="type">Greeter</span>'), 'The typed hero example is missing.');
+$assert(str_contains($homeBody, 'Hello from $(self.name)!'), 'The hero string interpolation is missing.');
+$assert(str_contains($homeBody, 'Hello from Silex!'), 'The hero example output is missing.');
 $assert(str_contains($homeBody, 'id="zed"'), 'The Zed installation section is missing.');
 $assert(str_contains($homeBody, 'Installer l’extension Silex pour Zed.'), 'The French Zed installation heading is missing.');
 $assert(str_contains($homeBody, 'Installation rapide') && str_contains($homeBody, 'En attente de validation'), 'The unavailable French Zed gallery path is missing.');

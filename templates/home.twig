@@ -23,20 +23,17 @@
 
     <div class="code-window" aria-label="{{ locale == 'fr' ? 'Exemple de code Silex' : 'Silex code example' }}">
         <div class="code-titlebar"><span></span><span></span><span></span><strong>Main.sx</strong></div>
-        <pre><code><span class="keyword">use</span> <span class="type">GFX</span>
-<span class="keyword">use</span> <span class="type">GFX.Plugins</span>
-<span class="keyword">use</span> <span class="type">GFX.Application.Schedule</span>
-
-<span class="keyword">func</span> system() { print(<span class="string">"Hello World !!!"</span>) }
+        <pre><code><span class="keyword">struct</span> <span class="type">Greeter</span> {
+    <span class="keyword">let</span> name:<span class="type">str</span>
+    <span class="keyword">func</span> message() <span class="type">str</span> {
+        <span class="keyword">return</span> <span class="string">"Hello from $(self.name)!"</span>
+    }
+}
 
 <span class="keyword">func</span> main() {
-    GFX.Application()
-        ..add_plugin(Plugins.Grid3D())
-        ..add_plugin(Plugins.ViewportCamera3D())
-        ..add_system(Schedule.startup, system)
-        ..run()
+    print(Greeter(name:<span class="string">"Silex"</span>).message())
 }</code></pre>
-        <div class="terminal-line"><span>$</span> silex run Main.sx <strong>→ Hello World !!!</strong></div>
+        <div class="terminal-line"><span>$</span> silex run Main.sx <strong>→ Hello from Silex!</strong></div>
     </div>
     </div>
 </section>
