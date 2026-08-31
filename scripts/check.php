@@ -78,6 +78,7 @@ $assert(str_contains($homeBody, 'Code moderne'), 'The French home page content i
 $assert(str_contains($homeBody, 'Concentrez-vous sur votre jeu, pas sur sa configuration.'), 'The French audience-focused hero introduction is missing.');
 $assert(preg_match('/>Simplicité<.*>Efficacité<.*>Sécurité</s', $homeBody) === 1, 'The French homepage benefits are missing or ordered incorrectly.');
 $assert(str_contains($homeBody, 'Compilation cross-platform pour Windows, macOS et Linux.'), 'The French cross-platform benefit is missing.');
+$assert(str_contains($homeBody, 'Le typage et l’ownership rendent la circulation des données prévisible.'), 'The French safety benefit is missing.');
 $assert(str_contains($homeBody, 'href="/en/"'), 'The home page language switch must preserve the page.');
 $assert(str_contains($home->getHeaderLine('Set-Cookie'), 'silex_locale=fr'), 'Localized routes must save the selected language.');
 $assert(str_contains($home->getHeaderLine('Set-Cookie'), 'Secure'), 'HTTPS locale cookies must be secure.');
@@ -113,6 +114,7 @@ $assert(str_contains($englishHomeBody, '<html lang="en">') && str_contains($engl
 $assert(str_contains($englishHomeBody, 'Focus on your game, not its setup.'), 'The English audience-focused hero introduction is missing.');
 $assert(preg_match('/>Simplicity<.*>Efficiency<.*>Safety</s', $englishHomeBody) === 1, 'The English homepage benefits are missing or ordered incorrectly.');
 $assert(str_contains($englishHomeBody, 'Cross-platform compilation for Windows, macOS, and Linux.'), 'The English cross-platform benefit is missing.');
+$assert(str_contains($englishHomeBody, 'Typing and ownership make data flow predictable.'), 'The English safety benefit is missing.');
 $assert(str_contains($englishHomeBody, 'href="/fr/"'), 'The English language switch is missing.');
 $assert(str_contains($englishHomeBody, 'Install the Silex extension for Zed.'), 'The English Zed installation heading is missing.');
 $assert(str_contains($englishHomeBody, 'Quick installation') && str_contains($englishHomeBody, 'Awaiting approval'), 'The unavailable English Zed gallery path is missing.');
