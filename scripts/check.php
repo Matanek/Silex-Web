@@ -76,6 +76,7 @@ $assert(str_contains($homeBody, '<div class="site-header-inner">'), 'The full-wi
 $assert(substr_count($homeBody, 'class="section-container') >= 5, 'The home page full-width sections are missing their containers.');
 $assert(str_contains($homeBody, 'Code moderne'), 'The French home page content is missing.');
 $assert(str_contains($homeBody, 'Un langage simple et moderne pour créer des programmes natifs performants'), 'The French benefit-led hero introduction is missing.');
+$assert(str_contains($homeBody, 'Simplicité et performances'), 'The French Silex value proposition is missing.');
 $assert(str_contains($homeBody, 'Déployez vos idées') && str_contains($homeBody, 'Code limpide') && str_contains($homeBody, 'Puissance native'), 'The French homepage benefits are missing.');
 $assert(str_contains($homeBody, 'href="/en/"'), 'The home page language switch must preserve the page.');
 $assert(str_contains($home->getHeaderLine('Set-Cookie'), 'silex_locale=fr'), 'Localized routes must save the selected language.');
@@ -110,6 +111,7 @@ $englishHomeBody = (string) $englishHome->getBody();
 $assert($englishHome->getStatusCode() === 200, 'The English home page must respond with HTTP 200.');
 $assert(str_contains($englishHomeBody, '<html lang="en">') && str_contains($englishHomeBody, 'Modern Code'), 'The English home page is missing.');
 $assert(str_contains($englishHomeBody, 'A simple, modern language for building fast native programs'), 'The English benefit-led hero introduction is missing.');
+$assert(str_contains($englishHomeBody, 'Simplicity and performance'), 'The English Silex value proposition is missing.');
 $assert(str_contains($englishHomeBody, 'Ship your ideas') && str_contains($englishHomeBody, 'Clear code') && str_contains($englishHomeBody, 'Native power'), 'The English homepage benefits are missing.');
 $assert(str_contains($englishHomeBody, 'href="/fr/"'), 'The English language switch is missing.');
 $assert(str_contains($englishHomeBody, 'Install the Silex extension for Zed.'), 'The English Zed installation heading is missing.');
