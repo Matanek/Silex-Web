@@ -89,6 +89,7 @@ $assert(str_contains($homeBody, 'struct</span> <span class="type">Greeter</span>
 $assert(str_contains($homeBody, 'Hello from $(self.name)!'), 'The hero string interpolation is missing.');
 $assert(str_contains($homeBody, 'Hello from Silex!'), 'The hero example output is missing.');
 $assert(str_contains($homeBody, 'id="zed"'), 'The Zed installation section is missing.');
+$assert(str_contains($homeBody, '<p class="eyebrow">Installer l’extension Zed</p>'), 'The French Zed mini heading is missing.');
 $assert(str_contains($homeBody, 'Installer l’extension Silex pour Zed.'), 'The French Zed installation heading is missing.');
 $assert(str_contains($homeBody, 'Installation rapide') && str_contains($homeBody, 'En attente de validation'), 'The unavailable French Zed gallery path is missing.');
 $assert(str_contains($homeBody, 'Installation manuelle') && str_contains($homeBody, 'Disponible maintenant'), 'The available French Zed manual path is missing.');
@@ -120,6 +121,7 @@ $assert(str_contains($englishHomeBody, 'Typing and ownership make data flow pred
 $assert(str_contains($englishHomeBody, '<p class="eyebrow" id="install-title">Install Silex</p>'), 'The compact English installation heading is missing.');
 $assert(!str_contains($englishHomeBody, 'The standalone compiler does not require Zig or Git'), 'The removed English installation introduction is still rendered.');
 $assert(str_contains($englishHomeBody, 'href="/fr/"'), 'The English language switch is missing.');
+$assert(str_contains($englishHomeBody, '<p class="eyebrow">Install the Zed extension</p>'), 'The English Zed mini heading is missing.');
 $assert(str_contains($englishHomeBody, 'Install the Silex extension for Zed.'), 'The English Zed installation heading is missing.');
 $assert(str_contains($englishHomeBody, 'Quick installation') && str_contains($englishHomeBody, 'Awaiting approval'), 'The unavailable English Zed gallery path is missing.');
 $assert(str_contains($englishHomeBody, 'Manual installation') && str_contains($englishHomeBody, 'Available now'), 'The available English Zed manual path is missing.');
