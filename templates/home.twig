@@ -39,19 +39,19 @@
 </section>
 
 {% set principles = locale == 'fr' ? [
-    ['01', 'Moins de setup', 'Une seule CLI pour les packages, la compilation et l’exécution : vous passez plus vite de l’idée au jeu qui tourne.'],
-    ['02', 'Code maintenable', 'Une syntaxe explicite et un ownership visible rendent le code plus facile à relire, déboguer et faire évoluer.'],
-    ['03', 'Trois OS', 'Un même projet peut produire des exécutables pour Windows x64, macOS Apple Silicon et Linux x64.']
+    ['01', 'Simplicité', 'Une seule CLI gère les packages, la compilation et l’exécution pour passer rapidement du code au programme qui tourne.'],
+    ['02', 'Sécurité', 'Le typage et l’ownership explicites rendent la circulation des données prévisible et aident à prévenir les erreurs difficiles à diagnostiquer.'],
+    ['03', 'Efficacité', 'Développez dans un même projet, puis produisez des exécutables pour Windows x64, macOS Apple Silicon et Linux x64.']
 ] : [
-    ['01', 'Less setup', 'One CLI handles packages, compilation, and execution, so you get from idea to a running game faster.'],
-    ['02', 'Maintainable code', 'Explicit syntax and visible ownership make code easier to read, debug, and evolve.'],
-    ['03', 'Three OSes', 'One project can produce executables for Windows x64, macOS on Apple Silicon, and Linux x64.']
+    ['01', 'Simplicity', 'One CLI handles packages, compilation, and execution so you can move quickly from code to a running program.'],
+    ['02', 'Safety', 'Explicit typing and ownership make data flow predictable and help prevent errors that are difficult to diagnose.'],
+    ['03', 'Efficiency', 'Develop in one project, then produce executables for Windows x64, macOS on Apple Silicon, and Linux x64.']
 ] %}
 <section class="principles" aria-label="{{ locale == 'fr' ? 'Principes de Silex' : 'Silex principles' }}">
     <div class="section-container">
         <div class="principles-heading">
             <p class="eyebrow">{{ locale == 'fr' ? 'Pourquoi Silex' : 'Why Silex' }}</p>
-            <h2>{{ locale == 'fr' ? 'Simplicité et performances' : 'Simplicity and performance' }}</h2>
+            <h2>{{ locale == 'fr' ? 'Conçu pour produire' : 'Built to ship' }}</h2>
         </div>
         <div class="principles-layout">
         {% for principle in principles %}
