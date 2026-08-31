@@ -23,14 +23,20 @@
 
     <div class="code-window" aria-label="{{ locale == 'fr' ? 'Exemple de code Silex' : 'Silex code example' }}">
         <div class="code-titlebar"><span></span><span></span><span></span><strong>Main.sx</strong></div>
-        <pre><code><span class="keyword">func</span> answer() <span class="type">int</span> {
-    <span class="keyword">return</span> 40 + 2
-}
+        <pre><code><span class="keyword">use</span> <span class="type">GFX</span>
+<span class="keyword">use</span> <span class="type">GFX.Plugins</span>
+<span class="keyword">use</span> <span class="type">GFX.Application.Schedule</span>
+
+<span class="keyword">func</span> system() { print(<span class="string">"Hello World !!!"</span>) }
 
 <span class="keyword">func</span> main() {
-    print(answer())
+    GFX.Application()
+        ..add_plugin(Plugins.Grid3D())
+        ..add_plugin(Plugins.ViewportCamera3D())
+        ..add_system(Schedule.startup, system)
+        ..run()
 }</code></pre>
-        <div class="terminal-line"><span>$</span> silex run Main.sx <strong>→ 42</strong></div>
+        <div class="terminal-line"><span>$</span> silex run Main.sx <strong>→ Hello World !!!</strong></div>
     </div>
     </div>
 </section>
