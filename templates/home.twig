@@ -14,7 +14,7 @@
             </a>
         </div>
         <h1 id="hero-title"><span>{{ locale == 'fr' ? 'Code moderne' : 'Modern Code' }}</span><span>{{ locale == 'fr' ? 'Puissance native' : 'Native Power' }}</span></h1>
-        <p class="lede">{{ locale == 'fr' ? 'Silex est un langage et un compilateur natif expérimental, avec des modules, des packages et une toolchain intégrée.' : 'Silex is an experimental native language and compiler, with modules, packages and an integrated toolchain.' }}</p>
+        <p class="lede">{{ locale == 'fr' ? 'Transformez une idée en programme natif sans casser votre élan. Silex garde le chemin court entre la première ligne et le résultat qui prend vie.' : 'Turn an idea into a native program without losing momentum. Silex keeps the path short from the first line to a result you can bring to life.' }}</p>
         <div class="actions">
             <a class="button button-primary" href="#install">{{ locale == 'fr' ? 'Installer Silex' : 'Install Silex' }}</a>
             <a class="button button-secondary" href="/{{ locale }}/docs">{{ locale == 'fr' ? 'Lire la documentation' : 'Read the docs' }}</a>
@@ -39,23 +39,29 @@
 </section>
 
 {% set principles = locale == 'fr' ? [
-    ['01', 'Simple', 'Un langage ciblé et une toolchain intégrée rendent l’écriture, la compilation et l’exécution directes.'],
-    ['02', 'Sémantique explicite', 'Valeurs, références et déplacements expriment clairement la manière dont les données circulent.'],
-    ['03', 'Exécutables natifs', 'Le compilateur produit directement des exécutables natifs pour les plateformes prises en charge.']
+    ['01', 'Élan préservé', 'Écrivez, lancez, ajustez. Silex limite les détours pour laisser plus de place à l’idée et au plaisir de la voir fonctionner.'],
+    ['02', 'Code limpide', 'Une syntaxe lisible et des intentions claires rendent le code plus simple à comprendre, à faire évoluer et à partager.'],
+    ['03', 'Résultat concret', 'Passez directement de votre source à un exécutable natif que vous pouvez lancer, tester et montrer.']
 ] : [
-    ['01', 'Simple', 'A focused language and integrated toolchain keep writing, building and running programs direct.'],
-    ['02', 'Explicit semantics', 'Values, references and moves make the way data flows through a program clear.'],
-    ['03', 'Native executables', 'The compiler directly produces native executables for its supported targets.']
+    ['01', 'Keep momentum', 'Write, run, refine. Silex cuts the detours so more of your energy goes into the idea and the joy of seeing it work.'],
+    ['02', 'Clear code', 'Readable syntax and clear intent make code easier to understand, evolve, and share.'],
+    ['03', 'Tangible results', 'Go straight from source to a native executable you can run, test, and show.']
 ] %}
 <section class="principles" aria-label="{{ locale == 'fr' ? 'Principes de Silex' : 'Silex principles' }}">
-    <div class="section-container principles-layout">
-    {% for principle in principles %}
-        <article>
-            <span class="number">{{ principle[0] }}</span>
-            <h2>{{ principle[1] }}</h2>
-            <p>{{ principle[2] }}</p>
-        </article>
-    {% endfor %}
+    <div class="section-container">
+        <div class="principles-heading">
+            <p class="eyebrow">{{ locale == 'fr' ? 'Pourquoi Silex' : 'Why Silex' }}</p>
+            <h2>{{ locale == 'fr' ? 'De l’idée au résultat, sans perdre le fil.' : 'From idea to result, without losing focus.' }}</h2>
+        </div>
+        <div class="principles-layout">
+        {% for principle in principles %}
+            <article>
+                <span class="number">{{ principle[0] }}</span>
+                <h3>{{ principle[1] }}</h3>
+                <p>{{ principle[2] }}</p>
+            </article>
+        {% endfor %}
+        </div>
     </div>
 </section>
 
