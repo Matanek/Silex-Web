@@ -78,6 +78,8 @@ $assert(str_contains($home->getHeaderLine('Set-Cookie'), 'Secure'), 'HTTPS local
 $assert(str_contains($homeBody, 'silex run Main.sx'), 'The canonical quickstart command is missing.');
 $assert(str_contains($homeBody, 'id="zed"'), 'The Zed installation section is missing.');
 $assert(str_contains($homeBody, 'Installer l’extension Silex pour Zed.'), 'The French Zed installation heading is missing.');
+$assert(str_contains($homeBody, 'Installation rapide') && str_contains($homeBody, 'En attente de validation'), 'The unavailable French Zed gallery path is missing.');
+$assert(str_contains($homeBody, 'Installation manuelle') && str_contains($homeBody, 'Disponible maintenant'), 'The available French Zed manual path is missing.');
 $assert(str_contains($homeBody, 'rustup target add wasm32-wasip2'), 'The Zed WebAssembly target setup is missing.');
 $assert(str_contains($homeBody, 'git clone https://github.com/Matanek/Silex-Extension-Zed.git'), 'The Zed extension clone command is missing.');
 $assert(str_contains($homeBody, 'zed: install dev extension'), 'The Zed development installation command is missing.');
@@ -100,7 +102,8 @@ $assert($englishHome->getStatusCode() === 200, 'The English home page must respo
 $assert(str_contains($englishHomeBody, '<html lang="en">') && str_contains($englishHomeBody, 'Modern Code'), 'The English home page is missing.');
 $assert(str_contains($englishHomeBody, 'href="/fr/"'), 'The English language switch is missing.');
 $assert(str_contains($englishHomeBody, 'Install the Silex extension for Zed.'), 'The English Zed installation heading is missing.');
-$assert(str_contains($englishHomeBody, 'Zed gallery publication tracked in PR #7190'), 'The English Zed publication status is missing.');
+$assert(str_contains($englishHomeBody, 'Quick installation') && str_contains($englishHomeBody, 'Awaiting approval'), 'The unavailable English Zed gallery path is missing.');
+$assert(str_contains($englishHomeBody, 'Manual installation') && str_contains($englishHomeBody, 'Available now'), 'The available English Zed manual path is missing.');
 $assert(str_contains($englishHomeBody, 'Demonstrates reusable Silex package metadata.'), 'The English package card must display the canonical manifest description.');
 $assert(!str_contains($englishHomeBody, 'Présente des métadonnées réutilisables'), 'The English package card must not display the French translation.');
 
