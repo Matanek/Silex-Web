@@ -105,10 +105,11 @@
 
 <section class="section zed-extension" id="zed" aria-labelledby="zed-title">
     <div class="section-container">
+    <div class="section-heading">
+        <p class="eyebrow" id="zed-title">{{ locale == 'fr' ? 'Installer l’extension Zed' : 'Install the Zed extension' }}</p>
+    </div>
     <div class="quickstart zed-setup">
         <div class="quickstart-copy zed-setup-copy">
-            <p class="eyebrow">{{ locale == 'fr' ? 'Installer l’extension Zed' : 'Install the Zed extension' }}</p>
-            <h3 id="zed-title">{{ locale == 'fr' ? 'Installer l’extension Silex pour Zed.' : 'Install the Silex extension for Zed.' }}</h3>
             <p>{{ locale == 'fr' ? 'La procédure manuelle est disponible aujourd’hui : préparez Rust, clonez l’extension et chargez-la dans Zed.' : 'Manual installation is available today: prepare Rust, clone the extension, and load it into Zed.' }}</p>
             <div class="zed-setup-actions">
                 <a class="button button-secondary" href="https://github.com/Matanek/Silex-Extension-Zed">{{ locale == 'fr' ? 'Dépôt de l’extension' : 'Extension repository' }}</a>
