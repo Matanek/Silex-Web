@@ -90,6 +90,56 @@
     </div>
 </section>
 
+<section class="section zed-extension" id="zed" aria-labelledby="zed-title">
+    <div class="zed-layout">
+        <div class="section-heading zed-heading">
+            <p class="eyebrow">{{ locale == 'fr' ? 'Éditeur' : 'Editor' }}</p>
+            <h2 id="zed-title">{{ locale == 'fr' ? 'Installer l’extension Silex pour Zed.' : 'Install the Silex extension for Zed.' }}</h2>
+            <p>{{ locale == 'fr' ? 'Ajoutez la coloration syntaxique, les diagnostics, la complétion et la navigation pendant que vous écrivez du Silex.' : 'Add syntax highlighting, diagnostics, completion, and navigation while writing Silex.' }}</p>
+
+            <a class="zed-status" href="https://github.com/zed-industries/extensions/pull/7190">
+                <span class="status-dot" aria-hidden="true"></span>
+                <span>{{ locale == 'fr' ? 'Publication dans la galerie Zed suivie dans la PR #7190' : 'Zed gallery publication tracked in PR #7190' }}</span>
+                <b aria-hidden="true">→</b>
+            </a>
+
+            <div class="zed-actions">
+                <a class="button button-secondary" href="https://github.com/Matanek/Silex-Extension-Zed">{{ locale == 'fr' ? 'Dépôt de l’extension' : 'Extension repository' }}</a>
+                <a class="text-link" href="/{{ locale }}/docs/Tools/Install-Zed-extension.md">{{ locale == 'fr' ? 'Guide détaillé' : 'Detailed guide' }} <span aria-hidden="true">→</span></a>
+            </div>
+        </div>
+
+        <div class="zed-terminal" aria-label="{{ locale == 'fr' ? 'Procédure d’installation de l’extension Zed' : 'Zed extension installation steps' }}">
+            <div class="quickstart-titlebar"><span></span><span></span><span></span><strong>Silex-Extension-Zed</strong></div>
+            <ol class="zed-steps">
+                <li>
+                    <span class="step-number">01</span>
+                    <div>
+                        <h3>{{ locale == 'fr' ? 'Préparer Silex et Rust' : 'Prepare Silex and Rust' }}</h3>
+                        <p>{{ locale == 'fr' ? 'Vérifiez que Silex est dans le PATH, puis ajoutez la cible WebAssembly utilisée par Zed.' : 'Check that Silex is in PATH, then add the WebAssembly target used by Zed.' }}</p>
+                        <pre><code><b>$</b> silex --version
+<b>$</b> rustup target add wasm32-wasip2</code></pre>
+                    </div>
+                </li>
+                <li>
+                    <span class="step-number">02</span>
+                    <div>
+                        <h3>{{ locale == 'fr' ? 'Cloner l’extension' : 'Clone the extension' }}</h3>
+                        <pre><code><b>$</b> git clone https://github.com/Matanek/Silex-Extension-Zed.git</code></pre>
+                    </div>
+                </li>
+                <li>
+                    <span class="step-number">03</span>
+                    <div>
+                        <h3>{{ locale == 'fr' ? 'L’installer dans Zed' : 'Install it in Zed' }}</h3>
+                        <p>{{ locale == 'fr' ? 'Ouvrez la palette de commandes, lancez « zed: install dev extension », puis sélectionnez le dossier Silex-Extension-Zed. Ouvrez ensuite un fichier .sx.' : 'Open the command palette, run “zed: install dev extension,” then select the Silex-Extension-Zed directory. Next, open an .sx file.' }}</p>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+</section>
+
 {% if packages is not empty %}
 <section class="section home-packages" id="packages" aria-labelledby="home-packages-title">
     <div class="section-heading home-packages-heading">
