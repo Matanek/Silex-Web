@@ -49,11 +49,17 @@ main,
 }
 
 .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
     min-height: 82px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid var(--line);
+    border: 1px solid var(--line);
+    border-top: 0;
+    border-radius: 0 0 14px 14px;
+    background: var(--background);
 }
 
 .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--text); text-decoration: none; font-size: 1.05rem; font-weight: 760; letter-spacing: -0.02em; }
@@ -101,7 +107,7 @@ h1, h2, h3, p { margin-top: 0; }
 .principles h2 { margin: 15px 0 10px; font-size: 1.2rem; }
 .principles p { margin-bottom: 0; color: var(--muted); font-size: 0.92rem; }
 
-.section { padding: 110px 0; border-bottom: 1px solid var(--line); }
+.section { padding: 110px 0; border-bottom: 1px solid var(--line); scroll-margin-top: 96px; }
 .section-heading { max-width: 720px; margin-bottom: 48px; }
 .section-heading h2 { margin-bottom: 18px; font-size: clamp(2.3rem, 4.5vw, 4.2rem); line-height: 1; letter-spacing: -0.05em; }
 .section-heading > p:last-child { color: var(--muted); font-size: 1.05rem; }
