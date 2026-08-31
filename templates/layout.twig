@@ -12,19 +12,21 @@
 <body>
     <!-- Silex Web release: {{ release }} -->
     <header class="site-header">
-        <a class="brand" href="/{{ locale }}/" aria-label="{{ locale == 'fr' ? 'Accueil Silex' : 'Silex home' }}">
-            <img class="brand-mark" src="/icon.svg" alt="">
-            <span>Silex</span>
-        </a>
+        <div class="site-header-inner">
+            <a class="brand" href="/{{ locale }}/" aria-label="{{ locale == 'fr' ? 'Accueil Silex' : 'Silex home' }}">
+                <img class="brand-mark" src="/icon.svg" alt="">
+                <span>Silex</span>
+            </a>
 
-        <nav class="site-navigation" aria-label="{{ locale == 'fr' ? 'Navigation principale' : 'Main navigation' }}">
-            <a href="/{{ locale }}/docs">{{ locale == 'fr' ? 'Documentation' : 'Docs' }}</a>
-            <a href="/{{ locale }}/#install">{{ locale == 'fr' ? 'Installer' : 'Install' }}</a>
-            <a href="/{{ locale }}/packages">Packages</a>
-            <a class="wide-link" href="/{{ locale }}/registry">{{ locale == 'fr' ? 'Registre' : 'Registry' }}</a>
-            <a class="wide-link" href="https://github.com/Matanek/Silex">GitHub</a>
-            <a class="locale-link" href="{{ alternate_path }}" lang="{{ alternate_locale }}">{{ alternate_label }}</a>
-        </nav>
+            <nav class="site-navigation" aria-label="{{ locale == 'fr' ? 'Navigation principale' : 'Main navigation' }}">
+                <a href="/{{ locale }}/docs">{{ locale == 'fr' ? 'Documentation' : 'Docs' }}</a>
+                <a href="/{{ locale }}/#install">{{ locale == 'fr' ? 'Installer' : 'Install' }}</a>
+                <a href="/{{ locale }}/packages">Packages</a>
+                <a class="wide-link" href="/{{ locale }}/registry">{{ locale == 'fr' ? 'Registre' : 'Registry' }}</a>
+                <a class="wide-link" href="https://github.com/Matanek/Silex">GitHub</a>
+                <a class="locale-link" href="{{ alternate_path }}" lang="{{ alternate_locale }}">{{ alternate_label }}</a>
+            </nav>
+        </div>
     </header>
 
     <main>{% block content %}{% endblock %}</main>

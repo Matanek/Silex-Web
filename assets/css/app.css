@@ -41,7 +41,6 @@ body {
 a { color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-.site-header,
 main,
 .site-footer {
     width: min(calc(100% - 40px), var(--max-width));
@@ -52,14 +51,18 @@ main,
     position: sticky;
     top: 0;
     z-index: 50;
+    width: 100%;
     min-height: 82px;
+    background: var(--background);
+}
+
+.site-header-inner {
+    width: min(calc(100% - 40px), var(--max-width));
+    min-height: inherit;
+    margin-inline: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border: 1px solid var(--line);
-    border-top: 0;
-    border-radius: 0 0 14px 14px;
-    background: var(--background);
 }
 
 .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--text); text-decoration: none; font-size: 1.05rem; font-weight: 760; letter-spacing: -0.02em; }
@@ -291,11 +294,11 @@ h1, h2, h3, p { margin-top: 0; }
 }
 
 @media (max-width: 650px) {
-    .site-header,
     main,
     .site-footer,
     .docs-shell { width: min(calc(100% - 28px), var(--max-width)); }
-    .site-header { align-items: flex-start; padding: 20px 0; }
+    .site-header { padding: 20px 0; }
+    .site-header-inner { width: min(calc(100% - 28px), var(--max-width)); min-height: auto; align-items: flex-start; }
     .site-navigation { flex-wrap: wrap; justify-content: flex-end; gap: 8px 16px; }
     .site-navigation .wide-link { display: none; }
     .hero { gap: 52px; padding: 65px 0 75px; }

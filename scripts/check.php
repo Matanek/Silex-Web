@@ -71,6 +71,7 @@ $releaseFile = $root . '/release.txt';
 $expectedRelease = is_file($releaseFile) ? trim((string) file_get_contents($releaseFile)) : 'development';
 $assert($home->getStatusCode() === 200, 'The French home page must respond with HTTP 200.');
 $assert(str_contains($homeBody, '<html lang="fr">'), 'The French page language is missing.');
+$assert(str_contains($homeBody, '<div class="site-header-inner">'), 'The full-width header container is missing.');
 $assert(str_contains($homeBody, 'Code moderne'), 'The French home page content is missing.');
 $assert(str_contains($homeBody, 'href="/en/"'), 'The home page language switch must preserve the page.');
 $assert(str_contains($home->getHeaderLine('Set-Cookie'), 'silex_locale=fr'), 'Localized routes must save the selected language.');
