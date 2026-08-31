@@ -39,19 +39,18 @@
 </section>
 
 {% set principles = locale == 'fr' ? [
-    ['01', 'Simplicité', 'Une seule CLI gère les packages, la compilation et l’exécution pour passer rapidement du code au programme qui tourne.'],
-    ['02', 'Sécurité', 'Le typage et l’ownership explicites rendent la circulation des données prévisible et aident à prévenir les erreurs difficiles à diagnostiquer.'],
-    ['03', 'Efficacité', 'Développez dans un même projet, puis produisez des exécutables pour Windows x64, macOS Apple Silicon et Linux x64.']
+    ['01', 'Simplicité', 'Un langage expressif, puissant et souple pour écrire un code agréable à lire et à maintenir.'],
+    ['02', 'Efficacité', 'Compilation cross-platform pour Windows, macOS et Linux.'],
+    ['03', 'Sécurité', 'Le typage et l’ownership explicites rendent la circulation des données prévisible et aident à prévenir les erreurs difficiles à diagnostiquer.']
 ] : [
-    ['01', 'Simplicity', 'One CLI handles packages, compilation, and execution so you can move quickly from code to a running program.'],
-    ['02', 'Safety', 'Explicit typing and ownership make data flow predictable and help prevent errors that are difficult to diagnose.'],
-    ['03', 'Efficiency', 'Develop in one project, then produce executables for Windows x64, macOS on Apple Silicon, and Linux x64.']
+    ['01', 'Simplicity', 'An expressive, powerful, and flexible language for writing code that is pleasant to read and maintain.'],
+    ['02', 'Efficiency', 'Cross-platform compilation for Windows, macOS, and Linux.'],
+    ['03', 'Safety', 'Explicit typing and ownership make data flow predictable and help prevent errors that are difficult to diagnose.']
 ] %}
 <section class="principles" aria-label="{{ locale == 'fr' ? 'Principes de Silex' : 'Silex principles' }}">
     <div class="section-container">
         <div class="principles-heading">
             <p class="eyebrow">{{ locale == 'fr' ? 'Pourquoi Silex' : 'Why Silex' }}</p>
-            <h2>{{ locale == 'fr' ? 'Conçu pour produire' : 'Built to ship' }}</h2>
         </div>
         <div class="principles-layout">
         {% for principle in principles %}
