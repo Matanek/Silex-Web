@@ -125,13 +125,12 @@ h1, h2, h3, p { margin-top: 0; }
 .principles-layout { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
 .principles article { --card-accent: var(--accent); position: relative; min-height: 260px; padding: 30px; overflow: hidden; border: 1px solid var(--line); border-radius: 10px; background: linear-gradient(145deg, rgb(255 255 255 / 3%), transparent 62%), var(--surface); transition: border-color 180ms ease, transform 180ms ease; }
 .principles article::before { position: absolute; inset: 0 0 auto; height: 2px; background: linear-gradient(90deg, var(--card-accent), transparent 72%); content: ""; }
-.principles article:nth-child(2) { --card-accent: #87c8ff; transform: translateY(18px); }
+.principles article:nth-child(2) { --card-accent: #87c8ff; }
 .principles article:nth-child(3) { --card-accent: #f08cac; }
 .principles article:hover { border-color: color-mix(in srgb, var(--card-accent) 42%, var(--line)); transform: translateY(-4px); }
-.principles article:nth-child(2):hover { transform: translateY(14px); }
 .number { width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid color-mix(in srgb, var(--card-accent) 35%, var(--line)); border-radius: 50%; color: var(--card-accent); font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 0.68rem; }
 .principles h3 { margin: 48px 0 12px; font-size: 1.3rem; letter-spacing: -0.025em; }
-.principles p { margin-bottom: 0; color: var(--muted); font-size: 0.94rem; line-height: 1.65; text-wrap: pretty; }
+.principles article p { margin-bottom: 0; color: var(--muted); font-size: 0.94rem; line-height: 1.65; text-wrap: pretty; }
 
 .section { padding: 110px 0; border-bottom: 1px solid var(--line); scroll-margin-top: calc(var(--navbar-height) + 10px); }
 .section-heading { max-width: 720px; margin-bottom: 48px; }
@@ -309,10 +308,7 @@ h1, h2, h3, p { margin-top: 0; }
     .registry-hero { min-height: auto; grid-template-columns: 1fr; padding-top: 75px; }
     .code-window { max-width: 550px; justify-self: start; }
     .principles-layout { grid-template-columns: 1fr; }
-    .principles article,
-    .principles article:nth-child(2) { min-height: auto; transform: none; }
-    .principles article:hover,
-    .principles article:nth-child(2):hover { transform: translateY(-4px); }
+    .principles article { min-height: auto; }
     .install-grid,
     .quickstart,
     .registry-heading-split,
