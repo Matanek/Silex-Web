@@ -100,6 +100,7 @@ $assert(str_contains($homeBody, 'zed: install dev extension'), 'The Zed developm
 $assert(str_contains($homeBody, 'href="https://github.com/zed-industries/extensions/pull/7190"'), 'The Zed catalog pull request is missing.');
 $assert(str_contains($homeBody, 'v9.8.7'), 'The configured Silex version is missing.');
 $assert(str_contains($homeBody, 'data-package-count="2"'), 'The home page package catalog is missing.');
+$assert(str_contains($homeBody, 'href="/fr/#packages">Packages</a>'), 'The French navigation must link to the home page package catalog.');
 $assert(str_contains($homeBody, 'href="https://github.com/Matanek/Silex-Lib-Example"'), 'Package cards must link to their canonical repository.');
 $assert(str_contains($homeBody, 'Présente des métadonnées réutilisables pour un package Silex.'), 'French package cards must display their localized manifest description.');
 $assert(str_contains($homeBody, 'Uses one package description for every locale.'), 'Plain package descriptions must remain valid.');
@@ -127,6 +128,7 @@ $assert(str_contains($englishHomeBody, 'Quick installation') && str_contains($en
 $assert(str_contains($englishHomeBody, 'Manual installation') && str_contains($englishHomeBody, 'Available now'), 'The available English Zed manual path is missing.');
 $assert(str_contains($englishHomeBody, '<strong class="zed-titlebar-availability">Available now</strong>'), 'The English Zed title bar must contain one readable availability label.');
 $assert(str_contains($englishHomeBody, 'Demonstrates reusable Silex package metadata.'), 'The English package card must display the canonical manifest description.');
+$assert(str_contains($englishHomeBody, 'href="/en/#packages">Packages</a>'), 'The English navigation must link to the home page package catalog.');
 $assert(!str_contains($englishHomeBody, 'Présente des métadonnées réutilisables'), 'The English package card must not display the French translation.');
 
 $frenchDocumentation = $handle('https://silex.test/fr/docs');
