@@ -134,6 +134,14 @@ $assert(!str_contains($englishHomeBody, 'Présente des métadonnées réutilisab
 $frenchDocumentation = $handle('https://silex.test/fr/docs');
 $frenchDocumentationBody = (string) $frenchDocumentation->getBody();
 $assert($frenchDocumentation->getStatusCode() === 200, 'French documentation must respond with HTTP 200.');
+$assert(str_contains($frenchDocumentationBody, '<body class="docs-page">'), 'Documentation pages must expose their fixed-sidebar layout class.');
+$sourceCss = (string) file_get_contents($root . '/assets/css/app.css');
+$assert(
+    str_contains($sourceCss, '.docs-sidebar { position: fixed;')
+        && str_contains($sourceCss, 'height: calc(100dvh - var(--navbar-height));')
+        && str_contains($sourceCss, 'overscroll-behavior-y: contain;'),
+    'The desktop documentation sidebar must remain fixed below the navbar with independent scrolling.',
+);
 $assert(str_contains($frenchDocumentationBody, '<h1>Documentation Silex</h1>'), 'French Markdown must be rendered from FR/.');
 $assert(str_contains($frenchDocumentationBody, 'Bonjour depuis Silex'), 'The French code example is missing.');
 $assert(str_contains($frenchDocumentationBody, 'href="/fr/docs/Language/README.md"'), 'French relative links must stay in the French route tree.');
