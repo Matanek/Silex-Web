@@ -120,6 +120,7 @@ $assert(substr_count($homeBody, 'class="showcase-thumbnail"') === 13, 'The showc
 $assert(substr_count($homeBody, '<figcaption') === 1, 'Only the lightbox may render a showcase caption.');
 $assert(substr_count($homeBody, 'loading="lazy"') >= 13, 'Showcase thumbnails must load lazily.');
 $assert(str_contains($homeBody, 'data-showcase-lightbox'), 'The showcase lightbox is missing.');
+$assert(str_contains($homeBody, 'data-count-label="{current}/{total}"'), 'The showcase counter must use the compact current/total format.');
 $assert(str_contains($homeBody, '<script src="/assets/showcase.js" defer></script>'), 'The showcase interaction script is missing.');
 $showcaseSlugs = [
     'canvas-shapes',
@@ -246,7 +247,9 @@ $assert(
 );
 $assert(
     str_contains($sourceCss, 'position: fixed; inset: 0; width: min(calc(100% - 36px), 1120px);')
-        && str_contains($sourceCss, 'margin: auto;'),
+        && str_contains($sourceCss, 'margin: auto;')
+        && str_contains($sourceCss, '.showcase-lightbox figcaption > span {')
+        && str_contains($sourceCss, 'font-size: 0.68rem; white-space: nowrap;'),
     'The showcase lightbox must remain centered in the viewport.',
 );
 $assert(

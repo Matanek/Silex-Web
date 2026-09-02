@@ -206,7 +206,7 @@
             <p>{% if locale == 'fr' %}Ces captures présentent des exemples fournis avec Silex et disponibles dans le dépôt <a href="https://github.com/Matanek/Silex-Examples">Silex-Examples</a>.{% else %}These captures show examples distributed with Silex and available in the <a href="https://github.com/Matanek/Silex-Examples">Silex-Examples</a> repository.{% endif %}</p>
         </div>
 
-        <div class="showcase-grid" data-showcase-gallery data-count-label="{{ locale == 'fr' ? '{current} sur {total}' : '{current} of {total}' }}">
+        <div class="showcase-grid" data-showcase-gallery data-count-label="{current}/{total}">
             {% for item in showcase_items %}
                 {% set title = locale == 'fr' ? item.title_fr : item.title_en %}
                 {% set description = locale == 'fr' ? item.description_fr : item.description_en %}

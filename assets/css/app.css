@@ -313,7 +313,7 @@ body.showcase-lightbox-open { overflow: hidden; }
 .showcase-lightbox-stage { min-height: 0; flex: 1; display: grid; place-items: center; padding: 18px 72px 0; overflow: hidden; background: radial-gradient(circle at 50% 40%, var(--color-gray-900), var(--color-gray-950) 72%); }
 .showcase-lightbox-stage img { max-width: 100%; max-height: calc(100dvh - 176px); display: block; object-fit: contain; }
 .showcase-lightbox figcaption { min-height: 120px; display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 22px; align-items: start; padding: 22px 72px 26px; border-top: 1px solid var(--line); background: var(--surface); }
-.showcase-lightbox figcaption > span { padding-top: 4px; color: var(--accent); font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 0.68rem; }
+.showcase-lightbox figcaption > span { padding-top: 4px; color: var(--accent); font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 0.68rem; white-space: nowrap; }
 .showcase-lightbox h3 { margin-bottom: 5px; font-size: 1rem; }
 .showcase-lightbox p { max-width: 760px; margin-bottom: 0; color: var(--muted); font-size: 0.82rem; }
 .showcase-lightbox button { position: absolute; z-index: 2; display: grid; place-items: center; border: 1px solid color-mix(in srgb, var(--color-white) 18%, transparent); background: color-mix(in srgb, var(--color-gray-950) 82%, transparent); color: var(--text); cursor: pointer; }

@@ -14,7 +14,7 @@
     const close = dialog.querySelector('[data-showcase-close]');
     const previous = dialog.querySelector('[data-showcase-previous]');
     const next = dialog.querySelector('[data-showcase-next]');
-    const countLabel = gallery.dataset.countLabel || '{current} / {total}';
+    const countLabel = gallery.dataset.countLabel || '{current}/{total}';
     let activeIndex = 0;
 
     const render = (index) => {
