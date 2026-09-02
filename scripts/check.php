@@ -261,10 +261,10 @@ $assert(
     'Package hover states must use the sky accent instead of a gray text tint.',
 );
 $assert(
-    str_contains($sourceCss, '.package-card { position: relative;')
+    str_contains($sourceCss, '.package-card { position: relative; min-width: 0; min-height: 190px;')
         && str_contains($sourceCss, '.package-card-repository::after { position: absolute; inset: 0; content: ""; }')
         && str_contains($sourceCss, '.package-card-documentation { position: relative; z-index: 1; }'),
-    'The repository link must cover the package card while future documentation links remain independently interactive.',
+    'Compact package cards must remain fully covered by their repository link while future documentation links stay independently interactive.',
 );
 $assert(
     str_contains($sourceCss, 'position: fixed; inset: 0; width: min(calc(100% - 36px), 1120px);')
