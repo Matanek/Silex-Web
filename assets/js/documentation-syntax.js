@@ -31,7 +31,8 @@ async function highlightSilexCode(blocks) {
     });
 
     for (const block of blocks) {
-        const rendered = highlighter.codeToHtml(block.textContent ?? "", {
+        const source = (block.textContent ?? "").replace(/\r?\n$/, "");
+        const rendered = highlighter.codeToHtml(source, {
             lang: "silex",
             theme: "silex-css-variables",
         });

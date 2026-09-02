@@ -467,6 +467,10 @@ $syntaxScript = is_file($syntaxScriptPath) ? (string) file_get_contents($syntaxS
 $assert(strlen($syntaxScript) > 10_000, 'The compiled Silex syntax-highlighting bundle is missing.');
 $assert(str_contains($syntaxScript, 'silexHighlighted'), 'The syntax-highlighting bundle must mark highlighted code blocks.');
 $assert(
+    str_contains((string) file_get_contents($root . '/assets/js/documentation-syntax.js'), '.replace(/\\r?\\n$/, "")'),
+    'The syntax highlighter must discard the Markdown fence terminator without removing intentional blank lines.',
+);
+$assert(
     str_contains($sourceCss, '--sx-token-keyword: var(--color-sky-400);')
         && str_contains($sourceCss, '--sx-token-string: var(--color-lime-200);')
         && str_contains($sourceCss, '.prose-silex pre.shiki code'),
