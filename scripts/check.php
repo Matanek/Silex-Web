@@ -248,9 +248,19 @@ $assert(
 );
 $assert(
     str_contains($sourceCss, '.section { padding: 110px 0; border: 0;')
-        && str_contains($sourceCss, '.registry-section { padding: 110px 0; border: 0; }')
+        && str_contains($sourceCss, '.registry-section { padding: 110px 0; border: 0; scroll-margin-top: calc(var(--navbar-height) + 10px); }')
         && !str_contains($sourceCss, '.home-page .section:has(+ .showcase)'),
     'Top-level site sections must remain free of decorative separators.',
+);
+$assert(
+    str_contains($sourceCss, 'body.registry-page {')
+        && str_contains($sourceCss, '.registry-page main {')
+        && str_contains($sourceCss, '.registry-hero-section,')
+        && str_contains($sourceCss, '.registry-publish-section { background: var(--color-sky-50); }')
+        && str_contains($sourceCss, '.contribution-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }')
+        && str_contains($sourceCss, '.manifest-window { color-scheme: dark;')
+        && str_contains($sourceCss, '.registry-closing { max-width: 840px; padding: 130px 0 150px; text-align: center; }'),
+    'The registry must reuse the homepage rhythm with full-width alternating sections and contained content.',
 );
 $assert(
     !str_contains($sourceCss, '.home-page .section { min-height:')
@@ -378,6 +388,9 @@ $registry = $handle('https://silex.test/fr/registry');
 $registryBody = (string) $registry->getBody();
 $assert($registry->getStatusCode() === 200, 'The French registry page must respond with HTTP 200.');
 $assert(str_contains($registryBody, '<h1 id="registry-title">Construisez<br><span>Publiez</span><br>Partagez</h1>'), 'The French registry content is missing.');
+$assert(str_contains($registryBody, '<body class="registry-page">'), 'The registry page theme is missing.');
+$assert(substr_count($registryBody, 'class="section-container') >= 5, 'The registry full-width sections are missing their containers.');
+$assert(str_contains($registryBody, 'class="registry-section registry-publish-section"'), 'The registry publication section is missing.');
 $assert(str_contains($registryBody, 'href="/en/registry"'), 'The registry language switch must preserve the page.');
 $assert(str_contains($registryBody, 'https://registry.silex-lang.org/v1/index.json'), 'The registry API link is missing.');
 $assert(str_contains($registryBody, 'https://github.com/Matanek/Silex-Lib-STD'), 'Official package links must point to repositories.');
