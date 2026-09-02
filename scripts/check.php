@@ -77,7 +77,7 @@ $assert(substr_count($homeBody, 'class="section-container') >= 5, 'The home page
 $assert(str_contains($homeBody, 'Code moderne'), 'The French home page content is missing.');
 $assert(str_contains($homeBody, 'Concentrez-vous sur votre jeu, pas sur sa configuration.'), 'The French audience-focused hero introduction is missing.');
 $assert(preg_match('/>Simplicité<.*>Efficacité<.*>Sécurité</s', $homeBody) === 1, 'The French homepage benefits are missing or ordered incorrectly.');
-$assert(str_contains($homeBody, 'Compilation cross-platform pour Windows, macOS et Linux.'), 'The French cross-platform benefit is missing.');
+$assert(str_contains($homeBody, 'Compilation cross-platform pour Windows, macOS et Linux. Arm64 et x64.'), 'The French cross-platform benefit must include both desktop architectures.');
 $assert(str_contains($homeBody, 'Le typage et l’ownership rendent la circulation des données prévisible.'), 'The French safety benefit is missing.');
 $assert(str_contains($homeBody, '<p class="eyebrow" id="install-title">Installer Silex</p>'), 'The compact French installation heading is missing.');
 $assert(!str_contains($homeBody, 'Le compilateur autonome ne demande ni Zig, ni Git'), 'The removed French installation introduction is still rendered.');
@@ -166,7 +166,7 @@ $assert($englishHome->getStatusCode() === 200, 'The English home page must respo
 $assert(str_contains($englishHomeBody, '<html lang="en">') && str_contains($englishHomeBody, 'Modern Code'), 'The English home page is missing.');
 $assert(str_contains($englishHomeBody, 'Focus on your game, not its setup.'), 'The English audience-focused hero introduction is missing.');
 $assert(preg_match('/>Simplicity<.*>Efficiency<.*>Safety</s', $englishHomeBody) === 1, 'The English homepage benefits are missing or ordered incorrectly.');
-$assert(str_contains($englishHomeBody, 'Cross-platform compilation for Windows, macOS, and Linux.'), 'The English cross-platform benefit is missing.');
+$assert(str_contains($englishHomeBody, 'Cross-platform compilation for Windows, macOS, and Linux. ARM64 and x64.'), 'The English cross-platform benefit must include both desktop architectures.');
 $assert(str_contains($englishHomeBody, 'Typing and ownership make data flow predictable.'), 'The English safety benefit is missing.');
 $assert(str_contains($englishHomeBody, '<p class="eyebrow" id="install-title">Install Silex</p>'), 'The compact English installation heading is missing.');
 $assert(!str_contains($englishHomeBody, 'The standalone compiler does not require Zig or Git'), 'The removed English installation introduction is still rendered.');
