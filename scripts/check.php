@@ -227,13 +227,16 @@ $assert(
 );
 $assert(
     str_contains($sourceCss, '--navbar-height: 70px;')
+        && str_contains($sourceCss, 'padding-top: var(--navbar-height);')
         && str_contains($sourceCss, 'body.home-page {')
         && str_contains($sourceCss, 'background: var(--color-white);')
         && str_contains($sourceCss, '.site-header {')
+        && str_contains($sourceCss, "position: fixed;\n    inset: 0 0 auto;")
+        && !str_contains($sourceCss, 'position: sticky;')
         && str_contains($sourceCss, '.home-page .hero {')
         && str_contains($sourceCss, 'background: radial-gradient(circle at 78% 6%, color-mix(in srgb, var(--color-sky-400) 8%, transparent), transparent 26rem), var(--background);')
         && str_contains($sourceCss, '.home-page .section { background: transparent; }'),
-    'The homepage must use a white canvas and navbar while preserving the dark hero.',
+    'The fixed white navbar must stay outside the elastic page flow while preserving the dark hero.',
 );
 $assert(
     str_contains($sourceCss, '--color-silex-background: var(--color-gray-950);')
