@@ -276,10 +276,17 @@ $assert(
     'The showcase lightbox must remain centered in the viewport.',
 );
 $assert(
-    str_contains($sourceCss, '.docs-sidebar { position: fixed;')
+    str_contains($sourceCss, '.docs-page { color-scheme: light;')
+        && str_contains($sourceCss, '--docs-sidebar-width: clamp(230px, 18vw, 280px);')
+        && str_contains($sourceCss, '.docs-sidebar { position: fixed;')
         && str_contains($sourceCss, 'height: calc(100dvh - var(--navbar-height));')
-        && str_contains($sourceCss, 'overscroll-behavior-y: contain;'),
-    'The desktop documentation sidebar must remain fixed below the navbar with independent scrolling.',
+        && str_contains($sourceCss, 'overscroll-behavior-y: contain;')
+        && str_contains($sourceCss, 'background: var(--color-gray-50);')
+        && str_contains($sourceCss, '.docs-nav-group ul { margin: 0; padding: 0; border-left: 2px solid var(--color-gray-200);')
+        && str_contains($sourceCss, '.docs-nav-group a[aria-current="page"]::before {')
+        && str_contains($sourceCss, '.docs-toolbar > span { color: var(--color-sky-600); font-weight: 720; }')
+        && str_contains($sourceCss, '.prose-silex { color: var(--color-gray-700); font-size: 0.96rem;'),
+    'Documentation must use a compact light theme while keeping its fixed independently scrolling sidebar.',
 );
 $assert(str_contains($frenchDocumentationBody, '<h1>Documentation Silex</h1>'), 'French Markdown must be rendered from FR/.');
 $assert(str_contains($frenchDocumentationBody, 'Bonjour depuis Silex'), 'The French code example is missing.');
