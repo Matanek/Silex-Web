@@ -206,13 +206,14 @@ $assert(
         && str_contains($sourceCss, '.site-header {')
         && str_contains($sourceCss, '.home-page .hero {')
         && str_contains($sourceCss, 'background: radial-gradient(circle at 78% 6%, color-mix(in srgb, var(--color-sky-400) 8%, transparent), transparent 26rem), var(--background);')
-        && str_contains($sourceCss, 'align-items: center; background: transparent;')
-        && !str_contains($sourceCss, '.showcase { background:'),
-    'The homepage must use a white canvas and navbar, while preserving the dark hero and transparent following sections.',
+        && str_contains($sourceCss, '.home-page .section { background: transparent; }'),
+    'The homepage must use a white canvas and navbar while preserving the dark hero.',
 );
 $assert(
     str_contains($sourceCss, '--color-silex-background: var(--color-gray-950);')
         && str_contains($sourceCss, '--color-silex-accent: var(--color-sky-400);')
+        && str_contains($sourceCss, '--decorative-pink: var(--color-pink-400);')
+        && str_contains($sourceCss, '--decorative-pistachio: var(--color-lime-200);')
         && preg_match('/#[0-9a-f]{3,8}\b|rgba?\(/i', $sourceCss) !== 1,
     'The website theme must use Tailwind palette tokens instead of custom color literals.',
 );
@@ -223,8 +224,13 @@ $assert(
     'Top-level site sections must remain free of decorative separators.',
 );
 $assert(
-    str_contains($sourceCss, '.home-page .section { min-height: calc(100vh - var(--navbar-height)); min-height: calc(100svh - var(--navbar-height)); display: grid; align-items: center; background: transparent; }'),
-    'Home page sections must occupy at least the viewport height below the navbar.',
+    !str_contains($sourceCss, '.home-page .section { min-height:')
+        && str_contains($sourceCss, '.home-page .zed-extension { background: var(--color-gray-50); }')
+        && str_contains($sourceCss, '.zed-extension .section-heading .eyebrow { background: var(--decorative-pink); }')
+        && str_contains($sourceCss, '.home-packages .section-heading .eyebrow { background: var(--decorative-pistachio); }')
+        && str_contains($sourceCss, '.home-page .showcase { color-scheme: dark;')
+        && str_contains($sourceCss, 'background: var(--color-gray-950); color: var(--text); }'),
+    'Home page sections must follow the white, gray, pink, pistachio, and dark rhythm without forced viewport heights.',
 );
 $assert(
     str_contains($sourceCss, 'position: fixed; inset: 0; width: min(calc(100% - 36px), 1120px);')
