@@ -123,7 +123,7 @@ h1, h2, h3, p { margin-top: 0; }
 .hero-principles h2 { margin-bottom: 12px; color: var(--accent); font-size: clamp(1.15rem, 1.8vw, 1.45rem); line-height: 1.05; letter-spacing: 0.04em; text-transform: uppercase; }
 .hero-principles p { max-width: 340px; margin: 0 auto; color: var(--muted); font-size: 0.9rem; line-height: 1.65; text-wrap: pretty; }
 
-.section { padding: 110px 0; border-bottom: 1px solid var(--line); scroll-margin-top: calc(var(--navbar-height) + 10px); }
+.section { padding: 110px 0; border: 0; scroll-margin-top: calc(var(--navbar-height) + 10px); }
 .home-page .section { min-height: calc(100vh - var(--navbar-height)); min-height: calc(100svh - var(--navbar-height)); display: grid; align-items: center; }
 .section-heading { max-width: 720px; margin-bottom: 48px; }
 .section-heading h2 { margin-bottom: 18px; font-size: clamp(2.3rem, 4.5vw, 4.2rem); line-height: 1; letter-spacing: -0.05em; }
@@ -193,7 +193,7 @@ h1, h2, h3, p { margin-top: 0; }
 .registry-endpoint b { color: var(--accent); }
 .registry-endpoint:hover { border-color: var(--accent); }
 
-.registry-section { padding: 110px 0; border-top: 1px solid var(--line); }
+.registry-section { padding: 110px 0; border: 0; }
 .registry-heading { margin-bottom: 58px; }
 .registry-heading-split { display: grid; grid-template-columns: 1fr 0.8fr; gap: clamp(50px, 10vw, 150px); align-items: end; }
 .registry-heading h2,
@@ -256,8 +256,7 @@ h1, h2, h3, p { margin-top: 0; }
 .package-card-links a span { color: var(--accent); }
 .content-unavailable { padding: 30px; border: 1px solid var(--line); color: var(--muted); }
 
-.home-page .section:has(+ .showcase) { border-bottom: 0; }
-.showcase { border-bottom: 0; background: color-mix(in srgb, var(--background) 95%, white 5%); }
+.showcase { background: color-mix(in srgb, var(--background) 95%, white 5%); }
 .showcase-heading { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr); gap: clamp(40px, 8vw, 110px); align-items: end; margin-bottom: 64px; }
 .showcase-heading h2 { max-width: 680px; margin-bottom: 0; }
 .showcase-heading > p { max-width: 520px; margin-bottom: 4px; color: var(--muted); font-size: 1.02rem; text-wrap: pretty; }

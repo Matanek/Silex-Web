@@ -200,13 +200,14 @@ $assert(
     'The three uppercase benefits must remain centered in lightweight bordered cards.',
 );
 $assert(
-    str_contains($sourceCss, '.showcase { border-bottom: 0; background: color-mix(in srgb, var(--background) 95%, white 5%); }'),
+    str_contains($sourceCss, '.showcase { background: color-mix(in srgb, var(--background) 95%, white 5%); }'),
     'The showcase background must remain five percent lighter than the header background.',
 );
 $assert(
-    str_contains($sourceCss, '.home-page .section:has(+ .showcase) { border-bottom: 0; }')
-        && str_contains($sourceCss, '.showcase { border-bottom: 0;'),
-    'The showcase section must remain free of surrounding one-pixel separators.',
+    str_contains($sourceCss, '.section { padding: 110px 0; border: 0;')
+        && str_contains($sourceCss, '.registry-section { padding: 110px 0; border: 0; }')
+        && !str_contains($sourceCss, '.home-page .section:has(+ .showcase)'),
+    'Top-level site sections must remain free of decorative separators.',
 );
 $assert(
     str_contains($sourceCss, '.home-page .section { min-height: calc(100vh - var(--navbar-height)); min-height: calc(100svh - var(--navbar-height)); display: grid; align-items: center; }'),
