@@ -262,8 +262,9 @@ $assert(
         && str_contains($sourceCss, '.registry-publish-section { background: var(--color-sky-50); }')
         && str_contains($sourceCss, '.contribution-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }')
         && str_contains($sourceCss, '.manifest-window { color-scheme: dark;')
-        && str_contains($sourceCss, '.registry-review { display: flex; align-items: center; justify-content: space-between;'),
-    'The registry must reuse the homepage rhythm with full-width alternating sections and contained content.',
+        && str_contains($sourceCss, '.registry-review { display: flex; align-items: center; justify-content: space-between;')
+        && str_contains($sourceCss, '.registry-review-copy > p:last-child { margin-bottom: 0; color: var(--muted); font-size: 0.88rem; text-wrap: balance; }'),
+    'The registry must reuse the homepage rhythm with full-width alternating sections, contained content, and balanced tracking copy.',
 );
 $assert(
     !str_contains($sourceCss, '.home-page .section { min-height:')
@@ -395,7 +396,8 @@ $assert(str_contains($registryBody, 'class="registry-section registry-publish-se
 $assert(str_contains($registryBody, '<h2 id="publish-title">Enregistrez votre package</h2>'), 'The registry must use a concise package-registration title.');
 $assert(str_contains($registryBody, 'href="/fr/#packages"'), 'The registry contribution card must link to the complete package catalog.');
 $assert(!str_contains($registryBody, 'registry-packages-section'), 'The registry page must not duplicate a partial package catalog.');
-$assert(str_contains($registryBody, '<h3 id="registry-review-title">Suivez votre demande</h3>'), 'The registry must explain how to track a registration request.');
+$assert(str_contains($registryBody, '<h3 class="eyebrow" id="registry-review-title">Suivi des inscriptions</h3>'), 'The registry must use one concise registration-tracking title.');
+$assert(!str_contains($registryBody, 'Suivez votre demande'), 'The registry tracking card must not repeat its title.');
 $assert(substr_count($registryBody, 'href="https://github.com/Matanek/Silex-Registry/pulls"') === 2, 'Registry tracking links must point directly to pull requests.');
 $assert(!str_contains($registryBody, 'registry-closing-section'), 'The registry must not end with an oversized generic repository call to action.');
 $assert(str_contains($registryBody, 'href="/en/registry"'), 'The registry language switch must preserve the page.');
