@@ -120,6 +120,10 @@ h1, h2, h3, p { margin-top: 0; }
 
 .hero-principles { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(28px, 5vw, 64px); margin: 0; padding: 0; border: 0; list-style: none; }
 .hero-principle { min-width: 0; }
+.hero-principle:nth-child(2) { text-align: center; }
+.hero-principle:nth-child(2) p { margin-inline: auto; }
+.hero-principle:nth-child(3) { text-align: right; }
+.hero-principle:nth-child(3) p { margin-left: auto; }
 .hero-principles h2 { margin-bottom: 12px; color: var(--accent); font-size: clamp(1.15rem, 1.8vw, 1.45rem); line-height: 1.05; letter-spacing: 0.04em; text-transform: uppercase; }
 .hero-principles p { max-width: 340px; margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.65; text-wrap: pretty; }
 
@@ -357,6 +361,10 @@ body.showcase-lightbox-open { overflow: hidden; }
     .registry-hero { gap: 52px; padding: 65px 0 75px; }
     .registry-hero h1 { font-size: clamp(3rem, 15vw, 4.8rem); }
     .hero-principles { grid-template-columns: 1fr; gap: 28px; }
+    .hero-principle:nth-child(2),
+    .hero-principle:nth-child(3) { text-align: left; }
+    .hero-principle:nth-child(2) p,
+    .hero-principle:nth-child(3) p { margin-inline: 0; }
     .section { padding: 78px 0; }
     .registry-section { padding: 78px 0; }
     .contribution-grid { grid-template-columns: 1fr; }
