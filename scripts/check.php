@@ -242,13 +242,13 @@ $assert(
 );
 $assert(
     !str_contains($sourceCss, '.home-page .section { min-height:')
-        && !str_contains($sourceCss, '.home-page .zed-extension { background:')
+        && str_contains($sourceCss, '.home-page .zed-extension { background: var(--color-sky-50); }')
         && !str_contains($sourceCss, '.zed-extension .quickstart { background:')
         && !str_contains($sourceCss, '.zed-extension .quickstart::before { background:')
         && str_contains($sourceCss, '.section-tag { width: fit-content; padding: 5px 16px; border-radius: 5px; background: var(--decorative-pistachio); color: var(--color-gray-950); }')
         && str_contains($sourceCss, '.home-page .showcase { color-scheme: dark;')
         && str_contains($sourceCss, 'background: var(--color-gray-950); color: var(--text); }'),
-    'Installation sections must share the same white, sky, and pistachio treatment without forced viewport heights.',
+    'The Zed installation section must use a light sky background while preserving the shared installation treatment.',
 );
 $assert(
     str_contains($sourceCss, '.showcase-heading > p:last-child { max-width: 720px; margin: 18px 0 0;')

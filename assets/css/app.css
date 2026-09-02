@@ -181,6 +181,7 @@ h1, h2, h3, p { margin-top: 0; }
 .quickstart-steps code { color: var(--code); font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: clamp(0.76rem, 1.2vw, 0.88rem); line-height: 1.75; }
 .quickstart-steps code b { color: var(--accent); font-weight: 500; }
 
+.home-page .zed-extension { background: var(--color-sky-50); }
 .zed-setup { margin-top: 0; }
 .zed-setup-copy > p:not(.eyebrow) { max-width: 390px; margin-bottom: 0; color: var(--muted); font-size: 0.93rem; }
 .zed-setup-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 22px; margin-top: 26px; }
