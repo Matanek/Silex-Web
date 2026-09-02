@@ -108,7 +108,7 @@ $assert(str_contains($homeBody, '<span>v1.0.0</span>'), 'Package cards must disp
 $assert(!str_contains($homeBody, '<span>GitHub</span>'), 'Package cards must not repeat their repository host.');
 $assert(!str_contains($homeBody, 'Consultez le code, les versions'), 'Package cards must not repeat generic repository guidance.');
 $assert(!str_contains($homeBody, '/fr/packages/Example'), 'Package cards must not link to local package documentation.');
-$assert(str_contains($homeBody, '<h2 id="showcase-title">Exemples.</h2>'), 'The French Silex showcase heading is missing.');
+$assert(str_contains($homeBody, '<h2 id="showcase-title">Exemples</h2>'), 'The French Silex showcase heading is missing.');
 $assert(str_contains($homeBody, 'href="https://github.com/Matanek/Silex-Examples">Silex-Examples</a>'), 'The showcase must link to the Silex examples repository.');
 $assert(str_contains($homeBody, 'exemples fournis avec Silex'), 'The French showcase must identify the images as distributed examples.');
 $assert(substr_count($homeBody, 'data-showcase-item') === 13, 'The home page must render all thirteen Silex showcase images.');
@@ -174,7 +174,7 @@ $assert(str_contains($englishHomeBody, 'Manual installation') && str_contains($e
 $assert(str_contains($englishHomeBody, '<strong class="zed-titlebar-availability">Available now</strong>'), 'The English Zed title bar must contain one readable availability label.');
 $assert(str_contains($englishHomeBody, 'Demonstrates reusable Silex package metadata.'), 'The English package card must display the canonical manifest description.');
 $assert(str_contains($englishHomeBody, 'href="/en/#packages">Packages</a>'), 'The English navigation must link to the home page package catalog.');
-$assert(str_contains($englishHomeBody, '<h2 id="showcase-title">Examples.</h2>'), 'The English Silex showcase heading is missing.');
+$assert(str_contains($englishHomeBody, '<h2 id="showcase-title">Examples</h2>'), 'The English Silex showcase heading is missing.');
 $assert(str_contains($englishHomeBody, 'Canvas shapes and paths'), 'The English showcase captions are missing.');
 $assert(!str_contains($englishHomeBody, 'Présente des métadonnées réutilisables'), 'The English package card must not display the French translation.');
 
@@ -183,6 +183,10 @@ $frenchDocumentationBody = (string) $frenchDocumentation->getBody();
 $assert($frenchDocumentation->getStatusCode() === 200, 'French documentation must respond with HTTP 200.');
 $assert(str_contains($frenchDocumentationBody, '<body class="docs-page">'), 'Documentation pages must expose their fixed-sidebar layout class.');
 $sourceCss = (string) file_get_contents($root . '/assets/css/app.css');
+$assert(
+    str_contains($sourceCss, '.showcase { background: color-mix(in srgb, var(--background) 85%, white 15%); }'),
+    'The showcase background must remain fifteen percent lighter than the base background.',
+);
 $assert(
     str_contains($sourceCss, '.showcase-lightbox { position: fixed; inset: 0;')
         && str_contains($sourceCss, 'margin: auto;'),
@@ -216,7 +220,7 @@ $assert(str_contains($englishGuideBody, 'href="/fr/docs/Language/README.md"'), '
 $packages = $handle('https://silex.test/fr/packages');
 $packagesBody = (string) $packages->getBody();
 $assert($packages->getStatusCode() === 200, 'The French package catalog must respond with HTTP 200.');
-$assert(str_contains($packagesBody, 'Packages enregistrés.'), 'The French package catalog content is missing.');
+$assert(str_contains($packagesBody, '<h1 id="packages-index-title">Packages enregistrés</h1>'), 'The French package catalog content is missing.');
 $assert(str_contains($packagesBody, 'data-package-count="2"'), 'The package count is missing.');
 $assert(str_contains($packagesBody, 'href="https://github.com/Matanek/Silex-Lib-Example"'), 'The package repository link is missing.');
 $assert(str_contains($packagesBody, 'Présente des métadonnées réutilisables pour un package Silex.'), 'The localized package description is missing.');
@@ -226,7 +230,7 @@ $assert(!str_contains($packagesBody, 'Docs <span'), 'The catalog must not advert
 $registry = $handle('https://silex.test/fr/registry');
 $registryBody = (string) $registry->getBody();
 $assert($registry->getStatusCode() === 200, 'The French registry page must respond with HTTP 200.');
-$assert(str_contains($registryBody, 'Construisez.'), 'The French registry content is missing.');
+$assert(str_contains($registryBody, '<h1 id="registry-title">Construisez<br><span>Publiez</span><br>Partagez</h1>'), 'The French registry content is missing.');
 $assert(str_contains($registryBody, 'href="/en/registry"'), 'The registry language switch must preserve the page.');
 $assert(str_contains($registryBody, 'https://registry.silex-lang.org/v1/index.json'), 'The registry API link is missing.');
 $assert(str_contains($registryBody, 'https://github.com/Matanek/Silex-Lib-STD'), 'Official package links must point to repositories.');
