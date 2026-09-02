@@ -79,7 +79,7 @@ $assert(str_contains($homeBody, 'Concentrez-vous sur votre jeu, pas sur sa confi
 $assert(preg_match('/>Simplicité<.*>Efficacité<.*>Sécurité</s', $homeBody) === 1, 'The French homepage benefits are missing or ordered incorrectly.');
 $assert(str_contains($homeBody, 'Compilation cross-platform pour Windows, macOS et Linux. Arm64 et x64.'), 'The French cross-platform benefit must include both desktop architectures.');
 $assert(str_contains($homeBody, 'Le typage et l’ownership rendent la circulation des données prévisible.'), 'The French safety benefit is missing.');
-$assert(str_contains($homeBody, '<p class="eyebrow" id="install-title">Installer Silex</p>'), 'The compact French installation heading is missing.');
+$assert(str_contains($homeBody, '<p class="eyebrow section-tag" id="install-title">Installer Silex</p>'), 'The tagged French installation heading is missing.');
 $assert(!str_contains($homeBody, 'Le compilateur autonome ne demande ni Zig, ni Git'), 'The removed French installation introduction is still rendered.');
 $assert(str_contains($homeBody, 'href="/en/"'), 'The home page language switch must preserve the page.');
 $assert(str_contains($home->getHeaderLine('Set-Cookie'), 'silex_locale=fr'), 'Localized routes must save the selected language.');
@@ -89,7 +89,7 @@ $assert(str_contains($homeBody, 'struct</span> <span class="type">Greeter</span>
 $assert(str_contains($homeBody, 'Hello from $(self.name)!'), 'The hero string interpolation is missing.');
 $assert(str_contains($homeBody, 'Hello from Silex!'), 'The hero example output is missing.');
 $assert(str_contains($homeBody, 'id="zed"'), 'The Zed installation section is missing.');
-$assert(str_contains($homeBody, '<p class="eyebrow" id="zed-title">Installer l’extension Zed</p>'), 'The French Zed section heading is missing.');
+$assert(str_contains($homeBody, '<p class="eyebrow section-tag" id="zed-title">Installer l’extension Zed</p>'), 'The tagged French Zed section heading is missing.');
 $assert(!str_contains($homeBody, 'Installer l’extension Silex pour Zed.'), 'The duplicated French Zed installation heading is still rendered.');
 $assert(str_contains($homeBody, 'Installation rapide') && str_contains($homeBody, 'En attente de validation'), 'The unavailable French Zed gallery path is missing.');
 $assert(str_contains($homeBody, 'Installation manuelle') && str_contains($homeBody, 'Disponible maintenant'), 'The available French Zed manual path is missing.');
@@ -110,6 +110,7 @@ $assert(!str_contains($homeBody, '<span>GitHub</span>'), 'Package cards must not
 $assert(!str_contains($homeBody, 'Consultez le code, les versions'), 'Package cards must not repeat generic repository guidance.');
 $assert(!str_contains($homeBody, '>Dépôt <span'), 'Package cards must not repeat a repository action inside the card.');
 $assert(!str_contains($homeBody, '/fr/packages/Example'), 'Package cards must not link to local package documentation.');
+$assert(substr_count($homeBody, 'class="eyebrow section-tag"') === 3, 'Installation and package sections must share the same title tag.');
 $assert(str_contains($homeBody, '<ul class="hero-principles">'), 'The homepage benefits must be integrated into the hero.');
 $assert(substr_count($homeBody, 'class="hero-principle"') === 3, 'The hero must render exactly three benefits.');
 $assert(!str_contains($homeBody, 'Pourquoi Silex ?'), 'The redundant French principles heading must not be rendered.');
@@ -171,10 +172,10 @@ $assert(str_contains($englishHomeBody, 'Focus on your game, not its setup.'), 'T
 $assert(preg_match('/>Simplicity<.*>Efficiency<.*>Safety</s', $englishHomeBody) === 1, 'The English homepage benefits are missing or ordered incorrectly.');
 $assert(str_contains($englishHomeBody, 'Cross-platform compilation for Windows, macOS, and Linux. ARM64 and x64.'), 'The English cross-platform benefit must include both desktop architectures.');
 $assert(str_contains($englishHomeBody, 'Typing and ownership make data flow predictable.'), 'The English safety benefit is missing.');
-$assert(str_contains($englishHomeBody, '<p class="eyebrow" id="install-title">Install Silex</p>'), 'The compact English installation heading is missing.');
+$assert(str_contains($englishHomeBody, '<p class="eyebrow section-tag" id="install-title">Install Silex</p>'), 'The tagged English installation heading is missing.');
 $assert(!str_contains($englishHomeBody, 'The standalone compiler does not require Zig or Git'), 'The removed English installation introduction is still rendered.');
 $assert(str_contains($englishHomeBody, 'href="/fr/"'), 'The English language switch is missing.');
-$assert(str_contains($englishHomeBody, '<p class="eyebrow" id="zed-title">Install the Zed extension</p>'), 'The English Zed section heading is missing.');
+$assert(str_contains($englishHomeBody, '<p class="eyebrow section-tag" id="zed-title">Install the Zed extension</p>'), 'The tagged English Zed section heading is missing.');
 $assert(!str_contains($englishHomeBody, 'Install the Silex extension for Zed.'), 'The duplicated English Zed installation heading is still rendered.');
 $assert(str_contains($englishHomeBody, 'Quick installation') && str_contains($englishHomeBody, 'Awaiting approval'), 'The unavailable English Zed gallery path is missing.');
 $assert(str_contains($englishHomeBody, 'Manual installation') && str_contains($englishHomeBody, 'Available now'), 'The available English Zed manual path is missing.');
@@ -242,11 +243,10 @@ $assert(
 $assert(
     !str_contains($sourceCss, '.home-page .section { min-height:')
         && str_contains($sourceCss, '.home-page .zed-extension { background: var(--color-gray-50); }')
-        && str_contains($sourceCss, '.zed-extension .section-heading .eyebrow { background: var(--decorative-pink); }')
-        && str_contains($sourceCss, '.home-packages .section-heading .eyebrow { background: var(--decorative-pistachio); }')
+        && str_contains($sourceCss, '.section-tag { width: fit-content; padding: 5px 16px; border-radius: 5px; background: var(--decorative-pistachio); color: var(--color-gray-950); }')
         && str_contains($sourceCss, '.home-page .showcase { color-scheme: dark;')
         && str_contains($sourceCss, 'background: var(--color-gray-950); color: var(--text); }'),
-    'Home page sections must follow the white, gray, pink, pistachio, and dark rhythm without forced viewport heights.',
+    'Home page sections must use the shared pistachio title tag and preserve their white, gray, and dark rhythm without forced viewport heights.',
 );
 $assert(
     str_contains($sourceCss, '.showcase-heading > p:last-child { max-width: 720px; margin: 18px 0 0;')
