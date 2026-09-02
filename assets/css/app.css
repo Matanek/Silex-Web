@@ -423,17 +423,38 @@ body.showcase-lightbox-open { overflow: hidden; }
     .hero h1 { font-size: clamp(2.55rem, 12.8vw, 4.8rem); }
     .hero h1 span { white-space: normal; }
     .registry-hero { gap: 52px; padding: 65px 0 75px; }
+    .registry-hero-copy { text-align: center; }
+    .registry-hero-copy .lede { margin-inline: auto; }
+    .registry-hero-copy .actions { justify-content: center; }
     .registry-hero h1 { font-size: clamp(3rem, 15vw, 4.8rem); }
+    .registry-card,
+    .manifest-window { min-width: 0; }
+    .registry-card-titlebar strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .registry-facts { padding-inline: 18px; }
+    .registry-facts div { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 12px; }
+    .registry-endpoint { grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; margin: 14px; padding-inline: 14px; }
+    .registry-endpoint code { min-width: 0; overflow-wrap: anywhere; }
     .hero-principles { grid-template-columns: 1fr; }
     .section { padding: 78px 0; }
     .registry-section { padding: 78px 0; }
+    .registry-heading { margin-bottom: 42px; }
+    .registry-heading-split { gap: 24px; }
     .contribution-grid { grid-template-columns: 1fr; }
     .contribution-card,
     .contribution-card + .contribution-card { min-height: 260px; padding: 30px 0; border-left: 0; }
     .contribution-card + .contribution-card { border-top: 1px solid var(--line); }
     .contribution-card h3 { margin-top: 35px; }
-    .registry-package-list a { grid-template-columns: 90px 1fr auto; gap: 14px; }
-    .registry-closing { padding: 90px 0 110px; }
+    .publish-layout { gap: 42px; }
+    .release-steps li { grid-template-columns: 36px minmax(0, 1fr); gap: 12px; }
+    .release-steps code { overflow-wrap: anywhere; }
+    .manifest-window pre { min-height: auto; padding: 28px 18px; overflow-x: hidden; overflow-wrap: anywhere; white-space: pre-wrap; }
+    .manifest-window > a { gap: 18px; padding-inline: 18px; }
+    .registry-package-list a { grid-template-columns: 1fr auto; gap: 8px 14px; padding: 22px 0; }
+    .registry-package-list strong { grid-column: 1; grid-row: 1; }
+    .registry-package-list span { grid-column: 1 / -1; grid-row: 2; }
+    .registry-package-list b { grid-column: 2; grid-row: 1; }
+    .registry-closing { padding: 90px 0 110px; text-align: center; }
+    .registry-closing > p:not(.eyebrow) { margin-inline: auto; }
     .packages-index { padding: 72px 0 90px; }
     .packages-index-heading { margin-bottom: 44px; }
     .package-catalog { grid-template-columns: 1fr; }

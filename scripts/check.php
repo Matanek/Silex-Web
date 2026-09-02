@@ -280,6 +280,16 @@ $assert(
     'Mobile homepage content must be centered and full showcase images must replace the lightbox gallery.',
 );
 $assert(
+    str_contains($sourceCss, '.registry-hero-copy { text-align: center; }')
+        && str_contains($sourceCss, '.registry-hero-copy .actions { justify-content: center; }')
+        && str_contains($sourceCss, '.registry-heading-split { gap: 24px; }')
+        && str_contains($sourceCss, '.manifest-window pre { min-height: auto; padding: 28px 18px; overflow-x: hidden; overflow-wrap: anywhere; white-space: pre-wrap; }')
+        && str_contains($sourceCss, '.registry-package-list a { grid-template-columns: 1fr auto; gap: 8px 14px; padding: 22px 0; }')
+        && str_contains($sourceCss, '.registry-package-list b { grid-column: 2; grid-row: 1; }')
+        && str_contains($sourceCss, '.registry-closing { padding: 90px 0 110px; text-align: center; }'),
+    'The registry page must use its dedicated centered, overflow-safe mobile layout.',
+);
+$assert(
     str_contains($showcaseScript, "window.matchMedia('(max-width: 650px)')")
         && str_contains($showcaseScript, "item.removeAttribute('href')")
         && str_contains($showcaseScript, 'item.dataset.fullSrc')
