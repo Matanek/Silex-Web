@@ -263,7 +263,7 @@ h1, h2, h3, p { margin-top: 0; }
 .package-card-links a span { color: var(--accent); }
 .content-unavailable { padding: 30px; border: 1px solid var(--line); color: var(--muted); }
 
-.showcase { background: color-mix(in srgb, var(--background) 85%, white 15%); }
+.showcase { background: color-mix(in srgb, var(--background) 95%, white 5%); }
 .showcase-heading { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr); gap: clamp(40px, 8vw, 110px); align-items: end; margin-bottom: 64px; }
 .showcase-heading h2 { max-width: 680px; margin-bottom: 0; }
 .showcase-heading > p { max-width: 520px; margin-bottom: 4px; color: var(--muted); font-size: 1.02rem; text-wrap: pretty; }
