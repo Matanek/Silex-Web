@@ -200,8 +200,15 @@ $assert(
     'The three uppercase benefits must remain centered in lightweight bordered cards.',
 );
 $assert(
-    str_contains($sourceCss, '.showcase { background: color-mix(in srgb, var(--background) 95%, white 5%); }'),
-    'The showcase background must remain five percent lighter than the header background.',
+    str_contains($sourceCss, '--navbar-height: 70px;')
+        && str_contains($sourceCss, 'body.home-page {')
+        && str_contains($sourceCss, 'background: #fff;')
+        && str_contains($sourceCss, '.site-header {')
+        && str_contains($sourceCss, '.home-page .hero {')
+        && str_contains($sourceCss, 'background: radial-gradient(circle at 78% 6%, rgb(230 255 85 / 8%), transparent 26rem), var(--background);')
+        && str_contains($sourceCss, 'align-items: center; background: transparent;')
+        && !str_contains($sourceCss, '.showcase { background:'),
+    'The homepage must use a white canvas and navbar, while preserving the dark hero and transparent following sections.',
 );
 $assert(
     str_contains($sourceCss, '.section { padding: 110px 0; border: 0;')
@@ -210,11 +217,11 @@ $assert(
     'Top-level site sections must remain free of decorative separators.',
 );
 $assert(
-    str_contains($sourceCss, '.home-page .section { min-height: calc(100vh - var(--navbar-height)); min-height: calc(100svh - var(--navbar-height)); display: grid; align-items: center; }'),
+    str_contains($sourceCss, '.home-page .section { min-height: calc(100vh - var(--navbar-height)); min-height: calc(100svh - var(--navbar-height)); display: grid; align-items: center; background: transparent; }'),
     'Home page sections must occupy at least the viewport height below the navbar.',
 );
 $assert(
-    str_contains($sourceCss, '.showcase-lightbox { position: fixed; inset: 0;')
+    str_contains($sourceCss, 'position: fixed; inset: 0; width: min(calc(100% - 36px), 1120px);')
         && str_contains($sourceCss, 'margin: auto;'),
     'The showcase lightbox must remain centered in the viewport.',
 );
