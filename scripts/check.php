@@ -294,8 +294,6 @@ $assert(
         && str_contains($sourceCss, '.registry-hero-copy .actions { justify-content: center; }')
         && str_contains($sourceCss, '.registry-heading-split { gap: 24px; }')
         && str_contains($sourceCss, '.manifest-window pre { min-height: auto; padding: 28px 18px; overflow-x: hidden; overflow-wrap: anywhere; white-space: pre-wrap; }')
-        && str_contains($sourceCss, '.registry-package-list a { grid-template-columns: 1fr auto; gap: 8px 14px; padding: 22px 0; }')
-        && str_contains($sourceCss, '.registry-package-list b { grid-column: 2; grid-row: 1; }')
         && str_contains($sourceCss, '.registry-closing { padding: 90px 0 110px; text-align: center; }'),
     'The registry page must use its dedicated centered, overflow-safe mobile layout.',
 );
@@ -389,11 +387,13 @@ $registryBody = (string) $registry->getBody();
 $assert($registry->getStatusCode() === 200, 'The French registry page must respond with HTTP 200.');
 $assert(str_contains($registryBody, '<h1 id="registry-title">Construisez<br><span>Publiez</span><br>Partagez</h1>'), 'The French registry content is missing.');
 $assert(str_contains($registryBody, '<body class="registry-page">'), 'The registry page theme is missing.');
-$assert(substr_count($registryBody, 'class="section-container') >= 5, 'The registry full-width sections are missing their containers.');
+$assert(substr_count($registryBody, 'class="section-container') >= 4, 'The registry full-width sections are missing their containers.');
 $assert(str_contains($registryBody, 'class="registry-section registry-publish-section"'), 'The registry publication section is missing.');
+$assert(str_contains($registryBody, '<h2 id="publish-title">Enregistrez votre package une seule fois</h2>'), 'The registry must present registration as the only one-time action.');
+$assert(str_contains($registryBody, 'href="/fr/#packages"'), 'The registry contribution card must link to the complete package catalog.');
+$assert(!str_contains($registryBody, 'registry-packages-section'), 'The registry page must not duplicate a partial package catalog.');
 $assert(str_contains($registryBody, 'href="/en/registry"'), 'The registry language switch must preserve the page.');
 $assert(str_contains($registryBody, 'https://registry.silex-lang.org/v1/index.json'), 'The registry API link is missing.');
-$assert(str_contains($registryBody, 'https://github.com/Matanek/Silex-Lib-STD'), 'Official package links must point to repositories.');
 
 $assert($handle('https://silex.test/fr/docs/Missing.md')->getStatusCode() === 404, 'Missing documentation must respond with HTTP 404.');
 
