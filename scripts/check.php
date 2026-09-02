@@ -108,6 +108,42 @@ $assert(str_contains($homeBody, '<span>v1.0.0</span>'), 'Package cards must disp
 $assert(!str_contains($homeBody, '<span>GitHub</span>'), 'Package cards must not repeat their repository host.');
 $assert(!str_contains($homeBody, 'Consultez le code, les versions'), 'Package cards must not repeat generic repository guidance.');
 $assert(!str_contains($homeBody, '/fr/packages/Example'), 'Package cards must not link to local package documentation.');
+$assert(str_contains($homeBody, 'Déjà capable. Déjà visible.'), 'The French Silex showcase heading is missing.');
+$assert(substr_count($homeBody, 'data-showcase-item') === 13, 'The home page must render all thirteen Silex showcase images.');
+$assert(str_contains($homeBody, 'data-showcase-lightbox'), 'The showcase lightbox is missing.');
+$assert(str_contains($homeBody, '<script src="/assets/showcase.js" defer></script>'), 'The showcase interaction script is missing.');
+$showcaseSlugs = [
+    'canvas-shapes',
+    'shadow-debug',
+    'gfx-world',
+    'particle-system',
+    'plot-overview',
+    'plot-science',
+    'plot-circular',
+    'plot-areas',
+    'material-showcase',
+    'vector-font-typography',
+    'vector-font-scene2d',
+    'canvas-clock',
+    'shadow-volumes',
+];
+foreach ($showcaseSlugs as $showcaseSlug) {
+    $thumbnailInfo = getimagesize($root . '/public/assets/showcase/thumbs/' . $showcaseSlug . '.webp');
+    $fullInfo = getimagesize($root . '/public/assets/showcase/full/' . $showcaseSlug . '.webp');
+    $assert(
+        $thumbnailInfo !== false
+            && $thumbnailInfo[0] === 720
+            && $thumbnailInfo[1] === 450
+            && ($thumbnailInfo['mime'] ?? null) === 'image/webp',
+        'Every showcase thumbnail must be a 720x450 WebP image.',
+    );
+    $assert(
+        $fullInfo !== false
+            && $fullInfo[0] <= 1920
+            && ($fullInfo['mime'] ?? null) === 'image/webp',
+        'Every full showcase image must be a WebP image no wider than 1920 pixels.',
+    );
+}
 $assert(str_contains($homeBody, 'Silex Web release: ' . $expectedRelease), 'The deployment marker does not match release.txt.');
 $assert(str_contains($homeBody, '<link rel="icon" href="/icon.svg" type="image/svg+xml">'), 'The Silex icon is missing.');
 
@@ -129,6 +165,8 @@ $assert(str_contains($englishHomeBody, 'Manual installation') && str_contains($e
 $assert(str_contains($englishHomeBody, '<strong class="zed-titlebar-availability">Available now</strong>'), 'The English Zed title bar must contain one readable availability label.');
 $assert(str_contains($englishHomeBody, 'Demonstrates reusable Silex package metadata.'), 'The English package card must display the canonical manifest description.');
 $assert(str_contains($englishHomeBody, 'href="/en/#packages">Packages</a>'), 'The English navigation must link to the home page package catalog.');
+$assert(str_contains($englishHomeBody, 'Already capable. Already visible.'), 'The English Silex showcase heading is missing.');
+$assert(str_contains($englishHomeBody, 'Canvas shapes and paths'), 'The English showcase captions are missing.');
 $assert(!str_contains($englishHomeBody, 'Présente des métadonnées réutilisables'), 'The English package card must not display the French translation.');
 
 $frenchDocumentation = $handle('https://silex.test/fr/docs');

@@ -263,6 +263,45 @@ h1, h2, h3, p { margin-top: 0; }
 .package-card-links a span { color: var(--accent); }
 .content-unavailable { padding: 30px; border: 1px solid var(--line); color: var(--muted); }
 
+.showcase { background: #090a0d; }
+.showcase-heading { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr); gap: clamp(40px, 8vw, 110px); align-items: end; margin-bottom: 64px; }
+.showcase-heading h2 { max-width: 680px; margin-bottom: 0; }
+.showcase-heading > p { max-width: 520px; margin-bottom: 4px; color: var(--muted); font-size: 1.02rem; text-wrap: pretty; }
+.showcase-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.showcase-card { min-width: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgb(20 20 22 / 42%); text-decoration: none; }
+.showcase-card figure { height: 100%; margin: 0; }
+.showcase-thumbnail { position: relative; aspect-ratio: 8 / 5; overflow: hidden; background: var(--surface); }
+.showcase-thumbnail::after { position: absolute; inset: 0; border-bottom: 1px solid rgb(255 255 255 / 8%); background: linear-gradient(180deg, transparent 55%, rgb(0 0 0 / 24%)); content: ""; pointer-events: none; }
+.showcase-thumbnail img { width: 100%; height: 100%; display: block; object-fit: cover; transition: filter 220ms ease, transform 320ms ease; }
+.showcase-thumbnail > span { position: absolute; z-index: 1; right: 14px; bottom: 12px; width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid rgb(255 255 255 / 22%); border-radius: 50%; background: rgb(12 12 13 / 72%); color: var(--accent); font-size: 0.8rem; opacity: 0; transform: translateY(5px); transition: opacity 180ms ease, transform 180ms ease; }
+.showcase-card:hover .showcase-thumbnail img,
+.showcase-card:focus-visible .showcase-thumbnail img { filter: saturate(1.08) contrast(1.03); transform: scale(1.025); }
+.showcase-card:hover .showcase-thumbnail > span,
+.showcase-card:focus-visible .showcase-thumbnail > span { opacity: 1; transform: translateY(0); }
+.showcase-card figcaption { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 14px; padding: 20px 20px 24px; }
+.showcase-card figcaption > span { padding-top: 3px; color: #777670; font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 0.65rem; }
+.showcase-card h3 { margin-bottom: 7px; font-size: 0.96rem; letter-spacing: -0.015em; }
+.showcase-card p { margin-bottom: 0; color: var(--muted); font-size: 0.78rem; line-height: 1.5; text-wrap: pretty; }
+
+body.showcase-lightbox-open { overflow: hidden; }
+.showcase-lightbox { width: min(calc(100% - 36px), 1500px); max-width: none; max-height: calc(100dvh - 36px); padding: 0; overflow: hidden; border: 1px solid #39393e; border-radius: 8px; background: #08090b; color: var(--text); box-shadow: 0 35px 110px rgb(0 0 0 / 70%); }
+.showcase-lightbox::backdrop { background: rgb(0 0 0 / 82%); backdrop-filter: blur(7px); }
+.showcase-lightbox-frame { position: relative; }
+.showcase-lightbox figure { max-height: calc(100dvh - 38px); display: flex; flex-direction: column; margin: 0; }
+.showcase-lightbox-stage { min-height: 0; flex: 1; display: grid; place-items: center; padding: 18px 72px 0; overflow: hidden; background: radial-gradient(circle at 50% 40%, #17181c, #08090b 72%); }
+.showcase-lightbox-stage img { max-width: 100%; max-height: calc(100dvh - 176px); display: block; object-fit: contain; }
+.showcase-lightbox figcaption { min-height: 120px; display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 22px; align-items: start; padding: 22px 72px 26px; border-top: 1px solid var(--line); background: var(--surface); }
+.showcase-lightbox figcaption > span { padding-top: 4px; color: var(--accent); font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 0.68rem; }
+.showcase-lightbox h3 { margin-bottom: 5px; font-size: 1rem; }
+.showcase-lightbox p { max-width: 760px; margin-bottom: 0; color: var(--muted); font-size: 0.82rem; }
+.showcase-lightbox button { position: absolute; z-index: 2; display: grid; place-items: center; border: 1px solid rgb(255 255 255 / 18%); background: rgb(12 12 13 / 82%); color: var(--text); cursor: pointer; }
+.showcase-lightbox button:hover,
+.showcase-lightbox button:focus-visible { border-color: var(--accent); color: var(--accent); }
+.showcase-lightbox-close { top: 14px; right: 14px; width: 38px; height: 38px; border-radius: 50%; font-size: 1.25rem; }
+.showcase-lightbox-nav { top: calc(50% - 72px); width: 42px; height: 58px; border-radius: 4px; font-size: 1.1rem; }
+.showcase-lightbox-previous { left: 14px; }
+.showcase-lightbox-next { right: 14px; }
+
 .docs-page { --docs-sidebar-width: clamp(250px, 22vw, 320px); }
 .docs-page main { width: 100%; max-width: none; margin: 0; }
 .docs-page .site-footer { width: auto; margin-left: var(--docs-sidebar-width); padding-inline: max(40px, calc((100vw - var(--docs-sidebar-width) - 820px) / 2)); }
@@ -317,6 +356,8 @@ h1, h2, h3, p { margin-top: 0; }
     .publish-layout { grid-template-columns: 1fr; }
     .docs-page { --docs-sidebar-width: 220px; }
     .package-catalog { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .showcase-heading { grid-template-columns: 1fr; gap: 24px; }
+    .showcase-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 650px) {
@@ -347,6 +388,17 @@ h1, h2, h3, p { margin-top: 0; }
     .packages-index { padding: 72px 0 90px; }
     .packages-index-heading { margin-bottom: 44px; }
     .package-catalog { grid-template-columns: 1fr; }
+    .showcase-heading { margin-bottom: 42px; }
+    .showcase-grid { grid-template-columns: 1fr; }
+    .showcase-lightbox { width: calc(100% - 16px); max-height: calc(100dvh - 16px); }
+    .showcase-lightbox figure { max-height: calc(100dvh - 18px); }
+    .showcase-lightbox-stage { padding: 58px 8px 0; }
+    .showcase-lightbox-stage img { max-height: calc(100dvh - 215px); }
+    .showcase-lightbox figcaption { min-height: 142px; grid-template-columns: 40px minmax(0, 1fr); gap: 10px; padding: 18px 20px 22px; }
+    .showcase-lightbox-nav { top: 16px; width: 40px; height: 40px; border-radius: 50%; }
+    .showcase-lightbox-previous { left: 12px; }
+    .showcase-lightbox-next { right: 62px; }
+    .showcase-lightbox-close { top: 16px; right: 12px; width: 40px; height: 40px; }
     .quickstart { padding: 28px 20px; }
     .docs-page .site-footer { width: min(calc(100% - 28px), var(--max-width)); margin-inline: auto; padding-inline: 0; }
     .docs-shell { width: min(calc(100% - 28px), var(--max-width)); min-height: 0; margin-inline: auto; }

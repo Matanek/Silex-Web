@@ -189,4 +189,75 @@
     </div>
 </section>
 {% endif %}
+
+{% set showcase_items = [
+    {slug: 'canvas-shapes', title_fr: 'Formes et tracés Canvas', title_en: 'Canvas shapes and paths', description_fr: 'Primitives, courbes, styles, dégradés et composition 2D avec GFX.Canvas.', description_en: 'Primitives, curves, styles, gradients, and 2D composition with GFX.Canvas.', alt_fr: 'Galerie sombre présentant des lignes, courbes, formes et compositions colorées rendues par GFX.Canvas.', alt_en: 'Dark gallery of colorful lines, curves, shapes, and compositions rendered by GFX.Canvas.'},
+    {slug: 'shadow-debug', title_fr: 'Debug des ombres 3D', title_en: '3D shadow debugging', description_fr: 'Volumes de caméra et de lumière visualisés autour d’une scène éclairée.', description_en: 'Camera and light volumes visualized around a lit scene.', alt_fr: 'Cube éclairé sur un plan avec volumes de caméra et de lumière affichés en fil de fer.', alt_en: 'Lit cube on a plane with camera and light volumes shown as wireframes.'},
+    {slug: 'gfx-world', title_fr: 'Monde GFX temps réel', title_en: 'Real-time GFX world', description_fr: 'Scène 3D texturée, ombrée et instrumentée à 120 images par seconde.', description_en: 'Textured, shadowed, and instrumented 3D scene running at 120 frames per second.', alt_fr: 'Paysage 3D composé de rochers, d’arbres et d’herbe avec panneau de performances GFX.', alt_en: '3D landscape with rocks, trees, grass, and a GFX performance panel.'},
+    {slug: 'particle-system', title_fr: 'Système de particules', title_en: 'Particle system', description_fr: 'Des milliers de particules 2D animées et rendues à 120 images par seconde.', description_en: 'Thousands of animated 2D particles rendered at 120 frames per second.', alt_fr: 'Nuage dense de particules triangulaires cyan et violettes sur fond sombre.', alt_en: 'Dense cloud of cyan and violet triangular particles on a dark background.'},
+    {slug: 'plot-overview', title_fr: 'Plot — Vue d’ensemble', title_en: 'Plot — Overview', description_fr: 'Courbes, barres, chandeliers et boîtes à moustaches composés en Silex.', description_en: 'Lines, bars, candlesticks, and box plots composed in Silex.', alt_fr: 'Planche claire de quatre graphiques Plot : croissance, benchmark, marché et dispersion.', alt_en: 'Light dashboard of four Plot charts: growth, benchmark, market, and measurement spread.'},
+    {slug: 'plot-science', title_fr: 'Plot — Données scientifiques', title_en: 'Plot — Scientific data', description_fr: 'Intervalles, histogrammes, matrices de confusion et barres d’erreur.', description_en: 'Intervals, histograms, confusion matrices, and error bars.', alt_fr: 'Planche de graphiques scientifiques avec précision, distribution, matrice de confusion et temps d’inférence.', alt_en: 'Scientific chart board with accuracy, distribution, confusion matrix, and inference time.'},
+    {slug: 'plot-circular', title_fr: 'Plot — Graphiques circulaires', title_en: 'Plot — Circular charts', description_fr: 'Camemberts, anneaux et visualisations de couverture avec leurs légendes.', description_en: 'Pie, doughnut, and coverage charts with their legends.', alt_fr: 'Planche de quatre graphiques circulaires colorés présentant revenus, plateformes, objectif et couverture.', alt_en: 'Board of four colorful circular charts showing revenue, platforms, target, and coverage.'},
+    {slug: 'plot-areas', title_fr: 'Plot — Aires et progressions', title_en: 'Plot — Areas and progressions', description_fr: 'Aires superposées, piles, pyramides et entonnoirs de conversion.', description_en: 'Layered areas, stacks, pyramids, and conversion funnels.', alt_fr: 'Planche de graphiques Plot avec aires, activité empilée, pyramide et entonnoir.', alt_en: 'Plot board with area charts, stacked activity, pyramid, and funnel.'},
+    {slug: 'material-showcase', title_fr: 'Matériaux PBR', title_en: 'PBR materials', description_fr: 'Couleur, normales, émission, métal, rugosité, occlusion et transparence.', description_en: 'Color, normals, emission, metalness, roughness, occlusion, and transparency.', alt_fr: 'Planche 3D de sphères et objets démontrant différentes propriétés de matériaux PBR.', alt_en: '3D board of spheres and objects demonstrating different PBR material properties.'},
+    {slug: 'vector-font-typography', title_fr: 'Typographie vectorielle', title_en: 'Vector typography', description_fr: 'Shaping Unicode, ligatures, crénage, scripts multiples et métriques de glyphes.', description_en: 'Unicode shaping, ligatures, kerning, multiple scripts, and glyph metrics.', alt_fr: 'Interface sombre de démonstration typographique avec plusieurs alphabets et métriques de glyphes.', alt_en: 'Dark typography showcase interface with multiple alphabets and glyph metrics.'},
+    {slug: 'vector-font-scene2d', title_fr: 'Texte vectoriel Scene2D', title_en: 'Scene2D vector text', description_fr: 'GlyphRuns retenus, contours indépendants de la résolution et tessellation partagée.', description_en: 'Retained GlyphRuns, resolution-independent outlines, and shared tessellation.', alt_fr: 'Interface Scene2D affichant le mot OBé rempli et ses contours vectoriels annotés.', alt_en: 'Scene2D interface showing the word OBé filled and as annotated vector outlines.'},
+    {slug: 'canvas-clock', title_fr: 'Horloge Canvas', title_en: 'Canvas clock', description_fr: 'Un widget complet dessiné par composition de formes, de texte et de transformations.', description_en: 'A complete widget drawn by composing shapes, text, and transformations.', alt_fr: 'Grande horloge analogique claire dessinée avec des graduations, chiffres et aiguilles.', alt_en: 'Large light analog clock drawn with tick marks, numbers, and hands.'},
+    {slug: 'shadow-volumes', title_fr: 'Lumières et volumes d’ombre', title_en: 'Lights and shadow volumes', description_fr: 'Inspection des frustums, sources lumineuses et ombres portées dans une scène 3D.', description_en: 'Inspection of frustums, light sources, and cast shadows in a 3D scene.', alt_fr: 'Scène 3D sombre avec deux objets cyan, leurs ombres et plusieurs volumes de debug.', alt_en: 'Dark 3D scene with two cyan objects, their shadows, and several debug volumes.'}
+] %}
+
+<section class="section showcase" id="showcase" aria-labelledby="showcase-title">
+    <div class="section-container">
+        <div class="section-heading showcase-heading">
+            <div>
+                <p class="eyebrow">{{ locale == 'fr' ? 'Construit avec Silex' : 'Built with Silex' }}</p>
+                <h2 id="showcase-title">{{ locale == 'fr' ? 'Déjà capable. Déjà visible.' : 'Already capable. Already visible.' }}</h2>
+            </div>
+            <p>{{ locale == 'fr' ? 'Rendu 2D et 3D, visualisation de données, typographie et outils graphiques : ces images proviennent d’applications écrites en Silex.' : '2D and 3D rendering, data visualization, typography, and graphics tools: these images come from applications written in Silex.' }}</p>
+        </div>
+
+        <div class="showcase-grid" data-showcase-gallery data-count-label="{{ locale == 'fr' ? '{current} sur {total}' : '{current} of {total}' }}">
+            {% for item in showcase_items %}
+                {% set title = locale == 'fr' ? item.title_fr : item.title_en %}
+                {% set description = locale == 'fr' ? item.description_fr : item.description_en %}
+                {% set alt = locale == 'fr' ? item.alt_fr : item.alt_en %}
+                <a class="showcase-card" href="/assets/showcase/full/{{ item.slug }}.webp" data-showcase-item data-title="{{ title|e('html_attr') }}" data-description="{{ description|e('html_attr') }}" data-alt="{{ alt|e('html_attr') }}" aria-haspopup="dialog" aria-label="{{ (locale == 'fr' ? 'Agrandir ' : 'Enlarge ') ~ title }}">
+                    <figure>
+                        <div class="showcase-thumbnail">
+                            <img src="/assets/showcase/thumbs/{{ item.slug }}.webp" alt="{{ alt }}" width="720" height="450" loading="lazy" decoding="async">
+                            <span aria-hidden="true">↗</span>
+                        </div>
+                        <figcaption>
+                            <span>{{ '%02d'|format(loop.index) }}</span>
+                            <div>
+                                <h3>{{ title }}</h3>
+                                <p>{{ description }}</p>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<dialog class="showcase-lightbox" data-showcase-lightbox aria-labelledby="showcase-lightbox-title">
+    <div class="showcase-lightbox-frame">
+        <button class="showcase-lightbox-close" type="button" data-showcase-close aria-label="{{ locale == 'fr' ? 'Fermer la galerie' : 'Close gallery' }}">×</button>
+        <button class="showcase-lightbox-nav showcase-lightbox-previous" type="button" data-showcase-previous aria-label="{{ locale == 'fr' ? 'Image précédente' : 'Previous image' }}">←</button>
+        <figure>
+            <div class="showcase-lightbox-stage"><img data-showcase-image src="" alt=""></div>
+            <figcaption aria-live="polite">
+                <span data-showcase-count></span>
+                <div>
+                    <h3 id="showcase-lightbox-title" data-showcase-title></h3>
+                    <p data-showcase-description></p>
+                </div>
+            </figcaption>
+        </figure>
+        <button class="showcase-lightbox-nav showcase-lightbox-next" type="button" data-showcase-next aria-label="{{ locale == 'fr' ? 'Image suivante' : 'Next image' }}">→</button>
+    </div>
+</dialog>
+
+<script src="/assets/showcase.js" defer></script>
 {% endblock %}
