@@ -193,7 +193,7 @@ $assert(
         && str_contains($sourceCss, '.hero-principles { grid-column: 1 / -1;')
         && str_contains($sourceCss, 'padding: 0; border: 0; list-style: none;')
         && str_contains($sourceCss, '.hero-principle { min-width: 0; padding: clamp(22px, 2.5vw, 32px); border: 1px solid var(--line); border-radius: 8px;')
-        && str_contains($sourceCss, 'background: rgb(20 20 22 / 42%); text-align: center;')
+        && str_contains($sourceCss, 'background: color-mix(in srgb, var(--color-gray-900) 42%, transparent); text-align: center;')
         && str_contains($sourceCss, '.hero-principles p { max-width: 340px; margin: 0 auto;')
         && str_contains($sourceCss, '.hero-principles h2 {')
         && str_contains($sourceCss, 'text-transform: uppercase;'),
@@ -202,13 +202,19 @@ $assert(
 $assert(
     str_contains($sourceCss, '--navbar-height: 70px;')
         && str_contains($sourceCss, 'body.home-page {')
-        && str_contains($sourceCss, 'background: #fff;')
+        && str_contains($sourceCss, 'background: var(--color-white);')
         && str_contains($sourceCss, '.site-header {')
         && str_contains($sourceCss, '.home-page .hero {')
-        && str_contains($sourceCss, 'background: radial-gradient(circle at 78% 6%, rgb(230 255 85 / 8%), transparent 26rem), var(--background);')
+        && str_contains($sourceCss, 'background: radial-gradient(circle at 78% 6%, color-mix(in srgb, var(--color-sky-400) 8%, transparent), transparent 26rem), var(--background);')
         && str_contains($sourceCss, 'align-items: center; background: transparent;')
         && !str_contains($sourceCss, '.showcase { background:'),
     'The homepage must use a white canvas and navbar, while preserving the dark hero and transparent following sections.',
+);
+$assert(
+    str_contains($sourceCss, '--color-silex-background: var(--color-gray-950);')
+        && str_contains($sourceCss, '--color-silex-accent: var(--color-sky-400);')
+        && preg_match('/#[0-9a-f]{3,8}\b|rgba?\(/i', $sourceCss) !== 1,
+    'The website theme must use Tailwind palette tokens instead of custom color literals.',
 );
 $assert(
     str_contains($sourceCss, '.section { padding: 110px 0; border: 0;')
@@ -306,6 +312,7 @@ $assert(
 $cssPath = $root . '/public/assets/app.css';
 $assert(is_file($cssPath) && filesize($cssPath) > 1_000, 'The compiled Tailwind stylesheet is missing.');
 $iconPath = $root . '/public/icon.svg';
-$assert(is_file($iconPath) && str_contains((string) file_get_contents($iconPath), '#e6ff55'), 'The Silex icon is missing or uses the wrong accent.');
+$assert(is_file($iconPath) && str_contains((string) file_get_contents($iconPath), '#38bdf8'), 'The Silex icon is missing or does not use Tailwind sky-400.');
+$assert(str_contains($homeBody, '<meta name="theme-color" content="#030712">'), 'The browser theme color must use Tailwind gray-950.');
 
 echo "Silex Web checks passed.\n";
