@@ -193,6 +193,11 @@ $assert(
     'The showcase section must remain free of surrounding one-pixel separators.',
 );
 $assert(
+    str_contains($sourceCss, '.home-page .principles,')
+        && str_contains($sourceCss, '.home-page .section { min-height: calc(100vh - var(--navbar-height)); min-height: calc(100svh - var(--navbar-height)); display: grid; align-items: center; }'),
+    'Home page sections must occupy at least the viewport height below the navbar.',
+);
+$assert(
     str_contains($sourceCss, '.showcase-lightbox { position: fixed; inset: 0;')
         && str_contains($sourceCss, 'margin: auto;'),
     'The showcase lightbox must remain centered in the viewport.',
