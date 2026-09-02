@@ -147,10 +147,10 @@ foreach ($showcaseSlugs as $showcaseSlug) {
     );
     $assert(
         $fullInfo !== false
-            && $fullInfo[0] <= 1920
+            && $fullInfo[0] <= 1440
             && ($fullInfo['mime'] ?? null) === 'image/webp'
             && filesize($fullPath) <= 1024 * 1024,
-        'Every full showcase image must be a WebP image no wider than 1920 pixels or larger than 1 MiB.',
+        'Every full showcase image must be a WebP image no wider than 1440 pixels or larger than 1 MiB.',
     );
 }
 $assert(str_contains($homeBody, 'Silex Web release: ' . $expectedRelease), 'The deployment marker does not match release.txt.');
