@@ -182,7 +182,7 @@ h1, h2, h3, p { margin-top: 0; }
 .quickstart-steps code b { color: var(--accent); font-weight: 500; }
 
 .home-page .zed-extension { background: var(--color-sky-50); }
-.zed-setup { margin-top: 0; }
+.zed-setup { margin-top: 0; background: var(--color-white); }
 .zed-setup-copy > p:not(.eyebrow) { max-width: 390px; margin-bottom: 0; color: var(--muted); font-size: 0.93rem; }
 .zed-setup-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 22px; margin-top: 26px; }
 .zed-gallery-waiting { margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--line); }

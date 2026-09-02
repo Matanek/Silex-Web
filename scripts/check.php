@@ -243,6 +243,7 @@ $assert(
 $assert(
     !str_contains($sourceCss, '.home-page .section { min-height:')
         && str_contains($sourceCss, '.home-page .zed-extension { background: var(--color-sky-50); }')
+        && str_contains($sourceCss, '.zed-setup { margin-top: 0; background: var(--color-white); }')
         && !str_contains($sourceCss, '.zed-extension .quickstart { background:')
         && !str_contains($sourceCss, '.zed-extension .quickstart::before { background:')
         && str_contains($sourceCss, '.section-tag { width: fit-content; padding: 5px 16px; border-radius: 5px; background: var(--decorative-pistachio); color: var(--color-gray-950); }')
