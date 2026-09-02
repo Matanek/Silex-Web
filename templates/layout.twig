@@ -18,16 +18,33 @@
                 <span>Silex</span>
             </a>
 
-            <nav class="site-navigation" aria-label="{{ locale == 'fr' ? 'Navigation principale' : 'Main navigation' }}">
-                <a href="/{{ locale }}/docs">{{ locale == 'fr' ? 'Documentation' : 'Docs' }}</a>
-                <a href="/{{ locale }}/#install">{{ locale == 'fr' ? 'Installer' : 'Install' }}</a>
-                <a href="/{{ locale }}/#packages">Packages</a>
-                <a class="wide-link" href="/{{ locale }}/registry">{{ locale == 'fr' ? 'Registre' : 'Registry' }}</a>
-                <a class="wide-link" href="https://github.com/Matanek/Silex">GitHub</a>
-                <a class="locale-link" href="{{ alternate_path }}" lang="{{ alternate_locale }}">{{ alternate_label }}</a>
+            <nav class="site-navigation desktop-navigation" aria-label="{{ locale == 'fr' ? 'Navigation principale' : 'Main navigation' }}">
+                {% include '_site-navigation-links.twig' %}
             </nav>
+
+            <button
+                class="navigation-toggle"
+                type="button"
+                aria-controls="mobile-navigation"
+                aria-expanded="false"
+                aria-label="{{ locale == 'fr' ? 'Ouvrir le menu' : 'Open menu' }}"
+                data-navigation-toggle
+                data-open-label="{{ locale == 'fr' ? 'Ouvrir le menu' : 'Open menu' }}"
+                data-close-label="{{ locale == 'fr' ? 'Fermer le menu' : 'Close menu' }}"
+            >
+                <span class="navigation-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+            </button>
         </div>
     </header>
+
+    <div class="mobile-navigation-backdrop" aria-hidden="true" data-navigation-backdrop></div>
+    <aside class="mobile-navigation-panel" id="mobile-navigation" role="dialog" aria-modal="true" aria-label="{{ locale == 'fr' ? 'Menu principal' : 'Main menu' }}" aria-hidden="true" inert data-navigation-panel>
+        <p class="mobile-navigation-heading">Navigation</p>
+        <nav class="mobile-site-navigation" aria-label="{{ locale == 'fr' ? 'Navigation mobile' : 'Mobile navigation' }}">
+            {% include '_site-navigation-links.twig' %}
+        </nav>
+        {% block mobile_navigation %}{% endblock %}
+    </aside>
 
     <main>{% block content %}{% endblock %}</main>
 
@@ -39,5 +56,6 @@
         </span>
         <a href="https://github.com/Matanek/Silex/blob/main/LICENSE">Apache-2.0 with LLVM exception</a>
     </footer>
+    <script src="/assets/navigation.js" defer></script>
 </body>
 </html>

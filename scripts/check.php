@@ -73,6 +73,10 @@ $assert($home->getStatusCode() === 200, 'The French home page must respond with 
 $assert(str_contains($homeBody, '<html lang="fr">'), 'The French page language is missing.');
 $assert(str_contains($homeBody, '<body class="home-page">'), 'The home page section layout is missing.');
 $assert(str_contains($homeBody, '<div class="site-header-inner">'), 'The full-width header container is missing.');
+$assert(str_contains($homeBody, 'data-navigation-toggle'), 'The mobile navigation toggle is missing.');
+$assert(str_contains($homeBody, 'id="mobile-navigation" role="dialog" aria-modal="true"'), 'The mobile navigation panel must expose its modal dialog semantics.');
+$assert(str_contains($homeBody, 'aria-hidden="true" inert data-navigation-panel'), 'The closed mobile navigation panel must be hidden from assistive technology and keyboard focus.');
+$assert(str_contains($homeBody, '<script src="/assets/navigation.js" defer></script>'), 'The mobile navigation interaction script is missing.');
 $assert(substr_count($homeBody, 'class="section-container') >= 5, 'The home page full-width sections are missing their containers.');
 $assert(str_contains($homeBody, 'Code moderne'), 'The French home page content is missing.');
 $assert(str_contains($homeBody, 'Concentrez-vous sur votre jeu, pas sur sa configuration.'), 'The French audience-focused hero introduction is missing.');
@@ -192,6 +196,7 @@ $frenchDocumentationBody = (string) $frenchDocumentation->getBody();
 $assert($frenchDocumentation->getStatusCode() === 200, 'French documentation must respond with HTTP 200.');
 $assert(str_contains($frenchDocumentationBody, '<body class="docs-page">'), 'Documentation pages must expose their fixed-sidebar layout class.');
 $sourceCss = (string) file_get_contents($root . '/assets/css/app.css');
+$navigationScript = (string) file_get_contents($root . '/public/assets/navigation.js');
 $packageCardTemplate = (string) file_get_contents($root . '/templates/_package-card.twig');
 $snapshotBuilder = (string) file_get_contents($root . '/scripts/build-content-snapshot.mjs');
 $assert(
@@ -289,7 +294,25 @@ $assert(
         && str_contains($sourceCss, '.prose-silex { color: var(--color-gray-700); font-size: 0.96rem;'),
     'Documentation must use a compact light theme while keeping its fixed independently scrolling sidebar.',
 );
+$assert(
+    str_contains($sourceCss, '.mobile-navigation-panel { color-scheme: light;')
+        && str_contains($sourceCss, 'position: fixed; z-index: 45; top: var(--navbar-height); left: 0;')
+        && str_contains($sourceCss, 'height: calc(100dvh - var(--navbar-height));')
+        && str_contains($sourceCss, 'transform: translateX(-100%); visibility: hidden;')
+        && str_contains($sourceCss, '.navigation-open .mobile-navigation-panel { transform: translateX(0);')
+        && str_contains($sourceCss, '.docs-sidebar { display: none; }')
+        && str_contains($sourceCss, '.docs-toolbar { flex-direction: column; gap: 8px;'),
+    'Mobile navigation must slide in below the navbar while the documentation content keeps a compact single-column layout.',
+);
+$assert(
+    str_contains($navigationScript, "window.matchMedia('(min-width: 651px)')")
+        && str_contains($navigationScript, "panel.setAttribute('inert', '')")
+        && str_contains($navigationScript, "event.key === 'Escape'")
+        && str_contains($navigationScript, "event.key !== 'Tab'"),
+    'Mobile navigation must close across desktop transitions and provide keyboard focus management.',
+);
 $assert(str_contains($frenchDocumentationBody, '<h1>Documentation Silex</h1>'), 'French Markdown must be rendered from FR/.');
+$assert(str_contains($frenchDocumentationBody, '<div class="mobile-doc-navigation">'), 'Documentation navigation must be included in the mobile drawer.');
 $assert(str_contains($frenchDocumentationBody, 'Bonjour depuis Silex'), 'The French code example is missing.');
 $assert(str_contains($frenchDocumentationBody, 'href="/fr/docs/Language/README.md"'), 'French relative links must stay in the French route tree.');
 $assert(str_contains($frenchDocumentationBody, 'href="/en/docs"'), 'The documentation switch must preserve the document path.');

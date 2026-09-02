@@ -3,24 +3,16 @@
 {% block title %}{{ document_title }} — Silex Docs{% endblock %}
 {% block body_class %}docs-page{% endblock %}
 
+{% block mobile_navigation %}
+<div class="mobile-doc-navigation">
+    {% include '_docs-navigation.twig' %}
+</div>
+{% endblock %}
+
 {% block content %}
 <div class="docs-shell">
     <aside class="docs-sidebar">
-        <div class="docs-sidebar-heading"><span>Documentation</span><a href="/{{ locale }}/">{{ locale == 'fr' ? 'Accueil' : 'Home' }}</a></div>
-        <nav aria-label="Documentation">
-            {% for group in navigation %}
-                <div class="docs-nav-group">
-                    <h2>{{ group.label }}</h2>
-                    <ul>
-                        {% for item in group.items %}
-                            <li>
-                                <a {% if item.path == current_path %}aria-current="page"{% endif %} href="/{{ locale }}/docs{{ item.path == 'README.md' ? '' : '/' ~ item.path }}">{{ item.label }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% endfor %}
-        </nav>
+        {% include '_docs-navigation.twig' %}
     </aside>
 
     <div class="docs-main">
