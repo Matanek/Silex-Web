@@ -389,7 +389,7 @@ $assert(str_contains($registryBody, '<h1 id="registry-title">Construisez<br><spa
 $assert(str_contains($registryBody, '<body class="registry-page">'), 'The registry page theme is missing.');
 $assert(substr_count($registryBody, 'class="section-container') >= 4, 'The registry full-width sections are missing their containers.');
 $assert(str_contains($registryBody, 'class="registry-section registry-publish-section"'), 'The registry publication section is missing.');
-$assert(str_contains($registryBody, '<h2 id="publish-title">Enregistrez votre package une seule fois</h2>'), 'The registry must present registration as the only one-time action.');
+$assert(str_contains($registryBody, '<h2 id="publish-title">Enregistrez votre package</h2>'), 'The registry must use a concise package-registration title.');
 $assert(str_contains($registryBody, 'href="/fr/#packages"'), 'The registry contribution card must link to the complete package catalog.');
 $assert(!str_contains($registryBody, 'registry-packages-section'), 'The registry page must not duplicate a partial package catalog.');
 $assert(str_contains($registryBody, 'href="/en/registry"'), 'The registry language switch must preserve the page.');

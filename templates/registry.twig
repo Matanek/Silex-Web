@@ -67,7 +67,7 @@
 <section class="registry-section registry-publish-section" id="publish" aria-labelledby="publish-title">
 <div class="section-container">
     <div class="registry-heading registry-heading-split publish-heading">
-        <div><p class="eyebrow section-tag">{{ locale == 'fr' ? 'Enregistrer un package' : 'Register a package' }}</p><h2 id="publish-title">{{ locale == 'fr' ? 'Enregistrez votre package une seule fois' : 'Register your package once' }}</h2></div>
+        <div><p class="eyebrow section-tag">{{ locale == 'fr' ? 'Enregistrer un package' : 'Register a package' }}</p><h2 id="publish-title">{{ locale == 'fr' ? 'Enregistrez votre package' : 'Register your package' }}</h2></div>
         <p>{% if locale == 'fr' %}La commande <code>silex register</code> ouvre l’unique proposition d’inscription du package. Une fois acceptée, le registre lit les versions dans les tags Git du dépôt : aucune nouvelle commande Silex ni pull request n’est nécessaire.{% else %}<code>silex register</code> opens the package’s single registry proposal. Once accepted, the registry reads releases from the repository’s Git tags: no new Silex command or pull request is required.{% endif %}</p>
     </div>
 
