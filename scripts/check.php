@@ -188,6 +188,10 @@ $assert(
     'The showcase background must remain five percent lighter than the header background.',
 );
 $assert(
+    str_contains($sourceCss, '.showcase-card { width: 100%; max-width: 360px; aspect-ratio: 8 / 5; overflow: hidden; background: var(--surface); }'),
+    'Showcase thumbnails must remain borderless.',
+);
+$assert(
     str_contains($sourceCss, '.showcase-lightbox { position: fixed; inset: 0;')
         && str_contains($sourceCss, 'margin: auto;'),
     'The showcase lightbox must remain centered in the viewport.',
