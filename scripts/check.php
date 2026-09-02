@@ -398,6 +398,7 @@ $assert(str_contains($registryBody, 'href="/fr/#packages"'), 'The registry contr
 $assert(!str_contains($registryBody, 'registry-packages-section'), 'The registry page must not duplicate a partial package catalog.');
 $assert(str_contains($registryBody, '<h3 class="eyebrow" id="registry-review-title">Suivi des inscriptions</h3>'), 'The registry must use one concise registration-tracking title.');
 $assert(!str_contains($registryBody, 'Suivez votre demande'), 'The registry tracking card must not repeat its title.');
+$assert(str_contains($registryBody, 'Consultez-la pour vérifier son statut et les éventuelles revues.'), 'The registry tracking copy must remain concise.');
 $assert(substr_count($registryBody, 'href="https://github.com/Matanek/Silex-Registry/pulls"') === 2, 'Registry tracking links must point directly to pull requests.');
 $assert(!str_contains($registryBody, 'registry-closing-section'), 'The registry must not end with an oversized generic repository call to action.');
 $assert(str_contains($registryBody, 'href="/en/registry"'), 'The registry language switch must preserve the page.');
