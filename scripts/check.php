@@ -240,6 +240,11 @@ $assert(
     'The showcase subtitle must sit below its title and the desktop gallery must align four equal columns with the section container.',
 );
 $assert(
+    str_contains($sourceCss, '.package-card:hover { background: color-mix(in srgb, var(--surface) 86%, var(--accent) 14%); }')
+        && !str_contains($sourceCss, '.package-card:hover { background: color-mix(in srgb, var(--surface) 92%, var(--text) 8%); }'),
+    'Package hover states must use the sky accent instead of a gray text tint.',
+);
+$assert(
     str_contains($sourceCss, 'position: fixed; inset: 0; width: min(calc(100% - 36px), 1120px);')
         && str_contains($sourceCss, 'margin: auto;'),
     'The showcase lightbox must remain centered in the viewport.',
