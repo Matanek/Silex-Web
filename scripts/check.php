@@ -112,6 +112,8 @@ $assert(str_contains($homeBody, '<h2 id="showcase-title">Exemples.</h2>'), 'The 
 $assert(str_contains($homeBody, 'href="https://github.com/Matanek/Silex-Examples">Silex-Examples</a>'), 'The showcase must link to the Silex examples repository.');
 $assert(str_contains($homeBody, 'exemples fournis avec Silex'), 'The French showcase must identify the images as distributed examples.');
 $assert(substr_count($homeBody, 'data-showcase-item') === 13, 'The home page must render all thirteen Silex showcase images.');
+$assert(substr_count($homeBody, 'class="showcase-thumbnail"') === 13, 'The showcase must render image-only thumbnails.');
+$assert(substr_count($homeBody, '<figcaption') === 1, 'Only the lightbox may render a showcase caption.');
 $assert(substr_count($homeBody, 'loading="lazy"') >= 13, 'Showcase thumbnails must load lazily.');
 $assert(str_contains($homeBody, 'data-showcase-lightbox'), 'The showcase lightbox is missing.');
 $assert(str_contains($homeBody, '<script src="/assets/showcase.js" defer></script>'), 'The showcase interaction script is missing.');
@@ -135,10 +137,10 @@ foreach ($showcaseSlugs as $showcaseSlug) {
     $fullInfo = getimagesize($root . '/public/assets/showcase/full/' . $showcaseSlug . '.webp');
     $assert(
         $thumbnailInfo !== false
-            && $thumbnailInfo[0] === 720
-            && $thumbnailInfo[1] === 450
+            && $thumbnailInfo[0] === 360
+            && $thumbnailInfo[1] === 225
             && ($thumbnailInfo['mime'] ?? null) === 'image/webp',
-        'Every showcase thumbnail must be a 720x450 WebP image.',
+        'Every showcase thumbnail must be a 360x225 WebP image.',
     );
     $assert(
         $fullInfo !== false

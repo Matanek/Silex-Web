@@ -222,19 +222,7 @@
                 {% set description = locale == 'fr' ? item.description_fr : item.description_en %}
                 {% set alt = locale == 'fr' ? item.alt_fr : item.alt_en %}
                 <a class="showcase-card" href="/assets/showcase/full/{{ item.slug }}.webp" data-showcase-item data-title="{{ title|e('html_attr') }}" data-description="{{ description|e('html_attr') }}" data-alt="{{ alt|e('html_attr') }}" aria-haspopup="dialog" aria-label="{{ (locale == 'fr' ? 'Agrandir ' : 'Enlarge ') ~ title }}">
-                    <figure>
-                        <div class="showcase-thumbnail">
-                            <img src="/assets/showcase/thumbs/{{ item.slug }}.webp" alt="{{ alt }}" width="720" height="450" loading="lazy" decoding="async">
-                            <span aria-hidden="true">↗</span>
-                        </div>
-                        <figcaption>
-                            <span>{{ '%02d'|format(loop.index) }}</span>
-                            <div>
-                                <h3>{{ title }}</h3>
-                                <p>{{ description }}</p>
-                            </div>
-                        </figcaption>
-                    </figure>
+                    <img class="showcase-thumbnail" src="/assets/showcase/thumbs/{{ item.slug }}.webp" alt="{{ alt }}" width="360" height="225" loading="lazy" decoding="async">
                 </a>
             {% endfor %}
         </div>
