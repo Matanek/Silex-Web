@@ -122,13 +122,13 @@ $assert(!str_contains($homeBody, 'class="principles"'), 'The standalone principl
 $assert(str_contains($homeBody, '<h2 id="showcase-title">Exemples</h2>'), 'The French Silex showcase heading is missing.');
 $assert(str_contains($homeBody, 'href="https://github.com/Matanek/Silex-Examples">Silex-Examples</a>'), 'The showcase must link to the Silex examples repository.');
 $assert(str_contains($homeBody, 'exemples fournis avec Silex'), 'The French showcase must identify the images as distributed examples.');
-$assert(substr_count($homeBody, 'data-showcase-item') === 13, 'The home page must render all thirteen Silex showcase images.');
-$assert(substr_count($homeBody, 'class="showcase-thumbnail"') === 13, 'The showcase must render image-only thumbnails.');
-$assert(substr_count($homeBody, '<picture>') === 13, 'Every showcase item must provide responsive image sources.');
-$assert(substr_count($homeBody, '<source media="(max-width: 650px)"') === 13, 'Every mobile showcase item must use its full image.');
-$assert(substr_count($homeBody, 'data-full-src=') === 13, 'Every showcase item must expose its full image to the desktop lightbox.');
+$assert(substr_count($homeBody, 'data-showcase-item') === 16, 'The home page must render all sixteen Silex showcase images.');
+$assert(substr_count($homeBody, 'class="showcase-thumbnail"') === 16, 'The showcase must render image-only thumbnails.');
+$assert(substr_count($homeBody, '<picture>') === 16, 'Every showcase item must provide responsive image sources.');
+$assert(substr_count($homeBody, '<source media="(max-width: 650px)"') === 16, 'Every mobile showcase item must use its full image.');
+$assert(substr_count($homeBody, 'data-full-src=') === 16, 'Every showcase item must expose its full image to the desktop lightbox.');
 $assert(substr_count($homeBody, '<figcaption') === 1, 'Only the lightbox may render a showcase caption.');
-$assert(substr_count($homeBody, 'loading="lazy"') >= 13, 'Showcase thumbnails must load lazily.');
+$assert(substr_count($homeBody, 'loading="lazy"') >= 16, 'Showcase thumbnails must load lazily.');
 $assert(str_contains($homeBody, 'data-showcase-lightbox'), 'The showcase lightbox is missing.');
 $assert(str_contains($homeBody, 'data-count-label="{current}/{total}"'), 'The showcase counter must use the compact current/total format.');
 $assert(str_contains($homeBody, '<script src="/assets/showcase.js" defer></script>'), 'The showcase interaction script is missing.');
@@ -146,6 +146,9 @@ $showcaseSlugs = [
     'vector-font-scene2d',
     'canvas-clock',
     'shadow-volumes',
+    'minesweeper-board',
+    'minesweeper-setup',
+    'viewport-axis-3d',
 ];
 foreach ($showcaseSlugs as $showcaseSlug) {
     $thumbnailPath = $root . '/public/assets/showcase/thumbs/' . $showcaseSlug . '.webp';
@@ -191,7 +194,7 @@ $assert(str_contains($englishHomeBody, 'Demonstrates reusable Silex package meta
 $assert(str_contains($englishHomeBody, 'href="/en/#packages">Packages</a>'), 'The English navigation must link to the home page package catalog.');
 $assert(!str_contains($englishHomeBody, 'Why Silex?'), 'The redundant English principles heading must not be rendered.');
 $assert(str_contains($englishHomeBody, '<h2 id="showcase-title">Examples</h2>'), 'The English Silex showcase heading is missing.');
-$assert(str_contains($englishHomeBody, 'Canvas shapes and paths'), 'The English showcase captions are missing.');
+$assert(str_contains($englishHomeBody, 'Canvas shapes and paths') && str_contains($englishHomeBody, 'Minesweeper — Setup'), 'The English showcase captions are missing.');
 $assert(!str_contains($englishHomeBody, 'Présente des métadonnées réutilisables'), 'The English package card must not display the French translation.');
 
 $frenchDocumentation = $handle('https://silex.test/fr/docs');
