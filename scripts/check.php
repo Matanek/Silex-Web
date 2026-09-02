@@ -184,12 +184,13 @@ $assert($frenchDocumentation->getStatusCode() === 200, 'French documentation mus
 $assert(str_contains($frenchDocumentationBody, '<body class="docs-page">'), 'Documentation pages must expose their fixed-sidebar layout class.');
 $sourceCss = (string) file_get_contents($root . '/assets/css/app.css');
 $assert(
-    str_contains($sourceCss, '.showcase { background: color-mix(in srgb, var(--background) 95%, white 5%); }'),
+    str_contains($sourceCss, '.showcase { border-bottom: 0; background: color-mix(in srgb, var(--background) 95%, white 5%); }'),
     'The showcase background must remain five percent lighter than the header background.',
 );
 $assert(
-    str_contains($sourceCss, '.showcase-card { width: 100%; max-width: 360px; aspect-ratio: 8 / 5; overflow: hidden; background: var(--surface); }'),
-    'Showcase thumbnails must remain borderless.',
+    str_contains($sourceCss, '.home-page .section:has(+ .showcase) { border-bottom: 0; }')
+        && str_contains($sourceCss, '.showcase { border-bottom: 0;'),
+    'The showcase section must remain free of surrounding one-pixel separators.',
 );
 $assert(
     str_contains($sourceCss, '.showcase-lightbox { position: fixed; inset: 0;')

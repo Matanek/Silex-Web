@@ -263,13 +263,14 @@ h1, h2, h3, p { margin-top: 0; }
 .package-card-links a span { color: var(--accent); }
 .content-unavailable { padding: 30px; border: 1px solid var(--line); color: var(--muted); }
 
-.showcase { background: color-mix(in srgb, var(--background) 95%, white 5%); }
+.home-page .section:has(+ .showcase) { border-bottom: 0; }
+.showcase { border-bottom: 0; background: color-mix(in srgb, var(--background) 95%, white 5%); }
 .showcase-heading { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr); gap: clamp(40px, 8vw, 110px); align-items: end; margin-bottom: 64px; }
 .showcase-heading h2 { max-width: 680px; margin-bottom: 0; }
 .showcase-heading > p { max-width: 520px; margin-bottom: 4px; color: var(--muted); font-size: 1.02rem; text-wrap: pretty; }
 .showcase-heading > p a { color: var(--text); text-decoration-color: var(--accent); text-underline-offset: 4px; }
 .showcase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 360px)); justify-content: center; justify-items: center; gap: 16px; }
-.showcase-card { width: 100%; max-width: 360px; aspect-ratio: 8 / 5; overflow: hidden; background: var(--surface); }
+.showcase-card { width: 100%; max-width: 360px; aspect-ratio: 8 / 5; overflow: hidden; border: 1px solid var(--line); background: var(--surface); }
 .showcase-thumbnail { width: 100%; height: 100%; display: block; object-fit: cover; transition: filter 220ms ease, transform 320ms ease; }
 .showcase-card:hover .showcase-thumbnail,
 .showcase-card:focus-visible .showcase-thumbnail { filter: saturate(1.08) contrast(1.03); transform: scale(1.025); }
