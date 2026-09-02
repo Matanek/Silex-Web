@@ -39,25 +39,24 @@
 </section>
 
 {% set principles = locale == 'fr' ? [
-    ['01', 'Simplicité', 'Un langage expressif, puissant et souple pour écrire un code agréable à lire et à maintenir.'],
-    ['02', 'Efficacité', 'Compilation cross-platform pour Windows, macOS et Linux.'],
-    ['03', 'Sécurité', 'Le typage et l’ownership rendent la circulation des données prévisible.']
+    ['Simplicité', 'Un langage expressif, puissant et souple pour écrire un code agréable à lire et à maintenir.'],
+    ['Efficacité', 'Compilation cross-platform pour Windows, macOS et Linux.'],
+    ['Sécurité', 'Le typage et l’ownership rendent la circulation des données prévisible.']
 ] : [
-    ['01', 'Simplicity', 'An expressive, powerful, and flexible language for writing code that is pleasant to read and maintain.'],
-    ['02', 'Efficiency', 'Cross-platform compilation for Windows, macOS, and Linux.'],
-    ['03', 'Safety', 'Typing and ownership make data flow predictable.']
+    ['Simplicity', 'An expressive, powerful, and flexible language for writing code that is pleasant to read and maintain.'],
+    ['Efficiency', 'Cross-platform compilation for Windows, macOS, and Linux.'],
+    ['Safety', 'Typing and ownership make data flow predictable.']
 ] %}
-<section class="principles" aria-label="{{ locale == 'fr' ? 'Principes de Silex' : 'Silex principles' }}">
+<section class="principles" aria-labelledby="principles-title">
     <div class="section-container">
         <div class="principles-heading">
-            <p class="eyebrow">{{ locale == 'fr' ? 'Pourquoi Silex' : 'Why Silex' }}</p>
+            <h2 id="principles-title">{{ locale == 'fr' ? 'Pourquoi Silex' : 'Why Silex' }}</h2>
         </div>
         <div class="principles-layout">
         {% for principle in principles %}
-            <article>
-                <span class="number">{{ principle[0] }}</span>
-                <h3>{{ principle[1] }}</h3>
-                <p>{{ principle[2] }}</p>
+            <article class="principle-statement">
+                <h3>{{ principle[0] }}</h3>
+                <p>{{ principle[1] }}</p>
             </article>
         {% endfor %}
         </div>
