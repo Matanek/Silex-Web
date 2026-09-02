@@ -189,10 +189,12 @@ $assert($frenchDocumentation->getStatusCode() === 200, 'French documentation mus
 $assert(str_contains($frenchDocumentationBody, '<body class="docs-page">'), 'Documentation pages must expose their fixed-sidebar layout class.');
 $sourceCss = (string) file_get_contents($root . '/assets/css/app.css');
 $assert(
-    str_contains($sourceCss, '.hero-principles { grid-column: 1 / -1;')
+    str_contains($sourceCss, 'row-gap: clamp(32px, 4vw, 48px); align-content: center;')
+        && str_contains($sourceCss, '.hero-principles { grid-column: 1 / -1;')
+        && str_contains($sourceCss, 'padding: 0; border: 0; list-style: none;')
         && str_contains($sourceCss, '.hero-principles h2 {')
         && str_contains($sourceCss, 'text-transform: uppercase;'),
-    'The three uppercase benefits must remain integrated into the hero layout.',
+    'The three uppercase benefits must remain tightly integrated into the borderless hero layout.',
 );
 $assert(
     str_contains($sourceCss, '.showcase { border-bottom: 0; background: color-mix(in srgb, var(--background) 95%, white 5%); }'),

@@ -87,7 +87,7 @@ main,
 .site-navigation .locale-link { padding: 5px 9px; border: 1px solid var(--line); border-radius: 3px; color: var(--text); font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 0.72rem; }
 .site-navigation .locale-link:hover { border-color: var(--accent); color: var(--accent); }
 .hero { min-height: 100vh; padding-top: var(--navbar-height); }
-.hero-layout { min-height: calc(100vh - var(--navbar-height)); display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr); column-gap: clamp(50px, 8vw, 110px); row-gap: clamp(52px, 6vw, 76px); align-items: center; padding: 0 0 clamp(68px, 8vw, 96px); }
+.hero-layout { min-height: calc(100vh - var(--navbar-height)); display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr); column-gap: clamp(50px, 8vw, 110px); row-gap: clamp(32px, 4vw, 48px); align-content: center; align-items: center; padding: 0 0 clamp(68px, 8vw, 96px); }
 .eyebrow { margin: 0 0 16px; color: var(--accent); font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
 .hero-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-bottom: 16px; }
 .hero-meta .eyebrow { margin-bottom: 0; }
@@ -118,7 +118,7 @@ h1, h2, h3, p { margin-top: 0; }
 .terminal-line span,
 .terminal-line strong { color: var(--accent); }
 
-.hero-principles { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(28px, 5vw, 64px); margin: 0; padding: clamp(28px, 3.5vw, 42px) 0 0; border-top: 1px solid var(--line); list-style: none; }
+.hero-principles { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(28px, 5vw, 64px); margin: 0; padding: 0; border: 0; list-style: none; }
 .hero-principle { min-width: 0; }
 .hero-principles h2 { margin-bottom: 12px; color: var(--accent); font-size: clamp(1.15rem, 1.8vw, 1.45rem); line-height: 1.05; letter-spacing: 0.04em; text-transform: uppercase; }
 .hero-principles p { max-width: 340px; margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.65; text-wrap: pretty; }
