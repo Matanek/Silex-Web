@@ -133,20 +133,24 @@ $showcaseSlugs = [
     'shadow-volumes',
 ];
 foreach ($showcaseSlugs as $showcaseSlug) {
-    $thumbnailInfo = getimagesize($root . '/public/assets/showcase/thumbs/' . $showcaseSlug . '.webp');
-    $fullInfo = getimagesize($root . '/public/assets/showcase/full/' . $showcaseSlug . '.webp');
+    $thumbnailPath = $root . '/public/assets/showcase/thumbs/' . $showcaseSlug . '.webp';
+    $fullPath = $root . '/public/assets/showcase/full/' . $showcaseSlug . '.webp';
+    $thumbnailInfo = getimagesize($thumbnailPath);
+    $fullInfo = getimagesize($fullPath);
     $assert(
         $thumbnailInfo !== false
             && $thumbnailInfo[0] === 360
             && $thumbnailInfo[1] === 225
-            && ($thumbnailInfo['mime'] ?? null) === 'image/webp',
-        'Every showcase thumbnail must be a 360x225 WebP image.',
+            && ($thumbnailInfo['mime'] ?? null) === 'image/webp'
+            && filesize($thumbnailPath) <= 1024 * 1024,
+        'Every showcase thumbnail must be a 360x225 WebP image no larger than 1 MiB.',
     );
     $assert(
         $fullInfo !== false
-            && $fullInfo[0] <= 960
-            && ($fullInfo['mime'] ?? null) === 'image/webp',
-        'Every full showcase image must be a WebP image no wider than 960 pixels.',
+            && $fullInfo[0] <= 1920
+            && ($fullInfo['mime'] ?? null) === 'image/webp'
+            && filesize($fullPath) <= 1024 * 1024,
+        'Every full showcase image must be a WebP image no wider than 1920 pixels or larger than 1 MiB.',
     );
 }
 $assert(str_contains($homeBody, 'Silex Web release: ' . $expectedRelease), 'The deployment marker does not match release.txt.');
