@@ -255,11 +255,11 @@ $assert(
 $assert(
     str_contains($sourceCss, 'body.registry-page {')
         && str_contains($sourceCss, '.registry-page main {')
-        && str_contains($sourceCss, '.registry-hero-section,')
+        && str_contains($sourceCss, '.registry-hero-section { color-scheme: dark;')
         && str_contains($sourceCss, '.registry-publish-section { background: var(--color-sky-50); }')
         && str_contains($sourceCss, '.contribution-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }')
         && str_contains($sourceCss, '.manifest-window { color-scheme: dark;')
-        && str_contains($sourceCss, '.registry-closing { max-width: 840px; padding: 130px 0 150px; text-align: center; }'),
+        && str_contains($sourceCss, '.registry-review { display: flex; align-items: center; justify-content: space-between;'),
     'The registry must reuse the homepage rhythm with full-width alternating sections and contained content.',
 );
 $assert(
@@ -294,7 +294,7 @@ $assert(
         && str_contains($sourceCss, '.registry-hero-copy .actions { justify-content: center; }')
         && str_contains($sourceCss, '.registry-heading-split { gap: 24px; }')
         && str_contains($sourceCss, '.manifest-window pre { min-height: auto; padding: 28px 18px; overflow-x: hidden; overflow-wrap: anywhere; white-space: pre-wrap; }')
-        && str_contains($sourceCss, '.registry-closing { padding: 90px 0 110px; text-align: center; }'),
+        && str_contains($sourceCss, '.registry-review { align-items: stretch; flex-direction: column; padding: 24px 20px; }'),
     'The registry page must use its dedicated centered, overflow-safe mobile layout.',
 );
 $assert(
@@ -387,11 +387,14 @@ $registryBody = (string) $registry->getBody();
 $assert($registry->getStatusCode() === 200, 'The French registry page must respond with HTTP 200.');
 $assert(str_contains($registryBody, '<h1 id="registry-title">Construisez<br><span>Publiez</span><br>Partagez</h1>'), 'The French registry content is missing.');
 $assert(str_contains($registryBody, '<body class="registry-page">'), 'The registry page theme is missing.');
-$assert(substr_count($registryBody, 'class="section-container') >= 4, 'The registry full-width sections are missing their containers.');
+$assert(substr_count($registryBody, 'class="section-container') >= 3, 'The registry full-width sections are missing their containers.');
 $assert(str_contains($registryBody, 'class="registry-section registry-publish-section"'), 'The registry publication section is missing.');
 $assert(str_contains($registryBody, '<h2 id="publish-title">Enregistrez votre package</h2>'), 'The registry must use a concise package-registration title.');
 $assert(str_contains($registryBody, 'href="/fr/#packages"'), 'The registry contribution card must link to the complete package catalog.');
 $assert(!str_contains($registryBody, 'registry-packages-section'), 'The registry page must not duplicate a partial package catalog.');
+$assert(str_contains($registryBody, '<h3 id="registry-review-title">Suivez votre demande</h3>'), 'The registry must explain how to track a registration request.');
+$assert(substr_count($registryBody, 'href="https://github.com/Matanek/Silex-Registry/pulls"') === 2, 'Registry tracking links must point directly to pull requests.');
+$assert(!str_contains($registryBody, 'registry-closing-section'), 'The registry must not end with an oversized generic repository call to action.');
 $assert(str_contains($registryBody, 'href="/en/registry"'), 'The registry language switch must preserve the page.');
 $assert(str_contains($registryBody, 'https://registry.silex-lang.org/v1/index.json'), 'The registry API link is missing.');
 

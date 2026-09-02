@@ -13,7 +13,7 @@
         <p class="lede">{{ locale == 'fr' ? 'Silex grandit grâce aux logiciels qui fonctionnent. Améliorez le langage, renforcez ses packages ou publiez une capacité réutilisable.' : 'Silex grows through working software. Improve the language, strengthen its packages, or publish a reusable capability.' }}</p>
         <div class="actions">
             <a class="button button-primary" href="#publish">{{ locale == 'fr' ? 'Enregistrer un package' : 'Register a package' }}</a>
-            <a class="button button-secondary" href="https://github.com/Matanek/Silex-Registry">{{ locale == 'fr' ? 'Voir le dépôt du registre' : 'View the registry source' }}</a>
+            <a class="button button-secondary" href="https://github.com/Matanek/Silex-Registry/pulls">{{ locale == 'fr' ? 'Suivre les inscriptions' : 'Track registrations' }}</a>
         </div>
     </div>
 
@@ -108,15 +108,15 @@ for registry review</span>
             <a href="https://github.com/Matanek/Silex-Registry/blob/main/CONTRIBUTING.md">{{ locale == 'fr' ? 'Lire le contrat d’inscription' : 'Read the registration contract' }} <span aria-hidden="true">→</span></a>
         </div>
     </div>
-</div>
-</section>
 
-<section class="registry-closing-section" aria-labelledby="closing-title">
-<div class="section-container registry-closing">
-    <p class="eyebrow">{{ locale == 'fr' ? 'Un petit écosystème, construit avec soin' : 'A small ecosystem, deliberately built' }}</p>
-    <h2 id="closing-title">{{ locale == 'fr' ? 'Apportez une idée utile' : 'Bring one useful idea' }}</h2>
-    <p>{{ locale == 'fr' ? 'Rendez-la directe à utiliser, assez complète pour convaincre et assez claire pour être découverte.' : 'Make it direct to use, complete enough to prove, and clear enough for the next developer to discover.' }}</p>
-    <a class="button button-primary" href="https://github.com/Matanek/Silex-Registry">{{ locale == 'fr' ? 'Ouvrir le dépôt du registre' : 'Open the registry repository' }}</a>
+    <aside class="registry-review" aria-labelledby="registry-review-title">
+        <div class="registry-review-copy">
+            <p class="eyebrow">{{ locale == 'fr' ? 'Suivi des inscriptions' : 'Registration tracking' }}</p>
+            <h3 id="registry-review-title">{{ locale == 'fr' ? 'Suivez votre demande' : 'Track your request' }}</h3>
+            <p>{% if locale == 'fr' %}<code>silex register</code> ouvre une pull request. Consultez-la pour vérifier son statut et les éventuels retours de revue.{% else %}<code>silex register</code> opens a pull request. Check it to follow its status and any review feedback.{% endif %}</p>
+        </div>
+        <a class="button button-secondary" href="https://github.com/Matanek/Silex-Registry/pulls">{{ locale == 'fr' ? 'Voir les pull requests' : 'View pull requests' }}</a>
+    </aside>
 </div>
 </section>
 {% endblock %}
