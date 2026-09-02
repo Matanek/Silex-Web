@@ -11,6 +11,22 @@
     const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
     let isOpen = false;
 
+    const centerCurrentDocument = (container) => {
+        const current = container.querySelector('[data-current-document]');
+        if (!current) {
+            return;
+        }
+
+        const containerRect = container.getBoundingClientRect();
+        const currentRect = current.getBoundingClientRect();
+        const centeredTop = container.scrollTop
+            + currentRect.top
+            - containerRect.top
+            - ((container.clientHeight - currentRect.height) / 2);
+
+        container.scrollTo({ top: Math.max(0, centeredTop), behavior: 'auto' });
+    };
+
     const setOpen = (open, restoreFocus = false) => {
         isOpen = open;
         document.body.classList.toggle('navigation-open', open);
@@ -20,7 +36,12 @@
 
         if (open) {
             panel.removeAttribute('inert');
-            window.requestAnimationFrame(() => panel.querySelector(focusableSelector)?.focus());
+            window.requestAnimationFrame(() => {
+                centerCurrentDocument(panel);
+                const focusTarget = panel.querySelector('[data-current-document]')
+                    ?? panel.querySelector(focusableSelector);
+                focusTarget?.focus({ preventScroll: true });
+            });
             return;
         }
 
@@ -71,4 +92,6 @@
             setOpen(false);
         }
     });
+
+    document.querySelectorAll('.docs-sidebar').forEach(centerCurrentDocument);
 })();

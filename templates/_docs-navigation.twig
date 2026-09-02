@@ -6,7 +6,10 @@
             <ul>
                 {% for item in group.items %}
                     <li>
-                        <a {% if item.path == current_path %}aria-current="page"{% endif %} href="/{{ locale }}/docs{{ item.path == 'README.md' ? '' : '/' ~ item.path }}">{{ item.label }}</a>
+                        <a
+                            {% if item.path == current_path %}aria-current="page" data-current-document{% endif %}
+                            href="/{{ locale }}/docs{{ item.path == 'README.md' ? '' : '/' ~ item.path }}"
+                        >{{ item.label }}</a>
                     </li>
                 {% endfor %}
             </ul>

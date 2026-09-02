@@ -358,7 +358,11 @@ $assert(
     str_contains($navigationScript, "window.matchMedia('(min-width: 651px)')")
         && str_contains($navigationScript, "panel.setAttribute('inert', '')")
         && str_contains($navigationScript, "event.key === 'Escape'")
-        && str_contains($navigationScript, "event.key !== 'Tab'"),
+        && str_contains($navigationScript, "event.key !== 'Tab'")
+        && str_contains($navigationScript, "container.querySelector('[data-current-document]')")
+        && str_contains($navigationScript, "container.scrollTo({ top: Math.max(0, centeredTop), behavior: 'auto' })")
+        && str_contains($navigationScript, "focus({ preventScroll: true })")
+        && str_contains($navigationScript, "document.querySelectorAll('.docs-sidebar').forEach(centerCurrentDocument)"),
     'Mobile navigation must close across desktop transitions and provide keyboard focus management.',
 );
 $assert(str_contains($frenchDocumentationBody, '<h1>Documentation Silex</h1>'), 'French Markdown must be rendered from FR/.');
@@ -383,6 +387,11 @@ $assert(str_contains($englishGuideBody, 'href="/fr/docs/Language/README.md"'), '
 $assert(str_contains($englishGuideBody, '<code class="language-sx">'), 'Silex Markdown fences must expose their language to the highlighter.');
 $assert(str_contains($englishGuideBody, '<script src="/assets/documentation-syntax.js" defer></script>'), 'Documentation pages must load the local Silex syntax highlighter.');
 $assert(!str_contains($englishHomeBody, '/assets/documentation-syntax.js'), 'The syntax highlighter must only load on documentation pages.');
+
+$activeNavigationGuide = $handle('https://silex.test/en/docs/Language/Active-navigation.md');
+$activeNavigationGuideBody = (string) $activeNavigationGuide->getBody();
+$assert($activeNavigationGuide->getStatusCode() === 200, 'A documentation page represented in navigation must respond with HTTP 200.');
+$assert(substr_count($activeNavigationGuideBody, 'aria-current="page" data-current-document') === 2, 'Desktop and mobile documentation navigation must identify the current document.');
 
 $packages = $handle('https://silex.test/fr/packages');
 $packagesBody = (string) $packages->getBody();
