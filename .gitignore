@@ -1,6 +1,7 @@
 /vendor/
 /node_modules/
 /public/assets/app.css
+/public/assets/documentation-syntax.js
 /release.txt
 /.composer-cache/
 /.content/

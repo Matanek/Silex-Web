@@ -18,10 +18,13 @@ browser language, and exposes a switch that preserves the current page.
 
 Production releases contain an immutable snapshot under `var/content/sources`.
 The deployment build fetches the Silex release, its matching documentation
-branch, the registry, and the registered package manifests. It copies both
+branch, the canonical VS Code TextMate grammar, the registry, and the
+registered package manifests. It copies both
 documentation languages, immutable package registrations, and only the
 manifests needed for plain or localized package descriptions; package
 documentation is not ingested. Package cards link directly to each canonical
+repository. The browser bundle uses Shiki to highlight `sx` Markdown fences
+from that grammar without maintaining a second editable lexer in this
 repository. Local workspace sources keep priority so Herd reflects live
 documentation and manifest changes without rebuilding that snapshot.
 
@@ -42,7 +45,9 @@ Tailwind CSS produces the static stylesheet.
 
 - PHP 8.2 or newer;
 - Composer 2;
-- Node.js and npm for the Tailwind build.
+- Node.js and npm for the Tailwind and syntax-highlighting builds;
+- a sibling `Silex-Extension-VSCode/` checkout, the fetched `.content/` tree,
+  or an explicit `SILEX_TEXTMATE_GRAMMAR` path for the canonical grammar.
 
 ## Validate
 
@@ -61,8 +66,10 @@ composer serve
 ```
 
 The website is then available at <http://127.0.0.1:8080/>. For live CSS
-rebuilds, run `npm run dev` in a second terminal. With Laravel Herd, link the
-`public/` directory under an explicit name such as `silex`.
+rebuilds, run `npm run dev` in a second terminal. Rebuild the syntax bundle
+after a grammar change with `npm run build:syntax`, or watch it with
+`npm run dev:syntax`. With Laravel Herd, link the `public/` directory under an
+explicit name such as `silex`.
 
 ## Deployment
 

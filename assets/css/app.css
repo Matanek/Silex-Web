@@ -344,7 +344,31 @@ body.showcase-lightbox-open { overflow: hidden; }
 .showcase-lightbox-previous { left: 14px; }
 .showcase-lightbox-next { right: 14px; }
 
-.docs-page { color-scheme: light; --background: var(--color-white); --surface: var(--color-gray-50); --line: var(--color-gray-200); --text: var(--color-gray-950); --muted: var(--color-gray-600); --accent: var(--color-sky-400); --accent-ink: var(--color-gray-950); --code: var(--color-gray-300); --docs-sidebar-width: clamp(230px, 18vw, 280px); background: var(--background); color: var(--text); }
+.docs-page {
+    color-scheme: light;
+    --background: var(--color-white);
+    --surface: var(--color-gray-50);
+    --line: var(--color-gray-200);
+    --text: var(--color-gray-950);
+    --muted: var(--color-gray-600);
+    --accent: var(--color-sky-400);
+    --accent-ink: var(--color-gray-950);
+    --code: var(--color-gray-300);
+    --docs-sidebar-width: clamp(230px, 18vw, 280px);
+    --sx-foreground: var(--color-gray-300);
+    --sx-background: var(--color-gray-950);
+    --sx-token-constant: var(--color-orange-300);
+    --sx-token-string: var(--color-lime-200);
+    --sx-token-comment: var(--color-gray-500);
+    --sx-token-keyword: var(--color-sky-400);
+    --sx-token-parameter: var(--color-pink-400);
+    --sx-token-function: var(--color-sky-300);
+    --sx-token-string-expression: var(--color-orange-300);
+    --sx-token-punctuation: var(--color-gray-400);
+    --sx-token-link: var(--color-sky-400);
+    background: var(--background);
+    color: var(--text);
+}
 .docs-page main { width: 100%; max-width: none; margin: 0; }
 .docs-page .site-footer { width: auto; margin-left: var(--docs-sidebar-width); padding-inline: max(32px, calc((100vw - var(--docs-sidebar-width) - 760px) / 2)); }
 .docs-shell { width: 100%; min-height: calc(100vh - var(--navbar-height)); min-height: calc(100dvh - var(--navbar-height)); }
@@ -385,6 +409,8 @@ body.showcase-lightbox-open { overflow: hidden; }
 .prose-silex code { padding: 0.15em 0.35em; border: 1px solid var(--color-sky-200); border-radius: 3px; background: var(--color-sky-50); color: var(--color-sky-700); font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 0.86em; }
 .prose-silex pre { max-width: 100%; margin: 24px 0; padding: 20px 22px; overflow-x: auto; border: 1px solid var(--color-gray-800); border-radius: 6px; background: var(--color-gray-950); color: var(--code); font-size: 0.82rem; line-height: 1.65; tab-size: 4; }
 .prose-silex pre code { padding: 0; border: 0; background: transparent; color: inherit; font-size: inherit; }
+.prose-silex pre.shiki code { display: grid; min-width: max-content; }
+.prose-silex pre.shiki .line { min-height: 1lh; }
 .prose-silex blockquote { margin-left: 0; padding: 1px 0 1px 20px; border-left: 2px solid var(--accent); color: var(--muted); }
 
 .site-footer { min-height: 110px; display: flex; align-items: center; justify-content: space-between; gap: 20px; color: var(--muted); font-size: 0.78rem; }

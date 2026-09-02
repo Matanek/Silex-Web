@@ -52,6 +52,7 @@ const documentationReference = process.env.SILEX_DOCUMENTATION_REF ?? `release/$
 
 clone(silexRepository, resolve(outputRoot, "Silex"), silexVersion.tag);
 clone("https://github.com/Matanek/Silex-Documentation.git", resolve(outputRoot, "Silex-Documentation"), documentationReference);
+clone("https://github.com/Matanek/Silex-Extension-VSCode.git", resolve(outputRoot, "Silex-Extension-VSCode"));
 clone("https://github.com/Matanek/Silex-Registry.git", resolve(outputRoot, "Silex-Registry"));
 
 const registryPackagesRoot = resolve(outputRoot, "Silex-Registry/registry/v1/packages");
@@ -82,4 +83,4 @@ for (const entry of registrationEntries.sort((left, right) => left.name.localeCo
     packageCount += 1;
 }
 
-console.log(`Fetched Silex ${silexVersion.tag}, documentation ${documentationReference}, the registry, and ${packageCount} package manifests`);
+console.log(`Fetched Silex ${silexVersion.tag}, documentation ${documentationReference}, the TextMate grammar, the registry, and ${packageCount} package manifests`);

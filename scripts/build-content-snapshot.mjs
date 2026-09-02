@@ -9,6 +9,7 @@ const registryRoot = resolve(process.argv[3] ?? "../Silex-Registry");
 const silexRoot = resolve(process.argv[4] ?? "../Silex");
 const packagesRoot = resolve(process.argv[5] ?? "../Packages");
 const outputRoot = resolve(process.argv[6] ?? "var/content/sources");
+const vscodeExtensionRoot = resolve(process.argv[7] ?? "../Silex-Extension-VSCode");
 const stagingRoot = `${outputRoot}.tmp-${process.pid}`;
 const packagePattern = /^[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*$/;
 const repositoryPattern = /^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\.git$/;
@@ -119,6 +120,13 @@ try {
         throw new Error("The canonical Silex version is missing or invalid");
     }
 
+    const textmateGrammarPath = join(vscodeExtensionRoot, "syntaxes/silex.tmLanguage.json");
+    const textmateGrammarSource = await readFile(textmateGrammarPath, "utf8");
+    const textmateGrammar = JSON.parse(textmateGrammarSource);
+    if (textmateGrammar.scopeName !== "source.silex" || !Array.isArray(textmateGrammar.patterns)) {
+        throw new Error(`The canonical Silex TextMate grammar is invalid: ${textmateGrammarPath}`);
+    }
+
     await writeFile(
         join(stagingRoot, "snapshot.json"),
         `${JSON.stringify({
@@ -128,6 +136,12 @@ try {
                 commit: gitValue(documentationRoot, ["rev-parse", "HEAD"]),
                 reference: gitValue(documentationRoot, ["branch", "--show-current"]),
                 documents: documentCounts,
+            },
+            syntax_highlighting: {
+                owner: "Silex-Extension-VSCode",
+                commit: gitValue(vscodeExtensionRoot, ["rev-parse", "HEAD"]),
+                grammar: "syntaxes/silex.tmLanguage.json",
+                digest: createHash("sha256").update(textmateGrammarSource).digest("hex"),
             },
             registry: { commit: gitValue(registryRoot, ["rev-parse", "HEAD"]), packages: registrations.length },
             packages: { manifests: packageMetadata.length, digest: packageMetadataDigest },

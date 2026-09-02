@@ -331,7 +331,8 @@ $assert(
     'The showcase lightbox must remain centered in the viewport.',
 );
 $assert(
-    str_contains($sourceCss, '.docs-page { color-scheme: light;')
+    str_contains($sourceCss, '.docs-page {')
+        && str_contains($sourceCss, 'color-scheme: light;')
         && str_contains($sourceCss, '--docs-sidebar-width: clamp(230px, 18vw, 280px);')
         && str_contains($sourceCss, '.docs-sidebar { position: fixed;')
         && str_contains($sourceCss, 'height: calc(100dvh - var(--navbar-height));')
@@ -379,6 +380,9 @@ $englishGuideBody = (string) $englishGuide->getBody();
 $assert($englishGuide->getStatusCode() === 200, 'An English nested guide must respond with HTTP 200.');
 $assert(str_contains($englishGuideBody, '<h1>Understand the Silex language</h1>'), 'English Markdown must be rendered from EN/.');
 $assert(str_contains($englishGuideBody, 'href="/fr/docs/Language/README.md"'), 'The nested documentation switch must preserve the path.');
+$assert(str_contains($englishGuideBody, '<code class="language-sx">'), 'Silex Markdown fences must expose their language to the highlighter.');
+$assert(str_contains($englishGuideBody, '<script src="/assets/documentation-syntax.js" defer></script>'), 'Documentation pages must load the local Silex syntax highlighter.');
+$assert(!str_contains($englishHomeBody, '/assets/documentation-syntax.js'), 'The syntax highlighter must only load on documentation pages.');
 
 $packages = $handle('https://silex.test/fr/packages');
 $packagesBody = (string) $packages->getBody();
@@ -449,6 +453,16 @@ $assert(
 
 $cssPath = $root . '/public/assets/app.css';
 $assert(is_file($cssPath) && filesize($cssPath) > 1_000, 'The compiled Tailwind stylesheet is missing.');
+$syntaxScriptPath = $root . '/public/assets/documentation-syntax.js';
+$syntaxScript = is_file($syntaxScriptPath) ? (string) file_get_contents($syntaxScriptPath) : '';
+$assert(strlen($syntaxScript) > 10_000, 'The compiled Silex syntax-highlighting bundle is missing.');
+$assert(str_contains($syntaxScript, 'silexHighlighted'), 'The syntax-highlighting bundle must mark highlighted code blocks.');
+$assert(
+    str_contains($sourceCss, '--sx-token-keyword: var(--color-sky-400);')
+        && str_contains($sourceCss, '--sx-token-string: var(--color-lime-200);')
+        && str_contains($sourceCss, '.prose-silex pre.shiki code'),
+    'The documentation theme must style Shiki tokens with the Silex palette.',
+);
 $iconPath = $root . '/public/icon.svg';
 $assert(is_file($iconPath) && str_contains((string) file_get_contents($iconPath), '#38bdf8'), 'The Silex icon is missing or does not use Tailwind sky-400.');
 $assert(str_contains($homeBody, '<meta name="theme-color" content="#030712">'), 'The browser theme color must use Tailwind gray-950.');
