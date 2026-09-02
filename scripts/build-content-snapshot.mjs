@@ -104,14 +104,10 @@ try {
         if (manifest.name !== registration.name || description === null) {
             throw new Error(`Package manifest '${manifestSource}' has an invalid name or description`);
         }
-        if (typeof manifest.version !== "string" || !/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(manifest.version)) {
-            throw new Error(`Package manifest '${manifestSource}' has an invalid version`);
-        }
-
         const manifestDestination = join(stagingRoot, "Packages", registration.name, "Package.json");
         await mkdir(dirname(manifestDestination), { recursive: true });
         await copyFile(manifestSource, manifestDestination);
-        packageMetadata.push({ name: registration.name, version: manifest.version, description });
+        packageMetadata.push({ name: registration.name, description });
     }
     const packageMetadataDigest = createHash("sha256")
         .update(JSON.stringify(packageMetadata))

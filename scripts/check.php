@@ -102,11 +102,13 @@ $assert(str_contains($homeBody, 'v9.8.7'), 'The configured Silex version is miss
 $assert(str_contains($homeBody, 'data-package-count="2"'), 'The home page package catalog is missing.');
 $assert(str_contains($homeBody, 'href="/fr/#packages">Packages</a>'), 'The French navigation must link to the home page package catalog.');
 $assert(str_contains($homeBody, 'href="https://github.com/Matanek/Silex-Lib-Example"'), 'Package cards must link to their canonical repository.');
+$assert(str_contains($homeBody, 'class="package-card-repository"'), 'The package repository link must own the full-card interaction.');
 $assert(str_contains($homeBody, 'Présente des métadonnées réutilisables pour un package Silex.'), 'French package cards must display their localized manifest description.');
 $assert(str_contains($homeBody, 'Uses one package description for every locale.'), 'Plain package descriptions must remain valid.');
-$assert(str_contains($homeBody, '<span>v1.0.0</span>'), 'Package cards must display their manifest version.');
+$assert(!str_contains($homeBody, 'v1.0.0'), 'Package cards must not expose a package version.');
 $assert(!str_contains($homeBody, '<span>GitHub</span>'), 'Package cards must not repeat their repository host.');
 $assert(!str_contains($homeBody, 'Consultez le code, les versions'), 'Package cards must not repeat generic repository guidance.');
+$assert(!str_contains($homeBody, '>Dépôt <span'), 'Package cards must not repeat a repository action inside the card.');
 $assert(!str_contains($homeBody, '/fr/packages/Example'), 'Package cards must not link to local package documentation.');
 $assert(str_contains($homeBody, '<ul class="hero-principles">'), 'The homepage benefits must be integrated into the hero.');
 $assert(substr_count($homeBody, 'class="hero-principle"') === 3, 'The hero must render exactly three benefits.');
@@ -189,6 +191,19 @@ $frenchDocumentationBody = (string) $frenchDocumentation->getBody();
 $assert($frenchDocumentation->getStatusCode() === 200, 'French documentation must respond with HTTP 200.');
 $assert(str_contains($frenchDocumentationBody, '<body class="docs-page">'), 'Documentation pages must expose their fixed-sidebar layout class.');
 $sourceCss = (string) file_get_contents($root . '/assets/css/app.css');
+$packageCardTemplate = (string) file_get_contents($root . '/templates/_package-card.twig');
+$snapshotBuilder = (string) file_get_contents($root . '/scripts/build-content-snapshot.mjs');
+$assert(
+    !str_contains($packageCardTemplate, 'package.version')
+        && !str_contains($snapshotBuilder, 'manifest.version')
+        && str_contains($snapshotBuilder, 'packageMetadata.push({ name: registration.name, description });'),
+    'Package rendering and content snapshots must remain independent of package versions.',
+);
+$assert(
+    str_contains($packageCardTemplate, 'package.documentation is defined and package.documentation')
+        && str_contains($packageCardTemplate, 'class="package-card-documentation"'),
+    'Package cards must preserve an independent slot for future site documentation links.',
+);
 $assert(
     str_contains($sourceCss, 'row-gap: clamp(32px, 4vw, 48px); align-content: center;')
         && str_contains($sourceCss, '.hero-principles { grid-column: 1 / -1;')
@@ -246,6 +261,12 @@ $assert(
     'Package hover states must use the sky accent instead of a gray text tint.',
 );
 $assert(
+    str_contains($sourceCss, '.package-card { position: relative;')
+        && str_contains($sourceCss, '.package-card-repository::after { position: absolute; inset: 0; content: ""; }')
+        && str_contains($sourceCss, '.package-card-documentation { position: relative; z-index: 1; }'),
+    'The repository link must cover the package card while future documentation links remain independently interactive.',
+);
+$assert(
     str_contains($sourceCss, 'position: fixed; inset: 0; width: min(calc(100% - 36px), 1120px);')
         && str_contains($sourceCss, 'margin: auto;')
         && str_contains($sourceCss, '.showcase-lightbox figcaption > span {')
@@ -284,7 +305,7 @@ $assert(str_contains($packagesBody, '<h1 id="packages-index-title">Packages enre
 $assert(str_contains($packagesBody, 'data-package-count="2"'), 'The package count is missing.');
 $assert(str_contains($packagesBody, 'href="https://github.com/Matanek/Silex-Lib-Example"'), 'The package repository link is missing.');
 $assert(str_contains($packagesBody, 'Présente des métadonnées réutilisables pour un package Silex.'), 'The localized package description is missing.');
-$assert(str_contains($packagesBody, '<span>v1.0.0</span>'), 'The package version is missing.');
+$assert(!str_contains($packagesBody, 'v1.0.0'), 'The package catalog must not expose a package version.');
 $assert(!str_contains($packagesBody, 'Docs <span'), 'The catalog must not advertise aggregated package documentation.');
 
 $registry = $handle('https://silex.test/fr/registry');
@@ -317,6 +338,10 @@ $assert(
     isset($canadianPackages[0]['description'])
         && str_contains(implode(' ', array_column($canadianPackages, 'description')), 'Présente des métadonnées réutilisables'),
     'A regional locale must fall back to its primary package-description language.',
+);
+$assert(
+    array_filter($canadianPackages, static fn (array $package): bool => array_key_exists('version', $package)) === [],
+    'Package metadata exposed to the site must not include release versions.',
 );
 $fallbackPackages = $snapshotDocuments->packages('de');
 $assert(

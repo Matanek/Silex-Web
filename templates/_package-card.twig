@@ -1,12 +1,13 @@
 <article class="package-card">
     <div class="package-card-meta">
-        <a href="{{ package.repository }}">{{ package.name }}</a>
+        <a class="package-card-repository" href="{{ package.repository }}" aria-label="{{ package.name }} — {{ locale == 'fr' ? 'ouvrir le dépôt' : 'open repository' }}">{{ package.name }}</a>
     </div>
     <p>{{ package.description }}</p>
+    {% if package.documentation is defined and package.documentation %}
     <div class="package-card-footer">
-        <span>v{{ package.version }}</span>
         <div class="package-card-links">
-            <a href="{{ package.repository }}">{{ locale == 'fr' ? 'Dépôt' : 'Repository' }} <span aria-hidden="true">↗</span></a>
+            <a class="package-card-documentation" href="{{ package.documentation }}">Documentation <span aria-hidden="true">→</span></a>
         </div>
     </div>
+    {% endif %}
 </article>

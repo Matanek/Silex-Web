@@ -108,7 +108,7 @@ final readonly class DocumentRepository
         return $navigation;
     }
 
-    /** @return list<array{name: string, repository: string, description: string, version: string}> */
+    /** @return list<array{name: string, repository: string, description: string}> */
     public function packages(string $locale): array
     {
         $root = $this->registryRoot . '/registry/v1/packages';
@@ -145,7 +145,7 @@ final readonly class DocumentRepository
         return $packages;
     }
 
-    /** @return array{description: string, version: string} */
+    /** @return array{description: string} */
     private function packageMetadata(string $name, string $locale): array
     {
         $path = $this->packagesRoot . '/' . $name . '/Package.json';
@@ -160,15 +160,7 @@ final readonly class DocumentRepository
 
         $description = $this->packageDescription($manifest['description'] ?? null, $locale, $path);
 
-        $version = $manifest['version'] ?? null;
-        if (!is_string($version) || preg_match('/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/', $version) !== 1) {
-            throw new RuntimeException(sprintf('Package manifest "%s" has an invalid version.', $path));
-        }
-
-        return [
-            'description' => $description,
-            'version' => $version,
-        ];
+        return ['description' => $description];
     }
 
     private function packageDescription(mixed $value, string $locale, string $path): string
