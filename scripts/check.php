@@ -190,12 +190,11 @@ $assert(str_contains($frenchDocumentationBody, '<body class="docs-page">'), 'Doc
 $sourceCss = (string) file_get_contents($root . '/assets/css/app.css');
 $assert(
     str_contains($sourceCss, 'row-gap: clamp(32px, 4vw, 48px); align-content: center;')
-        && str_contains($sourceCss, '.hero-principles { grid-column: 1 / -1; width: min(100%, 1000px);')
-        && str_contains($sourceCss, 'padding: 0; border: 0; text-align: center; list-style: none;')
-        && str_contains($sourceCss, '.hero-principles p { max-width: 340px; margin: 0 auto;')
+        && str_contains($sourceCss, '.hero-principles { grid-column: 1 / -1;')
+        && str_contains($sourceCss, 'padding: 0; border: 0; list-style: none;')
         && str_contains($sourceCss, '.hero-principles h2 {')
         && str_contains($sourceCss, 'text-transform: uppercase;'),
-    'The three uppercase benefits must remain centered in their narrower borderless hero layout.',
+    'The three uppercase benefits must remain tightly integrated into the borderless hero layout.',
 );
 $assert(
     str_contains($sourceCss, '.showcase { border-bottom: 0; background: color-mix(in srgb, var(--background) 95%, white 5%); }'),

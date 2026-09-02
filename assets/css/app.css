@@ -118,10 +118,10 @@ h1, h2, h3, p { margin-top: 0; }
 .terminal-line span,
 .terminal-line strong { color: var(--accent); }
 
-.hero-principles { grid-column: 1 / -1; width: min(100%, 1000px); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); justify-self: center; gap: clamp(28px, 5vw, 64px); margin: 0; padding: 0; border: 0; text-align: center; list-style: none; }
+.hero-principles { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(28px, 5vw, 64px); margin: 0; padding: 0; border: 0; list-style: none; }
 .hero-principle { min-width: 0; }
 .hero-principles h2 { margin-bottom: 12px; color: var(--accent); font-size: clamp(1.15rem, 1.8vw, 1.45rem); line-height: 1.05; letter-spacing: 0.04em; text-transform: uppercase; }
-.hero-principles p { max-width: 340px; margin: 0 auto; color: var(--muted); font-size: 0.9rem; line-height: 1.65; text-wrap: pretty; }
+.hero-principles p { max-width: 340px; margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.65; text-wrap: pretty; }
 
 .section { padding: 110px 0; border-bottom: 1px solid var(--line); scroll-margin-top: calc(var(--navbar-height) + 10px); }
 .home-page .section { min-height: calc(100vh - var(--navbar-height)); min-height: calc(100svh - var(--navbar-height)); display: grid; align-items: center; }
