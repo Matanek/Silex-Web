@@ -267,6 +267,7 @@ h1, h2, h3, p { margin-top: 0; }
 .showcase-heading { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr); gap: clamp(40px, 8vw, 110px); align-items: end; margin-bottom: 64px; }
 .showcase-heading h2 { max-width: 680px; margin-bottom: 0; }
 .showcase-heading > p { max-width: 520px; margin-bottom: 4px; color: var(--muted); font-size: 1.02rem; text-wrap: pretty; }
+.showcase-heading > p a { color: var(--text); text-decoration-color: var(--accent); text-underline-offset: 4px; }
 .showcase-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
 .showcase-card { min-width: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgb(20 20 22 / 42%); text-decoration: none; }
 .showcase-card figure { height: 100%; margin: 0; }
@@ -284,7 +285,7 @@ h1, h2, h3, p { margin-top: 0; }
 .showcase-card p { margin-bottom: 0; color: var(--muted); font-size: 0.78rem; line-height: 1.5; text-wrap: pretty; }
 
 body.showcase-lightbox-open { overflow: hidden; }
-.showcase-lightbox { width: min(calc(100% - 36px), 1500px); max-width: none; max-height: calc(100dvh - 36px); padding: 0; overflow: hidden; border: 1px solid #39393e; border-radius: 8px; background: #08090b; color: var(--text); box-shadow: 0 35px 110px rgb(0 0 0 / 70%); }
+.showcase-lightbox { position: fixed; inset: 0; width: min(calc(100% - 36px), 1120px); max-width: none; max-height: calc(100dvh - 36px); margin: auto; padding: 0; overflow: hidden; border: 1px solid #39393e; border-radius: 8px; background: #08090b; color: var(--text); box-shadow: 0 35px 110px rgb(0 0 0 / 70%); }
 .showcase-lightbox::backdrop { background: rgb(0 0 0 / 82%); backdrop-filter: blur(7px); }
 .showcase-lightbox-frame { position: relative; }
 .showcase-lightbox figure { max-height: calc(100dvh - 38px); display: flex; flex-direction: column; margin: 0; }

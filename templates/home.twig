@@ -211,9 +211,9 @@
         <div class="section-heading showcase-heading">
             <div>
                 <p class="eyebrow">{{ locale == 'fr' ? 'Construit avec Silex' : 'Built with Silex' }}</p>
-                <h2 id="showcase-title">{{ locale == 'fr' ? 'Déjà capable. Déjà visible.' : 'Already capable. Already visible.' }}</h2>
+                <h2 id="showcase-title">{{ locale == 'fr' ? 'Exemples.' : 'Examples.' }}</h2>
             </div>
-            <p>{{ locale == 'fr' ? 'Rendu 2D et 3D, visualisation de données, typographie et outils graphiques : ces images proviennent d’applications écrites en Silex.' : '2D and 3D rendering, data visualization, typography, and graphics tools: these images come from applications written in Silex.' }}</p>
+            <p>{% if locale == 'fr' %}Ces captures présentent des exemples fournis avec Silex et disponibles dans le dépôt <a href="https://github.com/Matanek/Silex-Examples">Silex-Examples</a>.{% else %}These captures show examples distributed with Silex and available in the <a href="https://github.com/Matanek/Silex-Examples">Silex-Examples</a> repository.{% endif %}</p>
         </div>
 
         <div class="showcase-grid" data-showcase-gallery data-count-label="{{ locale == 'fr' ? '{current} sur {total}' : '{current} of {total}' }}">
