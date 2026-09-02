@@ -124,6 +124,9 @@ $assert(str_contains($homeBody, 'href="https://github.com/Matanek/Silex-Examples
 $assert(str_contains($homeBody, 'exemples fournis avec Silex'), 'The French showcase must identify the images as distributed examples.');
 $assert(substr_count($homeBody, 'data-showcase-item') === 13, 'The home page must render all thirteen Silex showcase images.');
 $assert(substr_count($homeBody, 'class="showcase-thumbnail"') === 13, 'The showcase must render image-only thumbnails.');
+$assert(substr_count($homeBody, '<picture>') === 13, 'Every showcase item must provide responsive image sources.');
+$assert(substr_count($homeBody, '<source media="(max-width: 650px)"') === 13, 'Every mobile showcase item must use its full image.');
+$assert(substr_count($homeBody, 'data-full-src=') === 13, 'Every showcase item must expose its full image to the desktop lightbox.');
 $assert(substr_count($homeBody, '<figcaption') === 1, 'Only the lightbox may render a showcase caption.');
 $assert(substr_count($homeBody, 'loading="lazy"') >= 13, 'Showcase thumbnails must load lazily.');
 $assert(str_contains($homeBody, 'data-showcase-lightbox'), 'The showcase lightbox is missing.');
@@ -197,6 +200,7 @@ $assert($frenchDocumentation->getStatusCode() === 200, 'French documentation mus
 $assert(str_contains($frenchDocumentationBody, '<body class="docs-page">'), 'Documentation pages must expose their fixed-sidebar layout class.');
 $sourceCss = (string) file_get_contents($root . '/assets/css/app.css');
 $navigationScript = (string) file_get_contents($root . '/public/assets/navigation.js');
+$showcaseScript = (string) file_get_contents($root . '/public/assets/showcase.js');
 $packageCardTemplate = (string) file_get_contents($root . '/templates/_package-card.twig');
 $snapshotBuilder = (string) file_get_contents($root . '/scripts/build-content-snapshot.mjs');
 $assert(
@@ -262,6 +266,22 @@ $assert(
         && str_contains($sourceCss, '.showcase-card { width: 100%; aspect-ratio: 8 / 5;')
         && !str_contains($sourceCss, '.showcase-card { width: 100%; max-width: 360px;'),
     'The showcase subtitle must sit below its title and the desktop gallery must align four equal columns with the section container.',
+);
+$assert(
+    str_contains($sourceCss, '.hero-copy { text-align: center; }')
+        && str_contains($sourceCss, '.hero .actions { justify-content: center; }')
+        && str_contains($sourceCss, '.hero .lede { margin-inline: auto; }')
+        && str_contains($sourceCss, '.showcase-card { aspect-ratio: auto; }')
+        && str_contains($sourceCss, '.showcase-thumbnail { height: auto; object-fit: contain; transition: none; }')
+        && str_contains($sourceCss, '.showcase-lightbox { display: none; }'),
+    'Mobile homepage content must be centered and full showcase images must replace the lightbox gallery.',
+);
+$assert(
+    str_contains($showcaseScript, "window.matchMedia('(max-width: 650px)')")
+        && str_contains($showcaseScript, "item.removeAttribute('href')")
+        && str_contains($showcaseScript, 'item.dataset.fullSrc')
+        && str_contains($showcaseScript, 'mobile.matches && dialog.open'),
+    'The showcase interaction must disable links and close the lightbox in mobile mode.',
 );
 $assert(
     str_contains($sourceCss, '.package-card:hover { background: color-mix(in srgb, var(--surface) 86%, var(--accent) 14%); }')

@@ -302,6 +302,7 @@ h1, h2, h3, p { margin-top: 0; }
 .showcase-heading > p:last-child a { color: var(--text); text-decoration-color: var(--accent); text-underline-offset: 4px; }
 .showcase-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
 .showcase-card { width: 100%; aspect-ratio: 8 / 5; overflow: hidden; border: 1px solid var(--line); background: var(--surface); }
+.showcase-card picture { width: 100%; height: 100%; display: block; }
 .showcase-thumbnail { width: 100%; height: 100%; display: block; object-fit: cover; transition: filter 220ms ease, transform 320ms ease; }
 .showcase-card:hover .showcase-thumbnail,
 .showcase-card:focus-visible .showcase-thumbnail { filter: saturate(1.08) contrast(1.03); transform: scale(1.025); }
@@ -413,6 +414,11 @@ body.showcase-lightbox-open { overflow: hidden; }
     .mobile-site-navigation .locale-link { width: fit-content; min-height: 0; margin-top: 18px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 3px; font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 0.68rem; }
     .mobile-doc-navigation { margin-top: 30px; padding-top: 26px; border-top: 1px solid var(--line); }
     .hero-layout { gap: 52px; padding: 0 0 75px; }
+    .hero-copy { text-align: center; }
+    .hero-meta,
+    .hero .actions { justify-content: center; }
+    .hero h1,
+    .hero .lede { margin-inline: auto; }
     .hero h1 { font-size: clamp(2.55rem, 12.8vw, 4.8rem); }
     .hero h1 span { white-space: normal; }
     .registry-hero { gap: 52px; padding: 65px 0 75px; }
@@ -432,15 +438,12 @@ body.showcase-lightbox-open { overflow: hidden; }
     .package-catalog { grid-template-columns: 1fr; }
     .showcase-heading { margin-bottom: 42px; }
     .showcase-grid { grid-template-columns: minmax(0, 1fr); }
-    .showcase-lightbox { width: calc(100% - 16px); max-height: calc(100dvh - 16px); }
-    .showcase-lightbox figure { max-height: calc(100dvh - 18px); }
-    .showcase-lightbox-stage { padding: 58px 8px 0; }
-    .showcase-lightbox-stage img { max-height: calc(100dvh - 215px); }
-    .showcase-lightbox figcaption { min-height: 142px; grid-template-columns: 40px minmax(0, 1fr); gap: 10px; padding: 18px 20px 22px; }
-    .showcase-lightbox-nav { top: 16px; width: 40px; height: 40px; border-radius: 50%; }
-    .showcase-lightbox-previous { left: 12px; }
-    .showcase-lightbox-next { right: 62px; }
-    .showcase-lightbox-close { top: 16px; right: 12px; width: 40px; height: 40px; }
+    .showcase-card { aspect-ratio: auto; }
+    .showcase-card picture { height: auto; }
+    .showcase-thumbnail { height: auto; object-fit: contain; transition: none; }
+    .showcase-card:hover .showcase-thumbnail,
+    .showcase-card:focus-visible .showcase-thumbnail { filter: none; transform: none; }
+    .showcase-lightbox { display: none; }
     .quickstart { padding: 28px 20px; }
     .docs-page .site-footer { width: min(calc(100% - 28px), var(--max-width)); margin-inline: auto; padding-inline: 0; }
     .docs-shell { width: min(calc(100% - 28px), var(--max-width)); min-height: 0; margin-inline: auto; }

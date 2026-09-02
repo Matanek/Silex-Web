@@ -211,8 +211,11 @@
                 {% set title = locale == 'fr' ? item.title_fr : item.title_en %}
                 {% set description = locale == 'fr' ? item.description_fr : item.description_en %}
                 {% set alt = locale == 'fr' ? item.alt_fr : item.alt_en %}
-                <a class="showcase-card" href="/assets/showcase/full/{{ item.slug }}.webp" data-showcase-item data-title="{{ title|e('html_attr') }}" data-description="{{ description|e('html_attr') }}" data-alt="{{ alt|e('html_attr') }}" aria-haspopup="dialog" aria-label="{{ (locale == 'fr' ? 'Agrandir ' : 'Enlarge ') ~ title }}">
-                    <img class="showcase-thumbnail" src="/assets/showcase/thumbs/{{ item.slug }}.webp" alt="{{ alt }}" width="360" height="225" loading="lazy" decoding="async">
+                <a class="showcase-card" href="/assets/showcase/full/{{ item.slug }}.webp" data-showcase-item data-full-src="/assets/showcase/full/{{ item.slug }}.webp" data-title="{{ title|e('html_attr') }}" data-description="{{ description|e('html_attr') }}" data-alt="{{ alt|e('html_attr') }}" data-lightbox-label="{{ ((locale == 'fr' ? 'Agrandir ' : 'Enlarge ') ~ title)|e('html_attr') }}" aria-haspopup="dialog" aria-label="{{ (locale == 'fr' ? 'Agrandir ' : 'Enlarge ') ~ title }}">
+                    <picture>
+                        <source media="(max-width: 650px)" srcset="/assets/showcase/full/{{ item.slug }}.webp">
+                        <img class="showcase-thumbnail" src="/assets/showcase/thumbs/{{ item.slug }}.webp" alt="{{ alt }}" width="360" height="225" loading="lazy" decoding="async">
+                    </picture>
                 </a>
             {% endfor %}
         </div>
