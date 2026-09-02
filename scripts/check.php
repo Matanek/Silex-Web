@@ -233,6 +233,13 @@ $assert(
     'Home page sections must follow the white, gray, pink, pistachio, and dark rhythm without forced viewport heights.',
 );
 $assert(
+    str_contains($sourceCss, '.showcase-heading > p:last-child { max-width: 720px; margin: 18px 0 0;')
+        && str_contains($sourceCss, '.showcase-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }')
+        && str_contains($sourceCss, '.showcase-card { width: 100%; aspect-ratio: 8 / 5;')
+        && !str_contains($sourceCss, '.showcase-card { width: 100%; max-width: 360px;'),
+    'The showcase subtitle must sit below its title and the desktop gallery must align four equal columns with the section container.',
+);
+$assert(
     str_contains($sourceCss, 'position: fixed; inset: 0; width: min(calc(100% - 36px), 1120px);')
         && str_contains($sourceCss, 'margin: auto;'),
     'The showcase lightbox must remain centered in the viewport.',
