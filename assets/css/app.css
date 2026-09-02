@@ -87,7 +87,7 @@ main,
 .site-navigation .locale-link { padding: 5px 9px; border: 1px solid var(--line); border-radius: 3px; color: var(--text); font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 0.72rem; }
 .site-navigation .locale-link:hover { border-color: var(--accent); color: var(--accent); }
 .hero { min-height: 100vh; padding-top: var(--navbar-height); }
-.hero-layout { min-height: calc(100vh - var(--navbar-height)); display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr); gap: clamp(50px, 8vw, 110px); align-items: center; padding: 0 0 100px; }
+.hero-layout { min-height: calc(100vh - var(--navbar-height)); display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr); column-gap: clamp(50px, 8vw, 110px); row-gap: clamp(52px, 6vw, 76px); align-items: center; padding: 0 0 clamp(68px, 8vw, 96px); }
 .eyebrow { margin: 0 0 16px; color: var(--accent); font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
 .hero-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-bottom: 16px; }
 .hero-meta .eyebrow { margin-bottom: 0; }
@@ -118,17 +118,12 @@ h1, h2, h3, p { margin-top: 0; }
 .terminal-line span,
 .terminal-line strong { color: var(--accent); }
 
-.principles { position: relative; padding: clamp(88px, 9vw, 132px) 0; overflow: hidden; border: 0; background: radial-gradient(circle at 88% 8%, rgb(56 189 248 / 20%), transparent 34rem), linear-gradient(135deg, #082f49 0%, #0c4a6e 100%); }
-.principles-heading { position: relative; margin-bottom: clamp(52px, 7vw, 82px); }
-.principles-heading h2 { display: flex; gap: clamp(14px, 2vw, 22px); align-items: center; max-width: 900px; margin: 0; font-size: clamp(2.4rem, 5vw, 4.8rem); line-height: 0.95; letter-spacing: -0.04em; text-transform: uppercase; }
-.principles-heading h2::before { width: clamp(32px, 4vw, 52px); height: 5px; flex: 0 0 auto; background: var(--accent); content: ""; }
-.principles-layout { position: relative; border-top: 1px solid rgb(186 230 253 / 22%); }
-.principles article { display: grid; grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr); gap: clamp(36px, 8vw, 120px); align-items: center; padding: clamp(28px, 4vw, 48px) 0; border-bottom: 1px solid rgb(186 230 253 / 22%); }
-.principles h3 { margin: 0; color: #7dd3fc; font-size: clamp(2.1rem, 4vw, 3.8rem); line-height: 0.95; letter-spacing: -0.035em; text-transform: uppercase; }
-.principles article p { max-width: 660px; margin: 0; color: rgb(224 242 254 / 82%); font-size: clamp(1.02rem, 1.6vw, 1.24rem); line-height: 1.7; text-wrap: pretty; }
+.hero-principles { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(28px, 5vw, 64px); margin: 0; padding: clamp(28px, 3.5vw, 42px) 0 0; border-top: 1px solid var(--line); list-style: none; }
+.hero-principle { min-width: 0; }
+.hero-principles h2 { margin-bottom: 12px; color: var(--accent); font-size: clamp(1.15rem, 1.8vw, 1.45rem); line-height: 1.05; letter-spacing: 0.04em; text-transform: uppercase; }
+.hero-principles p { max-width: 340px; margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.65; text-wrap: pretty; }
 
 .section { padding: 110px 0; border-bottom: 1px solid var(--line); scroll-margin-top: calc(var(--navbar-height) + 10px); }
-.home-page .principles,
 .home-page .section { min-height: calc(100vh - var(--navbar-height)); min-height: calc(100svh - var(--navbar-height)); display: grid; align-items: center; }
 .section-heading { max-width: 720px; margin-bottom: 48px; }
 .section-heading h2 { margin-bottom: 18px; font-size: clamp(2.3rem, 4.5vw, 4.2rem); line-height: 1; letter-spacing: -0.05em; }
@@ -361,8 +356,7 @@ body.showcase-lightbox-open { overflow: hidden; }
     .hero h1 span { white-space: normal; }
     .registry-hero { gap: 52px; padding: 65px 0 75px; }
     .registry-hero h1 { font-size: clamp(3rem, 15vw, 4.8rem); }
-    .principles-heading { margin-bottom: 44px; }
-    .principles article { grid-template-columns: 1fr; gap: 12px; padding: 28px 0 34px; }
+    .hero-principles { grid-template-columns: 1fr; gap: 28px; }
     .section { padding: 78px 0; }
     .registry-section { padding: 78px 0; }
     .contribution-grid { grid-template-columns: 1fr; }

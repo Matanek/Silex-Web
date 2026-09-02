@@ -108,9 +108,10 @@ $assert(str_contains($homeBody, '<span>v1.0.0</span>'), 'Package cards must disp
 $assert(!str_contains($homeBody, '<span>GitHub</span>'), 'Package cards must not repeat their repository host.');
 $assert(!str_contains($homeBody, 'Consultez le code, les versions'), 'Package cards must not repeat generic repository guidance.');
 $assert(!str_contains($homeBody, '/fr/packages/Example'), 'Package cards must not link to local package documentation.');
-$assert(str_contains($homeBody, '<h2 id="principles-title">Pourquoi Silex ?</h2>'), 'The French principles heading is missing its question mark.');
-$assert(substr_count($homeBody, 'class="principle-statement"') === 3, 'The principles section must render three editorial statements.');
-$assert(!str_contains($homeBody, 'class="number"'), 'The principles section must not emphasize sequence numbers.');
+$assert(str_contains($homeBody, '<ul class="hero-principles">'), 'The homepage benefits must be integrated into the hero.');
+$assert(substr_count($homeBody, 'class="hero-principle"') === 3, 'The hero must render exactly three benefits.');
+$assert(!str_contains($homeBody, 'Pourquoi Silex ?'), 'The redundant French principles heading must not be rendered.');
+$assert(!str_contains($homeBody, 'class="principles"'), 'The standalone principles section must not be rendered.');
 $assert(str_contains($homeBody, '<h2 id="showcase-title">Exemples</h2>'), 'The French Silex showcase heading is missing.');
 $assert(str_contains($homeBody, 'href="https://github.com/Matanek/Silex-Examples">Silex-Examples</a>'), 'The showcase must link to the Silex examples repository.');
 $assert(str_contains($homeBody, 'exemples fournis avec Silex'), 'The French showcase must identify the images as distributed examples.');
@@ -177,7 +178,7 @@ $assert(str_contains($englishHomeBody, 'Manual installation') && str_contains($e
 $assert(str_contains($englishHomeBody, '<strong class="zed-titlebar-availability">Available now</strong>'), 'The English Zed title bar must contain one readable availability label.');
 $assert(str_contains($englishHomeBody, 'Demonstrates reusable Silex package metadata.'), 'The English package card must display the canonical manifest description.');
 $assert(str_contains($englishHomeBody, 'href="/en/#packages">Packages</a>'), 'The English navigation must link to the home page package catalog.');
-$assert(str_contains($englishHomeBody, '<h2 id="principles-title">Why Silex?</h2>'), 'The English principles heading is missing its question mark.');
+$assert(!str_contains($englishHomeBody, 'Why Silex?'), 'The redundant English principles heading must not be rendered.');
 $assert(str_contains($englishHomeBody, '<h2 id="showcase-title">Examples</h2>'), 'The English Silex showcase heading is missing.');
 $assert(str_contains($englishHomeBody, 'Canvas shapes and paths'), 'The English showcase captions are missing.');
 $assert(!str_contains($englishHomeBody, 'Présente des métadonnées réutilisables'), 'The English package card must not display the French translation.');
@@ -188,10 +189,10 @@ $assert($frenchDocumentation->getStatusCode() === 200, 'French documentation mus
 $assert(str_contains($frenchDocumentationBody, '<body class="docs-page">'), 'Documentation pages must expose their fixed-sidebar layout class.');
 $sourceCss = (string) file_get_contents($root . '/assets/css/app.css');
 $assert(
-    str_contains($sourceCss, 'linear-gradient(135deg, #082f49 0%, #0c4a6e 100%)')
-        && str_contains($sourceCss, '.principles h3 { margin: 0; color: #7dd3fc;')
+    str_contains($sourceCss, '.hero-principles { grid-column: 1 / -1;')
+        && str_contains($sourceCss, '.hero-principles h2 {')
         && str_contains($sourceCss, 'text-transform: uppercase;'),
-    'The principles section must retain its uppercase Tailwind Sky treatment.',
+    'The three uppercase benefits must remain integrated into the hero layout.',
 );
 $assert(
     str_contains($sourceCss, '.showcase { border-bottom: 0; background: color-mix(in srgb, var(--background) 95%, white 5%); }'),
@@ -203,8 +204,7 @@ $assert(
     'The showcase section must remain free of surrounding one-pixel separators.',
 );
 $assert(
-    str_contains($sourceCss, '.home-page .principles,')
-        && str_contains($sourceCss, '.home-page .section { min-height: calc(100vh - var(--navbar-height)); min-height: calc(100svh - var(--navbar-height)); display: grid; align-items: center; }'),
+    str_contains($sourceCss, '.home-page .section { min-height: calc(100vh - var(--navbar-height)); min-height: calc(100svh - var(--navbar-height)); display: grid; align-items: center; }'),
     'Home page sections must occupy at least the viewport height below the navbar.',
 );
 $assert(
